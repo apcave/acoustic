@@ -23,7 +23,7 @@ export default function Home() {
           >
             Sign Out
           </button>
-          Hello, {data?.user?.email}, {data?.user?.name}
+          Hello, {data?.user?.email}, {data?.user?.name}, {data?.user?.id}
         </>
       );
     } else if (status === "loading") {

@@ -23,7 +23,7 @@ export interface UserDocument {
     },
     password: {
       type: String,
-      required: true
+      required: false, // Google and other OAuth providers don't provide password.
     },
     name: {
       type: String,
