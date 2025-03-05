@@ -24,7 +24,6 @@ export default function Home() {
             Sign Out
           </button>
           Hello, {data?.user?.email}, {data?.user?.name}
-          <p>Access Token: {data?.accessToken}</p> {/* Display the access token */}
         </>
       );
     } else if (status === "loading") {
