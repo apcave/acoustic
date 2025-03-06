@@ -1,5 +1,6 @@
 "use client";
 import { FormEvent, useState } from "react";
+
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -8,7 +9,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const res = await signIn("credentials", {
@@ -24,6 +25,7 @@ export default function Login() {
     }
   };
 
+  
   return (
     <section className="w-full h-screen flex items-center justify-center">
       <form
@@ -63,8 +65,7 @@ export default function Login() {
         <Link
           href="/register"
           className="text-sm text-[#888] transition duration-150 ease hover:text-black"
-        >
-          Don't have an account?
+          >Don&apos;t have an account?
         </Link>
       </form>
     </section>

@@ -25,6 +25,7 @@ export default function RootLayout({
   return (
 
       <Provider>
+
       <Header />
       <html lang="en">
       <body

@@ -6,7 +6,7 @@ import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
 
 
-import {seedDatabase as seedMaterial} from "@/models/seed-material";
+//import {seedDatabase as seedMaterial} from "@/models/seed-material";
 
 
 declare module "next-auth" {

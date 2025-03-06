@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link';
-import {  signOut, signIn, useSession } from "next-auth/react";
+import {  signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 import NavLink from '@/components/NavLink';
@@ -30,6 +30,7 @@ export default function Header() {
   const isAuth = status === "authenticated";
 
   return (
+    
     <header id="menu-header">
     <div className='flex justify-between'>
       <menu id="tabs" >
