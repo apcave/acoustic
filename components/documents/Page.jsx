@@ -1,5 +1,22 @@
 import { motion } from 'framer-motion';
 
+export function WebContent({ name, text, children, ...props }) {
+
+    return (
+        <div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 1 }}
+
+        className="w-[170mm] bg-white text-black shadow-md font-serif mx-auto p-8 rounded m-[5mm] relative">
+           <h1 className="text-4xl text-center">{name}</h1>
+           <p className="text-sm text-center mt-2 mb-2">{text}</p>
+        {children}
+        </div>
+    );
+}
+
 export function Page({ name, text, numPages, pageNum, onPageSelect, children, ...props }) {
 
     let navElements = [];
@@ -24,12 +41,11 @@ export function Page({ name, text, numPages, pageNum, onPageSelect, children, ..
         exit={{ opacity: 0 }}
         transition={{ duration: 1 }}
 
-        className="fixed overflow-hidden w-[170mm] h-[257mm] bg-white text-black shadow-md font-serif mx-auto p-8 rounded m-[5mm]"
-        style={{ left: '100px' }}>
+        className="w-[170mm] h-[257mm] bg-white text-black shadow-md font-serif mx-auto p-8 rounded m-[5mm] relative">
            <h1 className="text-4xl text-center">{name}</h1>
            <p className="text-sm text-center mt-2 mb-2">{text}</p>
         {children}
-        <div className="flex justify-center mt-4 space-x-4 absolute bottom-4 w-full">
+        <div className="flex justify-center items-center mt-4 space-x-4 absolute bottom-4 left-0 w-full">
             {navElements}
         </div>
         </motion.div>

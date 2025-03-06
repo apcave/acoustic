@@ -64,7 +64,7 @@ export default function Login() {
           href="/register"
           className="text-sm text-[#888] transition duration-150 ease hover:text-black"
         >
-          Don&apost have an account?
+          Don't have an account?
         </Link>
       </form>
     </section>

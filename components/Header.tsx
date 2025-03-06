@@ -1,4 +1,8 @@
+'use client'
+
 import Link from 'next/link';
+import {  signOut, signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 import NavLink from '@/components/NavLink';
 
@@ -20,11 +24,18 @@ function Tab({ link, title}: TabProps) {
 
 
 export default function Header() {
+  const { status, data } = useSession();
+  const router = useRouter();
+
+  const isAuth = status === "authenticated";
+
   return (
     <header id="menu-header">
     <div className='flex justify-between'>
       <menu id="tabs" >
-        <Tab link="/" title="Home" />      
+        <Tab link="/" title="Home" />
+        <Tab link="/acoustic/materials" title="Materials" />
+        <Tab link="/acoustic/results" title="Results" />
         <Tab link="/resume" title="Alex's Resume" />
         <li>
             <Link href="https://github.com/apcave/acoustic"
@@ -33,16 +44,23 @@ export default function Header() {
             >GitHub</Link>
         </li>
     </menu>
-    <menu id="app-links" >
-        <li>
-            <Link href="/acoustic/materials">Materials</Link>
-        </li>
-        <li>
-            <Link href="/acoustic/materials">Layers </Link>
-        </li>
-      </menu>
       </div>
-      <button className='pr-4'>Log In</button>
+      {isAuth && <p>Hello {data.user.name}</p>}
+      {isAuth && <button 
+        className='pr-4'
+        onClick={() => {
+        signOut({ redirect: false }).then(() => {
+            router.push("/");
+        });
+        }}
+        >Log Out</button>}
+      {!isAuth && <button 
+        className='pr-4'
+        onClick={() => {
+            router.push("/login");
+        }}
+        >Log In</button>}        
+      
     </header>
   );
 }
