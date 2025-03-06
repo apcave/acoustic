@@ -2,6 +2,14 @@
 import { signOut, signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+// import type { Metadata } from "next";
+
+
+// export const metadata: Metadata = {
+//   title: "Acoustic",
+//   description: "Home page for the multi-layer acoustic application and Dr Alexander Paul Cave's homepage.",
+// };
+
 
 export default function Home() {
   const { status, data } = useSession();
