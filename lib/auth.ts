@@ -6,15 +6,18 @@ import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
 
 
+import {seedDatabase as seedMaterial} from "@/models/seed-material";
+
+
 declare module "next-auth" {
   interface Session {
     user: {
-      id?: string | null | undefined;
-      name?: string | null | undefined;
-      email?: string | null | undefined;
-      image?: string | null | undefined;
+      id: string | null | undefined;
+      name: string | null | undefined;
+      email: string | null | undefined;
+      image: string | null | undefined;
     };
-    accessToken?: string;
+    accessToken: string;
   }
 }
 
@@ -95,8 +98,13 @@ export const authOptions: NextAuthOptions  = {
         token.name = user.name;
         token.email = user.email;
         token.id = user._id.toString();
+
+        // This is used during project setup to seed the database.
+        //seedMaterial(user._id.toString());
+
+        return token;
       }
-      return token;
+      throw new Error("Will not issue JWT to user no in database.")      
     },
     async session({ session, token }) {
       /*

@@ -1,7 +1,8 @@
-"use client";
-import { signOut, signIn, useSession } from "next-auth/react";
+'use client'
+import {  signIn, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+
+
 // import type { Metadata } from "next";
 
 
@@ -11,9 +12,10 @@ import { useRouter } from "next/navigation";
 // };
 
 
+
 export default function Home() {
   const { status, data } = useSession();
-  const router = useRouter();
+
 
   console.log(status, data);
 
@@ -21,16 +23,6 @@ export default function Home() {
     if (status === "authenticated") {
       return (
         <>
-          <button
-            className="border border-solid border-black rounded"
-            onClick={() => {
-              signOut({ redirect: false }).then(() => {
-                router.push("/");
-              });
-            }}
-          >
-            Sign Out
-          </button>
           Hello, {data?.user?.email}, {data?.user?.name}, {data?.user?.id}
         </>
       );

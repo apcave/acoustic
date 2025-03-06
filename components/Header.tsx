@@ -1,6 +1,4 @@
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { usePathname } from "next/navigation";
 
 import NavLink from '@/components/NavLink';
 
@@ -28,7 +26,6 @@ export default function Header() {
       <menu id="tabs" >
         <Tab link="/" title="Home" />      
         <Tab link="/resume" title="Alex's Resume" />
-        <Tab link="/acoustic" title="Acoustic App" />
         <li>
             <Link href="https://github.com/apcave/acoustic"
             target="_blank"
