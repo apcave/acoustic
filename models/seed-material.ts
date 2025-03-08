@@ -493,8 +493,14 @@ const materialsData = [
 
 
 
-
+let databaseInitialized = false;
+ 
 export async function seedDatabase(userIdStr: string) {
+    if (databaseInitialized) {
+        return;
+    }
+    databaseInitialized = true;
+
     try {
         await connectDB();
         console.log("Connected to MongoDB");

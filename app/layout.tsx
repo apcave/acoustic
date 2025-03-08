@@ -25,13 +25,15 @@ export default function RootLayout({
   return (
 
       <Provider>
-
+        <div id="modal-root"/>
       <Header />
       <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        
         {children}
+        
       </body>
       </html>
       </Provider>

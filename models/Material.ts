@@ -1,33 +1,23 @@
-import mongoose, { Schema, model, models, ObjectId } from "mongoose";
+import mongoose, { Schema, model, models } from "mongoose";
 
-// Define the schema for the nested 'compression' object
-const compressionSchema = new Schema({
+// Define the schema for the nested 'compression' and 'shear' objects
+const propertySchema = new Schema({
   type: {
     type: String,
     required: true,
-  },
-  waveSpeed: {
-    type: Number,
-    required: true,
-  },
-  attenuation: {
-    type: Number,
-    default: 0,
-  },
-});
-
-// Define the schema for the nested 'shear' object
-const shearSchema = new Schema({
-  type: {
-    type: String,
-    required: true,
+    enum: ['wave', 'modulus', 'fluid', 'vacuum'], // Add enum validation
   },
   waveSpeed: {
     type: Number,
   },
   attenuation: {
     type: Number,
-    default: 0,
+  },
+  real: {
+    type: Number,
+  },
+  imag: {
+    type: Number,
   },
 });
 
@@ -45,8 +35,8 @@ const materialSchema = new Schema({
     type: Number,
     required: true,
   },
-  compression: compressionSchema, // Embed the 'compression' schema
-  shear: shearSchema, // Embed the 'shear' schema
+  compression: propertySchema, // Embed the 'compression' schema
+  shear: propertySchema, // Embed the 'shear' schema
   userId: {
     type: mongoose.Types.ObjectId,
     required:true,

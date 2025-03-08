@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 
 import Button from './Button.jsx';
 
+
 export default function Modal({ children, buttonCaption, ref }) {
   const dialog = useRef();
 

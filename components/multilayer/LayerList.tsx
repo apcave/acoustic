@@ -1,0 +1,47 @@
+import { iLayers } from '@/actions/layers-helper';
+
+export default function LayerList({layers} : {layers : iLayers}) {
+    return (
+        <div className="border rounded-md border-gray-300 mb-3">
+
+        <span className="flex justify-center my-1">
+        <h1 className="text-xl text-center font-bold">Material Layers</h1>
+            
+        <button
+            className="ml-4 pr-2 pl-2 focus:outline-none text-sm rounded-md bg-stone-600 text-stone-300 hover:bg-stone-500 hover:text-stone-100"
+            >Save Layers to Model</button>        
+        </span>
+      
+            {layers.layers.length === 0 ? (
+                <>
+                <p className="text-center text-sm">Click on materials to add to model.</p> 
+                <p className="text-center text-sm">Models requires at least two materials for an interface.</p> 
+                </>
+            ) : (
+                <div className="w-[100mm] mx-auto text-sm">
+            <ul className="items-center py-3">
+                <li className="items-center">
+                    <span className="flex">
+                        <p className=" w-[21mm] font-bold">Layer</p>
+                        <p className=" w-[30mm] border-l pl-3 font-bold">Height</p>
+                        <p className=" w-[65mm] border-l pl-2 font-bold">Material</p>
+                    </span>
+                </li>
+                {layers.layers.map((layer, index, array) => (
+                    <li key={index} className={index === array.length - 1 ? "" : "border-b border-gray-300"}>
+                        <span className="flex">
+                            <img src="/greenUpArrow.svg" className="w-[4mm] h-[4mm] pt-2 cursor-pointer" />
+                            <img src="/greenUpArrow.svg" className="w-[7mm] h-[4mm] pr-3 pb-2  cursor-pointer transform rotate-180" />
+                            <p className=" w-[10mm] pl-5">{index+1}</p>
+                            <p className=" w-[33mm] border-l pl-3">{layer.thickness} mm</p>
+                            <p className=" w-[65mm] border-l pl-2">{layer.material.name}</p>
+                            <img src="/delete.svg" className="w-[5mm] w-5 h-5 ml-2 cursor-pointer" />
+                        </span>
+                    </li>
+                ))}
+            </ul>
+            </div>
+                )}
+        </div>
+    );
+}

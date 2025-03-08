@@ -1,19 +1,12 @@
-import { React, useContext, useRef } from "react";
+'use server'
 
-import { AcousticContext } from "./AcousticContext.jsx";
 import ModalMaterial from "./ModalMaterial.jsx";
 import Button from "../Button.jsx";
+import {getMaterials} from "@/actions/materials.ts";
 
-export default function ModifyModel() {
-    const { materials } = useContext(AcousticContext);
+export default async function ModifyModel() {
     const modalRef = useRef();
-
-    function handleMaterialSelect() {
-        modalRef.current.open();
-    }
-
-
-
+    const materials = await getMaterials();
     let materialList = [];
     materialList.push(
         materials.map((material, index) => {
@@ -21,6 +14,9 @@ export default function ModifyModel() {
             <MaterialRow key={index} material={material} />
         );
     }));
+
+    function handleMaterialSelect() {
+    }
 
 
     return (
