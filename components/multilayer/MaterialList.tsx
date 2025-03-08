@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 
 import ModalMaterial, { iModalHandle } from "@/components/multilayer/ModalMaterial";
 import { iLayers, initialLayers } from '@/actions/layers-helper';
-import { iWave, iMaterial } from '@/actions/material-helper';
+import { iMaterial } from '@/actions/material-helper';
 import LayerList from '@/components/multilayer/LayerList';
 
 
@@ -168,7 +168,7 @@ function MaterialRow({ material, onSelect, onEdit }: MaterialRowProps) {
                     onClick={() => onSelect(material)} 
                     className="hover:border-blue-300 hover:bg-blue-100 flex border rounded-md shadow bg-stone-100"  >
                     <p className={cellClasses + " w-[40mm] border-r rounded-r-none"}>{material.name}</p>
-                    <p className={cellClasses + " w-[20mm] border-r rounded-r-none"}>{material.density}</p>
+                    <p className={cellClasses + " w-[20mm] border-r rounded-r-none"}>{material.density} kg/m³</p>
                     <ModulusCell className={cellClasses + " w-[40mm] border-r rounded-r-none"} isShear={false} value={material.compression} />
                     <ModulusCell className={cellClasses + " w-[40mm]"} isShear={true} value={material.shear} />
                 </span>

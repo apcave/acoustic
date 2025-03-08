@@ -1,9 +1,10 @@
 "use server";
 import { connectDB } from "@/lib/mongodb";
 import Material from "@/models/Material";
-import { iMaterial, iUpdateMaterial, initialUpdateMaterial } from "@/actions/material-helper";
+import { iMaterial, iProperty, iUpdateMaterial, initialUpdateMaterial } from "@/actions/material-helper";
 
 import { revalidatePath } from 'next/cache';
+import { form } from "framer-motion/client";
 
 
 export async function getMaterials(): Promise<iMaterial[]> {
@@ -26,6 +27,7 @@ export async function updateAddMaterial(prevState : FormData, formData : FormDat
   try {
     await connectDB();
 
+    const userId = formData.get('userId') as string; // Get the user ID from the form
     const materialId = formData.get('_id') as string; // Get the material ID from the form
     const name = formData.get('name') as string;
     const density = parseFloat(formData.get('density') as string);
@@ -124,6 +126,80 @@ export async function updateAddMaterial(prevState : FormData, formData : FormDat
 
     let material: iMaterial | null = null;
 
+
+
+  function makeMaterial() : iMaterial {
+
+      // Update the material properties
+
+      let compression : iProperty | null = null;
+      // Update compression based on type
+      if (compressionType === 'wave') {
+          compression = {
+          type: compressionType,
+          waveSpeed: compressionWaveSpeed,
+          attenuation: compressionAttenuation === null ? 0 : compressionAttenuation, // Handle null attenuation
+        };
+      } else if (compressionType === 'modulus') {
+        compression = {
+          type: compressionType,
+          real: compressionModulusReal,
+          imag: compressionModulusImag === null ? 0 : compressionModulusImag, // Handle null imag
+        };
+      }
+
+      let shear : iProperty | null = null;
+      // Update shear based on type
+      if (shearType === 'wave') {
+        shear = {
+          type: shearType,
+          waveSpeed: shearWaveSpeed,
+          attenuation: shearAttenuation === null ? 0 : shearAttenuation, // Handle null attenuation
+        };
+      } else if (shearType === 'modulus') {
+        shear = {
+          type: shearType,
+          real: shearModulusReal,
+          imag: shearModulusImag === null ? 0 : shearModulusImag, // Handle null imag
+        };
+      }
+
+      if (category === 'vacuum') {
+        compression = {
+          type: category,
+        };
+        shear = {
+          type: category,
+        };
+      } else if (category === 'fluid') {
+        shear = {
+          type: category,
+        };
+      }
+
+      if (!compression) {
+        throw new Error("Compression type is invalid");
+      }
+
+      if (!shear) {
+        throw new Error("Shear type is invalid");
+      }
+
+      const materialOb: iMaterial = {
+        userId,
+        name,
+        density,
+        category,
+        compression,
+        shear,
+        updatedAt: new Date(),
+      };
+
+      return materialOb;
+
+    }
+
+
     if (materialId) {
       // Update existing material
       material = await Material.findById(materialId);
@@ -133,87 +209,20 @@ export async function updateAddMaterial(prevState : FormData, formData : FormDat
         return status;
       }
 
-      // Update the material properties
-      material.name = name;
-      material.density = density;
-      material.category = category;
-
-      // Update compression based on type
-      if (compressionType === 'wave') {
-        material.compression = {
-          type: compressionType,
-          waveSpeed: compressionWaveSpeed,
-          attenuation: compressionAttenuation === null ? 0 : compressionAttenuation, // Handle null attenuation
-        };
-      } else if (compressionType === 'modulus') {
-        material.compression = {
-          type: compressionType,
-          real: compressionModulusReal,
-          imag: compressionModulusImag === null ? 0 : compressionModulusImag, // Handle null imag
-        };
-      }
-
-      // Update shear based on type
-      if (shearType === 'wave') {
-        material.shear = {
-          type: shearType,
-          waveSpeed: shearWaveSpeed,
-          attenuation: shearAttenuation === null ? 0 : shearAttenuation, // Handle null attenuation
-        };
-      } else if (shearType === 'modulus') {
-        material.shear = {
-          type: shearType,
-          real: shearModulusReal,
-          imag: shearModulusImag === null ? 0 : shearModulusImag, // Handle null imag
-        };
-      }
-
-      if (category === 'vacuum') {
-        material.compression = {
-          type: category,
-          waveSpeed: undefined,
-          attenuation: undefined,
-          real: undefined,
-          imag: undefined,
-        };
-        material.shear = {
-          type: category,
-          waveSpeed: undefined,
-          attenuation: undefined,
-          real: undefined,
-          imag: undefined,
-        };
-      } else if (category === 'fluid') {
-        material.shear = {
-          type: category,
-          waveSpeed: undefined,
-          attenuation: undefined,
-          real: undefined,
-          imag: undefined,
-        };
-      }
+      // Assign the values from the makeMaterial function to the existing material
+      const materialOb = makeMaterial();
+      material.name = materialOb.name;
+      material.density = materialOb.density;
+      material.category = materialOb.category;
+      material.compression = materialOb.compression;
+      material.shear = materialOb.shear;
 
       await material.save();
 
     } else {
       // Create new material
-      // material = new Material({
-      //   name: name,
-      //   density: density,
-      //   category: category,
-      //   compression: {
-      //     type: compressionType,
-      //     waveSpeed: compressionWaveSpeed,
-      //     attenuation: compressionAttenuation,
-      //   },
-      //   shear: {
-      //     type: shearType,
-      //     waveSpeed: shearWaveSpeed,
-      //     attenuation: shearAttenuation,
-      //   },
-      //});
-
-      //await material.save();
+      material = new Material(makeMaterial());
+      await material.save();
     }
 
     revalidatePath('/acoustic/materials');

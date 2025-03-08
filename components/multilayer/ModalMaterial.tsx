@@ -3,6 +3,7 @@ import { iMaterial, initialMaterial, initialUpdateMaterial } from '@/actions/mat
 import { updateAddMaterial } from '@/actions/materials';
 import { useImperativeHandle, useRef, useState } from 'react';
 import { createPortal, useFormState, useFormStatus } from 'react-dom';
+import {  useSession } from "next-auth/react";
 
 import Button from '../Button.jsx';
 
@@ -27,6 +28,9 @@ export interface iModalHandle {
 */
 export default function ModalMaterial({ref, onChange }: iModalMaterialProps) {
 
+  // This is used to check if the user is logged in.
+  const { status, data } = useSession();
+
   // This ref is used to open the dialog from the parent component.
   const dialog = useRef<HTMLDialogElement | null>(null);
 
@@ -38,6 +42,11 @@ export default function ModalMaterial({ref, onChange }: iModalMaterialProps) {
 
   // This state is used to update the UI (combo boxes determine input fields)
   const [material, setMaterial] = useState(initialMaterial());
+
+  let userId = 'anonomous';
+  if (status === 'authenticated' && data?.user?.id) {
+    userId = data.user.id;
+  }
 
   // When the parent component opens the modal it passes the material to be edited.
   useImperativeHandle(ref, () => {
@@ -82,6 +91,7 @@ export default function ModalMaterial({ref, onChange }: iModalMaterialProps) {
     >
     <form id="material-form" action={formAction}  >
       <input type="hidden" name="_id" value={material._id} />
+      <input type="hidden" name="userId" value={userId} />
     <h1 className="text-2xl font-bold mb-4">Material Properties</h1>
     <div className="flex items-center mb-4">
         <label 

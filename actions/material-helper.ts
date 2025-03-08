@@ -8,6 +8,9 @@ export interface iProperty {
 }
 
 export interface iMaterial {
+  _id: string;
+  createdAt?: Date;
+  updatedAt?: Date;
   category: string;
   name: string;
   density: number;
