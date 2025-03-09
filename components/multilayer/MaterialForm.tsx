@@ -168,9 +168,6 @@ export default function MaterialForm({
         <button disabled={pending}>
           {pending ? "Submitting..." : "Save Properties"}
         </button>
-        <button disabled={pending} onClick={() => dialog.current?.close()}>
-          Close
-        </button>
       </div>
     </form>
   );

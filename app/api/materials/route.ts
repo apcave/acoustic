@@ -12,7 +12,10 @@ export async function GET() {
       );
     }
     return NextResponse.json(materials.payload, { status: 200 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error?.message }, { status: 500 });
+  } catch (error: unknown) {
+    return NextResponse.json(
+      { error: (error as Error)?.message },
+      { status: 500 }
+    );
   }
 }

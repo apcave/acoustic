@@ -61,6 +61,7 @@ export default function MaterialModal({ ref, onChange }: iMaterialModalProps) {
         setMaterial={setMaterial}
         onChange={onChange}
       />
+      <button onClick={() => dialog.current?.close()}>Close</button>
     </dialog>,
     document.getElementById("modal-root") || document.body
   );
