@@ -6,13 +6,13 @@ export async function GET() {
   try {
     const materials = await getMaterials();
     if (materials.status === "error") {
-      return new NextResponse(
+      return NextResponse.json(
         { error: "Failed to fetch materials" },
         { status: 500 }
       );
     }
-    return new NextResponse(JSON.stringify(materials.payload), { status: 200 });
-  } catch (error) {
-    return new NextResponse({ error: error.message }, { status: 500 });
+    return NextResponse.json(materials.payload, { status: 200 });
+  } catch (error: any) {
+    return NextResponse.json({ error: error?.message }, { status: 500 });
   }
 }

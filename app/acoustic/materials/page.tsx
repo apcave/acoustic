@@ -4,8 +4,7 @@ import MaterialList from "@/components/multilayer/MaterialList";
 import { getMaterials } from "@/actions/materials";
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { iLayers, initialLayers } from "@/actions/layers-helper";
-import { iMaterial } from "@/actions/material-helper";
+
 /*
     The list of material properties is important and will attract users to the site.
     This list needs to be searchable for the users to interact with the site.
@@ -36,7 +35,7 @@ export default async function HomePage() {
   const materials = await getData();
   return (
     <Suspense fallback={<p>Loading materials...</p>}>
-      <MaterialList materials={materials} propsLayers={null} />
+      <MaterialList materials={materials} />
     </Suspense>
   );
 }

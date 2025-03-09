@@ -1,9 +1,9 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 
-import ModalMaterial, {
+import MaterialModal, {
   iModalHandle,
-} from "@/components/multilayer/ModalMaterial";
+} from "@/components/multilayer/MaterialModal";
 import { iLayers, initialLayers } from "@/actions/layers-helper";
 import { iMaterial, iProperty } from "@/actions/material-helper";
 import LayerList from "@/components/multilayer/LayerList";
@@ -12,7 +12,6 @@ interface iMaterialListProps {
   materials: iMaterial[];
   propsLayers?: iLayers;
 }
-
 
 export default function MaterialList({
   materials,
@@ -122,7 +121,7 @@ export default function MaterialList({
   return (
     <>
       <div id="modal-root" />
-      <ModalMaterial ref={modalRef} onChange={handleOptimisticUpdate} />
+      <MaterialModal ref={modalRef} onChange={handleOptimisticUpdate} />
       <div className="w-[170mm] bg-white text-black shadow-md font-serif mx-auto p-8 rounded m-[5mm] relative">
         <h1 className="text-2xl text-center mb-1 font-bold">
           Acoustic Material Properties
