@@ -1,10 +1,9 @@
 "use server";
 import { connectDB } from "@/lib/mongodb";
 import Material from "@/models/Material";
-import { iMaterial, iProperty, iUpdateMaterial, initialUpdateMaterial } from "@/actions/material-helper";
+import { iMaterial, iProperty, iUpdateMaterial, initialMaterialUpdateStatus } from "@/actions/material-helper";
 
 import { revalidatePath } from 'next/cache';
-import { form } from "framer-motion/client";
 
 
 export async function getMaterials(): Promise<iMaterial[]> {
@@ -18,11 +17,11 @@ export async function getMaterials(): Promise<iMaterial[]> {
   }
 };
 
-export async function updateAddMaterial(prevState : FormData, formData : FormData) : Promise<iUpdateMaterial>  {
+export async function updateAddMaterial(_prev : any, formData : FormData) : Promise<iUpdateMaterial>  {
 
   console.log("Updating material - ", formData);
 
-  const status = initialUpdateMaterial();
+  const status = initialMaterialUpdateStatus();
 
   try {
     await connectDB();
@@ -38,7 +37,7 @@ export async function updateAddMaterial(prevState : FormData, formData : FormDat
     const compressionModulusReal = parseFloat(formData.get('compression-real') as string);
     const compressionModulusImag = parseFloat(formData.get('compression-imag') as string);
 
-    const shearType = formData.get('shear') as string;
+    let shearType = formData.get('shear') as string;
     const shearWaveSpeed = parseFloat(formData.get('shear-wave-speed') as string);
     const shearAttenuation = parseFloat(formData.get('shear-attenuation') as string);
     const shearModulusReal = parseFloat(formData.get('shear-real') as string);
@@ -126,11 +125,26 @@ export async function updateAddMaterial(prevState : FormData, formData : FormDat
 
     let material: iMaterial | null = null;
 
+  async  function saveMaterial() {
+    // Nested function to save the material object to the database that is typescript safe.
 
+    if (!material) {
+      status.status = "error";
+      status.errorMessages.push("Failed to create material");
+      return status;
+    }
+
+    if (material.save) {
+      await material.save();
+    } else {
+      status.status = "error";
+      status.errorMessages.push("Failed to save material");
+      return status;
+    }
+  }
 
   function makeMaterial() : iMaterial {
-
-      // Update the material properties
+      // Nested function to create the material object from function variables.
 
       let compression : iProperty | null = null;
       // Update compression based on type
@@ -217,12 +231,12 @@ export async function updateAddMaterial(prevState : FormData, formData : FormDat
       material.compression = materialOb.compression;
       material.shear = materialOb.shear;
 
-      await material.save();
+      saveMaterial();
 
     } else {
       // Create new material
       material = new Material(makeMaterial());
-      await material.save();
+      saveMaterial();
     }
 
     revalidatePath('/acoustic/materials');

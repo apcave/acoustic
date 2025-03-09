@@ -1,8 +1,9 @@
 'use client'
-import { iMaterial, initialMaterial, initialUpdateMaterial } from '@/actions/material-helper';
+import { iMaterial, initialMaterial, initialMaterialUpdateStatus } from '@/actions/material-helper';
 import { updateAddMaterial } from '@/actions/materials';
 import { useImperativeHandle, useRef, useState } from 'react';
-import { createPortal, useFormState, useFormStatus } from 'react-dom';
+import { createPortal, useFormStatus } from 'react-dom';
+import { useActionState } from 'react';
 import {  useSession } from "next-auth/react";
 
 import Button from '../Button.jsx';
@@ -35,7 +36,7 @@ export default function ModalMaterial({ref, onChange }: iModalMaterialProps) {
   const dialog = useRef<HTMLDialogElement | null>(null);
 
   // This used to update the material properties in the database on the server.
-  const [state, formAction] = useFormState(updateAddMaterial, initialUpdateMaterial());
+  const [state, formAction] = useActionState(updateAddMaterial, initialMaterialUpdateStatus());
 
   // Used to provide feedback while the form is being submitted.
   const { pending } = useFormStatus();
@@ -48,6 +49,11 @@ export default function ModalMaterial({ref, onChange }: iModalMaterialProps) {
     userId = data.user.id;
   }
 
+  if (state.status === 'success') {
+    onChange(material);
+    dialog.current?.close();
+  }
+
   // When the parent component opens the modal it passes the material to be edited.
   useImperativeHandle(ref, () => {
     return {
@@ -57,6 +63,21 @@ export default function ModalMaterial({ref, onChange }: iModalMaterialProps) {
       },
     };
   });
+
+  function handleEditForm(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+    const name = e.target.name;
+    if (name === 'name') {
+      setMaterial((prev) => {
+        return {
+          ...prev,
+          name: e.target.value,
+        };
+      });
+      return;
+    }
+    const value = e.target.value;
+    console.log('edit - ', name, ', value - ', value);
+  }
 
   console.log('ModalMaterial - ', material);
 
@@ -102,17 +123,22 @@ export default function ModalMaterial({ref, onChange }: iModalMaterialProps) {
           className="border rounded-md p-2 mr-4"
           id='name'
           name='name'
+          onChange={handleEditForm}
           required
+          pattern="\S+.*"
+          title="Name cannot be empty or just whitespace"
           value={material.name} />
         <label 
           className="block font-bold mr-4"
-          htmlFor="density">Density</label>
+          htmlFor="density">Density (kg/m³)</label>
         <input 
           type='number'
           className="border rounded-md p-2 w-[40mm]"
           id='density'
           name='density'
           required
+          onChange={handleEditForm}
+          min='0'
           value={material.density} />
     </div>
 
@@ -126,7 +152,7 @@ export default function ModalMaterial({ref, onChange }: iModalMaterialProps) {
             id="compression"
             name='compression'
             value={material.compression.type}
-            onChange={(e) => handleCompType( e.target.value )}
+            onChange={handleEditForm}
             className="border rounded-md mb-2">
               <option value="wave">Wave</option>
               <option value="modulus">Modulus (K)</option>
@@ -137,21 +163,24 @@ export default function ModalMaterial({ref, onChange }: iModalMaterialProps) {
             <div className="flex items-center">
                 <label 
                   htmlFor='compression-wave-speed'
-                  className="block text-lg font-bold mr-4 p-2 w-[40mm]">Wave Speed</label>
+                  className="block text-lg font-bold mr-4 p-2 w-[40mm]">Wave Speed (m/s)</label>
                 <input 
                   id='compression-wave-speed'
                   name='compression-wave-speed'
                   type="number" 
                   className="border rounded-md p-2 mr-4 w-[40mm]"
-                  value={material.compression.waveSpeed} />
+                  value={material.compression.waveSpeed}
+                  onChange={handleEditForm}
+                  min='0' />
                 <label 
                   htmlFor='compression-attenuation'
-                  className="block text-lg font-bold w-[40mm]">Attenuation</label>
+                  className="block text-lg font-bold w-[40mm]">Attenuation (db/m)</label>
                 <input 
                   id='compression-attenuation'
                   name='compression-attenuation'
                   type="number" 
                   className="border rounded-md p-2 w-[40mm]" 
+                  onChange={handleEditForm}
                   value={material.compression.attenuation} />
             </div>)}
         {material.compression.type === 'modulus' && (
@@ -164,6 +193,8 @@ export default function ModalMaterial({ref, onChange }: iModalMaterialProps) {
                   name='compression-real'
                   type="number" 
                   className="border rounded-md p-2 mr-4 w-[40mm]"
+                  min='0'
+                  onChange={handleEditForm}
                   value={material.compression.real} />
                 <label 
                   htmlFor='compression-imag'
@@ -172,6 +203,8 @@ export default function ModalMaterial({ref, onChange }: iModalMaterialProps) {
                   id='compression-imag'
                   name='compression-imag'
                   type="number" className="border rounded-md p-2 w-[40mm]"
+                  onChange={handleEditForm}
+                  min='0'
                   value={material.compression.imag} />
             </div>)}
         {material.compression.type === 'vacuum' && (
@@ -192,7 +225,7 @@ export default function ModalMaterial({ref, onChange }: iModalMaterialProps) {
             name='shear'
             required
             value={material.compression.type}
-            onChange={(e) => handleCompType( e.target.value )}
+            onChange={handleEditForm}
             className="border rounded-md mb-2">
               <option value="wave">Wave</option>
               <option value="modulus">Modulus (σ)</option>
@@ -203,21 +236,24 @@ export default function ModalMaterial({ref, onChange }: iModalMaterialProps) {
             <div className="flex items-center">
                 <label 
                   htmlFor='shear-wave-speed'
-                  className="block text-lg font-bold mr-4 p-2 w-[40mm]">Wave Speed</label>
+                  className="block text-lg font-bold mr-4 p-2 w-[40mm]">Wave Speed (m/s)</label>
                 <input 
                   id='shear-wave-speed'
                   name='shear-wave-speed'
                   type="number" 
                   className="border rounded-md p-2 mr-4 w-[40mm]"
+                  onChange={handleEditForm}
+                  min='0'
                   value={material.shear.waveSpeed} />
                 <label
                   htmlFor='shear-attenuation'
-                  className="block text-lg font-bold w-[40mm]">Attenuation</label>
+                  className="block text-lg font-bold w-[40mm]">Attenuation (db/m)</label>
                 <input 
                   id='shear-attenuation'
                   name='shear-attenuation'
                   type="number"
                   className="border rounded-md p-2 w-[40mm]"
+                  onChange={handleEditForm}
                   value={material.shear.attenuation} />
             </div>)}
         {material.compression.type === 'modulus' && (
@@ -230,6 +266,8 @@ export default function ModalMaterial({ref, onChange }: iModalMaterialProps) {
                   name='shear-real'
                   type="number" 
                   className="border rounded-md p-2 mr-4 w-[40mm]" 
+                  onChange={handleEditForm}
+                  min='0'
                   value={material.shear.real} />
                 <label 
                   htmlFor='shear-imag'
@@ -239,6 +277,8 @@ export default function ModalMaterial({ref, onChange }: iModalMaterialProps) {
                   name='shear-imag'
                   type="number"
                   className="border rounded-md p-2 w-[40mm]"
+                  onChange={handleEditForm}
+                  min='0'
                   value={material.shear.imag} />
             </div>)}
         {material.compression.type === 'vacuum' && (
@@ -258,6 +298,6 @@ export default function ModalMaterial({ref, onChange }: iModalMaterialProps) {
         </div>
       </form>
     </dialog>,
-    document.getElementById('modal-root')
+    document.getElementById('modal-root') || document.body
   );
 }

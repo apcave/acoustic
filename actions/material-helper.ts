@@ -8,7 +8,7 @@ export interface iProperty {
 }
 
 export interface iMaterial {
-  _id: string;
+  _id?: string;
   createdAt?: Date;
   updatedAt?: Date;
   category: string;
@@ -17,9 +17,10 @@ export interface iMaterial {
   compression: iProperty;
   shear: iProperty;
   userId: string;
+  save?(): void;
 }
 
-export function initialUpdateMaterial() : iUpdateMaterial {
+export function initialMaterialUpdateStatus() : iUpdateMaterial {
   return {
     status: "idle",
     errorMessages: [],

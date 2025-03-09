@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 
 import ModalMaterial, { iModalHandle } from "@/components/multilayer/ModalMaterial";
 import { iLayers, initialLayers } from '@/actions/layers-helper';
-import { iMaterial } from '@/actions/material-helper';
+import { iMaterial, iProperty } from '@/actions/material-helper';
 import LayerList from '@/components/multilayer/LayerList';
 
 
@@ -113,7 +113,7 @@ export default function MaterialList({ materials, propsLayers }: MaterialListPro
 
 interface ModulusCellProps {
     isShear: boolean;
-    value: iWave;
+    value: iProperty;
     className?: string; // Make className optional
 }
 
