@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
 
       <Provider>
-        <div id="modal-root"/>
+
       <Header />
       <html lang="en">
       <body

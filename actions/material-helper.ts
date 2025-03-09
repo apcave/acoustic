@@ -1,6 +1,9 @@
+export type iType = "wave" | "modulus" | "fluid" | "vacuum";
+export type iCategory = "solid" | "fluid" | "vacuum";
+export type iLabel = "compression" | "shear";
 
 export interface iProperty {
-  type: string; // "wave" or "modulus"
+  type: iType; // "wave" or "modulus"
   waveSpeed?: number;
   attenuation?: number;
   real?: number;
@@ -11,7 +14,7 @@ export interface iMaterial {
   _id?: string;
   createdAt?: Date;
   updatedAt?: Date;
-  category: string;
+  category: iCategory;
   name: string;
   density: number;
   compression: iProperty;
@@ -20,41 +23,41 @@ export interface iMaterial {
   save?(): void;
 }
 
-export function initialMaterialUpdateStatus() : iUpdateMaterial {
+export interface iMatActionStatus {
+  status: string;
+  payload: iMaterial[];
+  errorMessages: string[];
+}
+
+export function iniMatActionStatus(): iMatActionStatus {
   return {
     status: "idle",
+    payload: [],
     errorMessages: [],
   };
 }
 
-export interface iUpdateMaterial {
-  status: string;
-  errorMessages: string[];
-}
-
-
 export function initialMaterial(): iMaterial {
-
   return {
-    _id: '', // Or generate a default ID if needed
-    category: 'solid', // Or a default category
-    name: 'New Material',
+    _id: "", // Or generate a default ID if needed
+    category: "solid", // Or a default category
+    name: "New Material",
     density: 1, // Or a default density
     compression: {
-        type: 'wave',
-        waveSpeed: 0,
-        attenuation: 0,
-        real: undefined,
-        imag: undefined
+      type: "wave",
+      waveSpeed: 0,
+      attenuation: 0,
+      real: undefined,
+      imag: undefined,
     },
     shear: {
-        type: 'wave',
-        waveSpeed: 0,
-        attenuation: 0,
-        real: undefined,
-        imag: undefined
+      type: "wave",
+      waveSpeed: 0,
+      attenuation: 0,
+      real: undefined,
+      imag: undefined,
     },
-    userId: '', // Or a default user ID
+    userId: "", // Or a default user ID
     createdAt: new Date(),
     updatedAt: new Date(),
   };

@@ -31,12 +31,12 @@ export default function LayerList({layers} : {layers : iLayers}) {
                 {layers.layers.map((layer, index, array) => (
                     <li key={index} className={index === array.length - 1 ? "" : "border-b border-gray-300"}>
                         <span className="flex">
-                            <Image src="/greenUpArrow.svg" className="w-[4mm] h-[4mm] pt-2 cursor-pointer" alt="up arrow"/>
-                            <Image src="/greenUpArrow.svg" className="w-[7mm] h-[4mm] pr-3 pb-2  cursor-pointer transform rotate-180" alt="down arrow"/>
-                            <p className=" w-[10mm] pl-5">{index+1}</p>
+                            <Image src="/greenUpArrow.svg" width="10" height="4" alt="up arrow" className="my-2 ml-2 cursor-pointer"/>
+                            <Image src="/greenUpArrow.svg" width="10" height="4" className="my-2 ml-2 cursor-pointer transform rotate-180" alt="down arrow"/>
+                            <p className=" w-[10mm] pl-3">{index+1}</p>
                             <p className=" w-[33mm] border-l pl-3">{layer.thickness} mm</p>
                             <p className=" w-[65mm] border-l pl-2">{layer.material.name}</p>
-                            <Image src="/delete.svg" className="w-[5mm] w-5 h-5 ml-2 cursor-pointer" alt="delete" />
+                            <Image src="/delete.svg" width="15" height="15" className="ml-2 cursor-pointer" alt="delete" />
                         </span>
                     </li>
                 ))}

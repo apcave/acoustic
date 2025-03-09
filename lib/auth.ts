@@ -5,9 +5,7 @@ import credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
 
-
-//import {seedDatabase as seedMaterial} from "@/models/seed-material";
-
+import { seedDatabase as seedMaterial } from "@/models/seed-material";
 
 declare module "next-auth" {
   interface Session {
@@ -24,68 +22,66 @@ declare module "next-auth" {
 console.log(process.env.AUTH_GOOGLE_ID);
 console.log(process.env.AUTH_GOOGLE_SECRET);
 
-export const authOptions: NextAuthOptions  = {
-    providers: [
-      GoogleProvider({
-        clientId: process.env.AUTH_GOOGLE_ID || "",
-        clientSecret: process.env.AUTH_GOOGLE_SECRET || ""
-      }),
-      credentials({
-        name: "Credentials",
-        id: "credentials",
-        credentials: {
-          email: { label: "Email", type: "text" },
-          password: { label: "Password", type: "password" },
-        },
-        async authorize(credentials) {
-            await connectDB();
-            const user = await User.findOne({
-              email: credentials?.email,
-            }).select("+password");
-            if (!user) throw new Error("Wrong Email");
-            const passwordMatch = await bcrypt.compare(
-              credentials!.password,
-              user.password
-            );
-            if (!passwordMatch) throw new Error("Wrong Password");
-            return user;
-        },
-      }),
-    ],
-    session: {
-      strategy: "jwt",
-    },
-    callbacks: {
-      async signIn({ account, profile }) {
-
-        if (account?.provider === "google" && profile) {
-          /* 
+export const authOptions: NextAuthOptions = {
+  providers: [
+    GoogleProvider({
+      clientId: process.env.AUTH_GOOGLE_ID || "",
+      clientSecret: process.env.AUTH_GOOGLE_SECRET || "",
+    }),
+    credentials({
+      name: "Credentials",
+      id: "credentials",
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        await connectDB();
+        const user = await User.findOne({
+          email: credentials?.email,
+        }).select("+password");
+        if (!user) throw new Error("Wrong Email");
+        const passwordMatch = await bcrypt.compare(
+          credentials!.password,
+          user.password
+        );
+        if (!passwordMatch) throw new Error("Wrong Password");
+        return user;
+      },
+    }),
+  ],
+  session: {
+    strategy: "jwt",
+  },
+  callbacks: {
+    async signIn({ account, profile }) {
+      if (account?.provider === "google" && profile) {
+        /* 
             If the auth provider is google, check if the user exists in the database.
             If the user is not in the database make a new entry.
             A user identifier is needed to associate other documents with the users.
           */
 
-          await connectDB();
-          try {
-            const user = await User.findOne({ email: profile?.email });
-            if (!user) {
+        await connectDB();
+        try {
+          const user = await User.findOne({ email: profile?.email });
+          if (!user) {
+            const newUser = new User({
+              email: profile?.email,
+              name: profile?.name,
+            });
 
-              const newUser = new User({
-                email: profile?.email,
-                name: profile?.name,
-              });
-  
-              await newUser.save();
-            }
-  
-            return true;
-          } catch (error) {
-            console.log("Error saving user", error);
-            return false;
+            await newUser.save();
           }
+
+          return true;
+        } catch (error) {
+          console.log("Error saving user", error);
+          return false;
         }
-        return true;
-      },
+      }
+      return true;
+    },
 
     async jwt({ token }) {
       /*
@@ -104,7 +100,7 @@ export const authOptions: NextAuthOptions  = {
 
         return token;
       }
-      throw new Error("Will not issue JWT to user no in database.")      
+      throw new Error("Will not issue JWT to user no in database.");
     },
     async session({ session, token }) {
       /*
@@ -119,5 +115,5 @@ export const authOptions: NextAuthOptions  = {
       }
       return session;
     },
-    }
-  };
+  },
+};

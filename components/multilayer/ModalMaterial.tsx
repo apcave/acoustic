@@ -1,14 +1,18 @@
-'use client'
-import { iMaterial, initialMaterial, initialMaterialUpdateStatus } from '@/actions/material-helper';
-import { updateAddMaterial } from '@/actions/materials';
-import { useImperativeHandle, useRef, useState } from 'react';
-import { createPortal, useFormStatus } from 'react-dom';
-import { useActionState } from 'react';
-import {  useSession } from "next-auth/react";
+"use client";
+import {
+  iMaterial,
+  initialMaterial,
+  iniMatActionStatus,
+  iProperty,
+} from "@/actions/material-helper";
+import { updateAddMaterial } from "@/actions/materials";
 
-import Button from '../Button.jsx';
+import MaterialProperty from "@/components/multilayer/MaterialProperty";
 
-import React from 'react';
+import { useImperativeHandle, useRef, useState, useEffect } from "react";
+import { createPortal } from "react-dom";
+import { useActionState } from "react";
+import { useSession } from "next-auth/react";
 
 interface iModalMaterialProps {
   ref: React.Ref<iModalHandle>;
@@ -17,6 +21,7 @@ interface iModalMaterialProps {
 
 export interface iModalHandle {
   open: (material: iMaterial) => void;
+  close: () => void;
 }
 
 /*
@@ -27,8 +32,7 @@ export interface iModalHandle {
   The form is either closed with escape, close or save buttons.
   In the case of escape or close the dialog closes and no changes are made.
 */
-export default function ModalMaterial({ref, onChange }: iModalMaterialProps) {
-
+export default function ModalMaterial({ ref, onChange }: iModalMaterialProps) {
   // This is used to check if the user is logged in.
   const { status, data } = useSession();
 
@@ -36,23 +40,27 @@ export default function ModalMaterial({ref, onChange }: iModalMaterialProps) {
   const dialog = useRef<HTMLDialogElement | null>(null);
 
   // This used to update the material properties in the database on the server.
-  const [state, formAction] = useActionState(updateAddMaterial, initialMaterialUpdateStatus());
-
-  // Used to provide feedback while the form is being submitted.
-  const { pending } = useFormStatus();
+  const [state, formAction, pending] = useActionState(
+    updateAddMaterial,
+    iniMatActionStatus()
+  );
 
   // This state is used to update the UI (combo boxes determine input fields)
   const [material, setMaterial] = useState(initialMaterial());
 
-  let userId = 'anonomous';
-  if (status === 'authenticated' && data?.user?.id) {
+  let userId = "anonymous";
+  if (status === "authenticated" && data?.user?.id) {
     userId = data.user.id;
   }
 
-  if (state.status === 'success') {
-    onChange(material);
-    dialog.current?.close();
-  }
+  // useEffect is required to update the parent state this cannot be done during a child render.
+  useEffect(() => {
+    if (state.status === "success") {
+      state.status = "idle";
+      onChange({ ...material });
+      setMaterial(initialMaterial());
+    }
+  }, [state, onChange, material]);
 
   // When the parent component opens the modal it passes the material to be edited.
   useImperativeHandle(ref, () => {
@@ -61,48 +69,84 @@ export default function ModalMaterial({ref, onChange }: iModalMaterialProps) {
         setMaterial(material);
         dialog.current?.showModal();
       },
+      close() {
+        dialog.current?.close();
+      },
     };
   });
 
-  function handleEditForm(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
-    const name = e.target.name;
-    if (name === 'name') {
-      setMaterial((prev) => {
-        return {
-          ...prev,
-          name: e.target.value,
+  type iPropType = "shear" | "compression";
+  function handleChangeProperty(property: iProperty, propType: iPropType) {
+    // The validation makes it not possible put in invalid material properties.
+
+    setMaterial((prev) => {
+      const newMat = { ...prev };
+      // The material category is a derived property.
+
+      if (
+        newMat.category === "vacuum" &&
+        propType === "compression" &&
+        property.type !== "vacuum"
+      ) {
+        newMat.category = "fluid";
+        newMat.shear = {
+          type: "fluid",
         };
-      });
-      return;
-    }
-    const value = e.target.value;
-    console.log('edit - ', name, ', value - ', value);
+      }
+
+      // The material category is a derived property.
+      if (propType === "compression" && property.type === "vacuum") {
+        newMat.category = "vacuum";
+        newMat.shear = {
+          type: "vacuum",
+          waveSpeed: undefined,
+          attenuation: undefined,
+          real: undefined,
+          imag: undefined,
+        };
+      }
+
+      if (propType === "shear" && property.type === "fluid") {
+        newMat.category = "fluid";
+      }
+
+      if (
+        propType === "shear" &&
+        (property.type === "modulus" || property.type === "wave")
+      ) {
+        newMat.category = "solid";
+      }
+
+      newMat[propType] = property;
+
+      console.log("New Material - ", newMat);
+
+      return newMat;
+    });
   }
 
-  console.log('ModalMaterial - ', material);
-
-  function handleCompType( newType : string ) {
-    console.log(newType);
+  function handleEdit(
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) {
+    const name = e.target.name;
     setMaterial((prev) => {
       return {
         ...prev,
-        compression: {
-        type: newType,
-        waveSpeed: 0,
-        attenuation: 0,
-        real: 0,
-        imag: 0,
-      }}});
+        [name]: e.target.value,
+      };
+    });
   }
 
-  let compLabel = 'Compression Wave Data';
-  if (material.compression.type === 'modulus') {
-    compLabel = 'Compression Modulus (K) Data';
-  }
+  // This logic is used with the portal to ensure the dialog is rendered on the client side only.
+  // The id tag for the portal is only valid on the client side.
+  const [isClient, setIsClient] = useState(false);
 
-  let shearLabel = 'Shear Wave Data';
-  if (material.shear.type === 'modulus') {
-    shearLabel = 'Shear Modulus (σ) Data';
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null;
   }
 
   return createPortal(
@@ -110,194 +154,65 @@ export default function ModalMaterial({ref, onChange }: iModalMaterialProps) {
       ref={dialog}
       className="backdrop:bg-stone-900/90 p-4 rounded-md shadow-md"
     >
-    <form id="material-form" action={formAction}  >
-      <input type="hidden" name="_id" value={material._id} />
-      <input type="hidden" name="userId" value={userId} />
-    <h1 className="text-2xl font-bold mb-4">Material Properties</h1>
-    <div className="flex items-center mb-4">
-        <label 
-          className="block font-bold mr-4"
-          htmlFor='name'>Name</label>
-        <input 
-          type="text"
-          className="border rounded-md p-2 mr-4"
-          id='name'
-          name='name'
-          onChange={handleEditForm}
-          required
-          pattern="\S+.*"
-          title="Name cannot be empty or just whitespace"
-          value={material.name} />
-        <label 
-          className="block font-bold mr-4"
-          htmlFor="density">Density (kg/m³)</label>
-        <input 
-          type='number'
-          className="border rounded-md p-2 w-[40mm]"
-          id='density'
-          name='density'
-          required
-          onChange={handleEditForm}
-          min='0'
-          value={material.density} />
-    </div>
-
-    <div className="align-center border rounded-md pt-1 pb-4 px-4 w-[200mm] h-[50mm]">
-        <label className="block text-lg mb-2 font-bold">{compLabel}</label>
-        <div className="flex items-center">
-        <label 
-          className="block text-lg mb-2 font-bold mr-4 p-2 w-[40mm]"
-          htmlFor='compression'>Data Type</label>
-        <select 
-            id="compression"
-            name='compression'
-            value={material.compression.type}
-            onChange={handleEditForm}
-            className="border rounded-md mb-2">
-              <option value="wave">Wave</option>
-              <option value="modulus">Modulus (K)</option>
-              <option value="vacuum">Vacuum</option>
-        </select>
-        </div>
-        {material.compression.type === 'wave' && (
-            <div className="flex items-center">
-                <label 
-                  htmlFor='compression-wave-speed'
-                  className="block text-lg font-bold mr-4 p-2 w-[40mm]">Wave Speed (m/s)</label>
-                <input 
-                  id='compression-wave-speed'
-                  name='compression-wave-speed'
-                  type="number" 
-                  className="border rounded-md p-2 mr-4 w-[40mm]"
-                  value={material.compression.waveSpeed}
-                  onChange={handleEditForm}
-                  min='0' />
-                <label 
-                  htmlFor='compression-attenuation'
-                  className="block text-lg font-bold w-[40mm]">Attenuation (db/m)</label>
-                <input 
-                  id='compression-attenuation'
-                  name='compression-attenuation'
-                  type="number" 
-                  className="border rounded-md p-2 w-[40mm]" 
-                  onChange={handleEditForm}
-                  value={material.compression.attenuation} />
-            </div>)}
-        {material.compression.type === 'modulus' && (
-            <div className="flex items-center">
-                <label 
-                htmlFor='compression-real'
-                className="block text-lg font-bold mr-4 p-2 w-[40mm]">Real (Pa)</label>
-                <input 
-                  id='compression-real'
-                  name='compression-real'
-                  type="number" 
-                  className="border rounded-md p-2 mr-4 w-[40mm]"
-                  min='0'
-                  onChange={handleEditForm}
-                  value={material.compression.real} />
-                <label 
-                  htmlFor='compression-imag'
-                  className="block text-lg font-bold mr-4 p-2 w-[40mm]">Imaginary (Pa)</label>
-                <input
-                  id='compression-imag'
-                  name='compression-imag'
-                  type="number" className="border rounded-md p-2 w-[40mm]"
-                  onChange={handleEditForm}
-                  min='0'
-                  value={material.compression.imag} />
-            </div>)}
-        {material.compression.type === 'vacuum' && (
-            <>
-                <p>Vacuums do not support compression or shear waves.</p>
-                <p>They are pure reflective layers that shift phase 180°.</p>
-                </>
-            )}
-    </div>
-    <div className="align-center border rounded-md pt-1 pb-4 px-4 mt-4 w-[200mm] h-[50mm]">
-        <label className="block text-lg mb-2 font-bold">{shearLabel}</label>
-        <div className="flex items-center">
-        <label 
-          htmlFor='shear'
-          className="block text-lg mb-2 font-bold mr-4 p-2 w-[40mm]">Data Type</label>
-        <select 
-            id="shear"
-            name='shear'
+      <form id="material-form" action={formAction}>
+        <input type="hidden" name="_id" value={material._id} />
+        <input type="hidden" name="userId" value={userId} />
+        <h1 className="text-2xl font-bold mb-4">
+          Material Properties - state: {material.category}
+        </h1>
+        <div className="flex items-center mb-4">
+          <label className="block font-bold mr-4" htmlFor="name">
+            Name
+          </label>
+          <input
+            type="text"
+            className="border rounded-md p-2 mr-4"
+            id="name"
+            name="name"
+            onChange={handleEdit}
             required
-            value={material.compression.type}
-            onChange={handleEditForm}
-            className="border rounded-md mb-2">
-              <option value="wave">Wave</option>
-              <option value="modulus">Modulus (σ)</option>
-              <option value="fluid">Fluid</option>
-        </select>
+            pattern="\S+.*"
+            title="Name cannot be empty or just whitespace"
+            value={material.name}
+          />
+          <label className="block font-bold mr-4" htmlFor="density">
+            Density (kg/m³)
+          </label>
+          <input
+            type="number"
+            className="border rounded-md p-2 w-[40mm]"
+            id="density"
+            name="density"
+            required
+            onChange={handleEdit}
+            step="any"
+            min="0"
+            value={material.density}
+          />
         </div>
-        {material.compression.type === 'wave' && (
-            <div className="flex items-center">
-                <label 
-                  htmlFor='shear-wave-speed'
-                  className="block text-lg font-bold mr-4 p-2 w-[40mm]">Wave Speed (m/s)</label>
-                <input 
-                  id='shear-wave-speed'
-                  name='shear-wave-speed'
-                  type="number" 
-                  className="border rounded-md p-2 mr-4 w-[40mm]"
-                  onChange={handleEditForm}
-                  min='0'
-                  value={material.shear.waveSpeed} />
-                <label
-                  htmlFor='shear-attenuation'
-                  className="block text-lg font-bold w-[40mm]">Attenuation (db/m)</label>
-                <input 
-                  id='shear-attenuation'
-                  name='shear-attenuation'
-                  type="number"
-                  className="border rounded-md p-2 w-[40mm]"
-                  onChange={handleEditForm}
-                  value={material.shear.attenuation} />
-            </div>)}
-        {material.compression.type === 'modulus' && (
-            <div className="flex items-center">
-                <label 
-                  htmlFor='shear-real'
-                  className="block text-lg font-bold mr-4 p-2 w-[40mm]">Real (Pa)</label>
-                <input 
-                  id='shear-real'
-                  name='shear-real'
-                  type="number" 
-                  className="border rounded-md p-2 mr-4 w-[40mm]" 
-                  onChange={handleEditForm}
-                  min='0'
-                  value={material.shear.real} />
-                <label 
-                  htmlFor='shear-imag'
-                  className="block text-lg font-bold mr-4 p-2 w-[40mm]">Imaginary (Pa)</label>
-                <input
-                  id='shear-imag'
-                  name='shear-imag'
-                  type="number"
-                  className="border rounded-md p-2 w-[40mm]"
-                  onChange={handleEditForm}
-                  min='0'
-                  value={material.shear.imag} />
-            </div>)}
-        {material.compression.type === 'vacuum' && (
-            <>
-                <p>Vacuums do not support compression or shear waves.</p>
-                <p>They are pure reflective layers that shift phase 180°.</p>
-                </>
-            )}
-    </div>
-      <div className="mt-4 text-right space-x-4">
-      {state.status === 'error' &&
-       state.errorMessages.map((mess, index) => <p key={index}>{mess}</p>)}
-      <button disabled={pending}>
-      {pending ? 'Submitting...' : 'Save Properties'}
-    </button>        
-        <Button>Close</Button>
+        <MaterialProperty
+          label="compression"
+          property={material.compression}
+          onChange={handleChangeProperty}
+        />
+        <MaterialProperty
+          label="shear"
+          property={material.shear}
+          onChange={handleChangeProperty}
+          compType={material.compression.type}
+        />
+        <div className="mt-4 text-right space-x-4">
+          {state.status === "error" &&
+            state.errorMessages.map((mess, index) => <p key={index}>{mess}</p>)}
+          <button disabled={pending}>
+            {pending ? "Submitting..." : "Save Properties"}
+          </button>
+          <button disabled={pending} onClick={() => dialog.current?.close()}>
+            Close
+          </button>
         </div>
       </form>
     </dialog>,
-    document.getElementById('modal-root') || document.body
+    document.getElementById("modal-root") || document.body
   );
 }
