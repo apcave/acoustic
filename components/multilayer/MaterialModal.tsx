@@ -46,6 +46,7 @@ export default function MaterialModal() {
       onClose={() => dispatch(showEditMaterial(false))}
       className="backdrop:bg-stone-900/90 p-4 rounded-md shadow-md"
     >
+      <MaterialForm />
       <button onClick={() => dispatch(showEditMaterial(false))}>Close</button>
     </dialog>,
     document.getElementById("modal-root") || document.body

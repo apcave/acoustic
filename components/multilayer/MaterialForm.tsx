@@ -8,14 +8,13 @@ import { updateAddMaterial } from "@/actions/materials";
 
 import MaterialProperty from "@/components/multilayer/MaterialProperty";
 
-import { useActionState, useEffect } from "react";
+import { useActionState } from "react";
 import { useSession } from "next-auth/react";
 
-interface iMaterialFormProps {
-  material: iMaterial;
-  setMaterial: React.Dispatch<React.SetStateAction<iMaterial>>;
-  onChange: (material: iMaterial) => void;
-}
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "@/store/store";
+import { showEditMaterial } from "@/store/uiSlice";
+import { saveEditToMaterials, setEditMaterial } from "@/store/materialSlice";
 
 /*
   Local state is used to update the UI and then a server action updates the materials database.
@@ -23,13 +22,13 @@ interface iMaterialFormProps {
   The form is either closed with escape, close or save buttons.
   In the case of escape or close the dialog closes and no changes are made.
 */
-export default function MaterialForm({
-  material,
-  setMaterial,
-  onChange,
-}: iMaterialFormProps) {
+export default function MaterialForm() {
+  const dispatch = useDispatch();
+
   // This is used to check if the user is logged in.
   const { status, data } = useSession();
+
+  const material = useSelector((state: RootState) => state.mat.editMaterial);
 
   // This used to update the material properties in the database on the server.
   const [state, formAction, pending] = useActionState(
@@ -37,85 +36,83 @@ export default function MaterialForm({
     iniMatActionStatus()
   );
 
+  if (!material) {
+    return null;
+  }
+
   let userId = "anonymous";
   if (status === "authenticated" && data?.user?.id) {
     userId = data.user.id;
   }
 
-  // useEffect is required to update the parent state this cannot be done during a child render.
-  useEffect(() => {
-    if (state.status === "success") {
-      state.status = "idle";
-      onChange({ ...material });
-      setMaterial(initialMaterial());
-    }
-  }, [state, onChange, material, setMaterial]);
+  if (state.status === "success") {
+    state.status = "idle";
+    dispatch(saveEditToMaterials()); // Optimistic update.
+    dispatch(showEditMaterial(false));
+  }
 
   type iPropType = "shear" | "compression";
   function handleChangeProperty(property: iProperty, propType: iPropType) {
     // The validation makes it not possible put in invalid material properties.
 
-    setMaterial((prev) => {
-      const newMat = { ...prev };
-      // The material category is a derived property.
+    const newMat = { ...material } as iMaterial;
 
-      if (
-        newMat.category === "vacuum" &&
-        propType === "compression" &&
-        property.type !== "vacuum"
-      ) {
-        newMat.category = "fluid";
-        newMat.shear = {
-          type: "fluid",
-        };
-      }
+    if (
+      newMat.category === "vacuum" &&
+      propType === "compression" &&
+      property.type !== "vacuum"
+    ) {
+      newMat.category = "fluid";
+      newMat.shear = {
+        type: "fluid",
+      };
+    }
 
-      // The material category is a derived property.
-      if (propType === "compression" && property.type === "vacuum") {
-        newMat.category = "vacuum";
-        newMat.shear = {
-          type: "vacuum",
-          waveSpeed: undefined,
-          attenuation: undefined,
-          real: undefined,
-          imag: undefined,
-        };
-      }
+    // The material category is a derived property.
+    if (propType === "compression" && property.type === "vacuum") {
+      newMat.category = "vacuum";
+      newMat.shear = {
+        type: "vacuum",
+        waveSpeed: undefined,
+        attenuation: undefined,
+        real: undefined,
+        imag: undefined,
+      };
+    }
 
-      if (propType === "shear" && property.type === "fluid") {
-        newMat.category = "fluid";
-      }
+    if (propType === "shear" && property.type === "fluid") {
+      newMat.category = "fluid";
+    }
 
-      if (
-        propType === "shear" &&
-        (property.type === "modulus" || property.type === "wave")
-      ) {
-        newMat.category = "solid";
-      }
+    if (
+      propType === "shear" &&
+      (property.type === "modulus" || property.type === "wave")
+    ) {
+      newMat.category = "solid";
+    }
 
-      newMat[propType] = property;
+    newMat[propType] = property;
 
-      console.log("New Material - ", newMat);
+    console.log("New Material - ", newMat);
 
-      return newMat;
-    });
+    dispatch(setEditMaterial(newMat));
   }
 
   function handleEdit(
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) {
-    const name = e.target.name;
-    setMaterial((prev) => {
-      return {
-        ...prev,
-        [name]: e.target.value,
-      };
-    });
+    const name = e.target.name as keyof iMaterial;
+    const newMat = { ...material } as iMaterial;
+    if (name === "name") {
+      newMat.name = e.target.value;
+    } else if (name === "density") {
+      newMat.density = parseFloat(e.target.value);
+    }
   }
 
   return (
     <form id="material-form" action={formAction}>
-      <input type="hidden" name="_id" value={material._id} />
+      <input type="hidden" name="_id" value={material?._id} />
       <input type="hidden" name="userId" value={userId} />
       <h1 className="text-2xl font-bold mb-4">
         Material Properties - state: {material.category}

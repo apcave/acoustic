@@ -8,7 +8,7 @@ import LayerList from "@/components/multilayer/LayerList";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { RootState } from "@/store/store";
+import { RootState, AppDispatch } from "@/store/store";
 import { fetchMaterialsList } from "@/store/materialActions";
 import { replaceMaterials, setEditMaterial } from "@/store/materialSlice";
 import { showEditMaterial } from "@/store/uiSlice";
@@ -22,7 +22,7 @@ export default function MaterialList({
   materials,
   propsLayers,
 }: iMaterialListProps) {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const materialState = useSelector((state: RootState) => state.mat.materials);
   const [filteredMaterials, setMaterialFilter] = useState(materialState);
 
@@ -31,7 +31,10 @@ export default function MaterialList({
 
   // Update the material list every 10 seconds in case another users changes the data.
   useEffect(() => {
-    const interval = setInterval(dispatch(fetchMaterialsList() as any), 10000);
+    const interval = setInterval(() => {
+      dispatch(fetchMaterialsList());
+    }, 10000);
+
     return () => clearInterval(interval);
   }, [dispatch]);
 

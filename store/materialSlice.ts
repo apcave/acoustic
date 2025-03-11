@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import {
   iMaterial,
+  iniMaterial,
   matSerializable,
   matsSerializable,
 } from "../actions/material-helper";
@@ -13,7 +14,7 @@ interface MaterialState {
 
 const initialState: MaterialState = {
   materials: [],
-  editMaterial: null,
+  editMaterial: iniMaterial(),
 };
 
 const materialSlice = createSlice({
@@ -26,8 +27,19 @@ const materialSlice = createSlice({
     setEditMaterial: (state, action: PayloadAction<iMaterial>) => {
       state.editMaterial = matSerializable(action.payload);
     },
+    saveEditToMaterials: (state) => {
+      if (state.editMaterial) {
+        const idx = state.materials.findIndex(
+          (mat) => mat._id === state.editMaterial?._id
+        );
+        if (idx >= 0) {
+          state.materials[idx] = state.editMaterial;
+        }
+      }
+    },
   },
 });
 
-export const { replaceMaterials, setEditMaterial } = materialSlice.actions;
+export const { replaceMaterials, setEditMaterial, saveEditToMaterials } =
+  materialSlice.actions;
 export default materialSlice.reducer;
