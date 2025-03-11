@@ -72,10 +72,8 @@ export default function MaterialList({ materials }: iMaterialListProps) {
     <>
       <div id="modal-root" />
       <MaterialModal />
-      <div className="w-[170mm] bg-white text-black shadow-md font-serif mx-auto p-8 rounded m-[5mm] relative">
-        <h1 className="text-2xl text-center mb-1 font-bold">
-          Acoustic Material Properties
-        </h1>
+      <div id="acoustic-app">
+        <h1>Acoustic Material Properties</h1>
 
         <LayerList />
 
