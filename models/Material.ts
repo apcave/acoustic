@@ -1,52 +1,28 @@
-import mongoose, { Schema, model, models } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
-// Define the schema for the nested 'compression' and 'shear' objects
-const propertySchema = new Schema({
-  type: {
-    type: String,
-    required: true,
-    enum: ['wave', 'modulus', 'fluid', 'vacuum'], // Add enum validation
-  },
-  waveSpeed: {
-    type: Number,
-  },
-  attenuation: {
-    type: Number,
-  },
-  real: {
-    type: Number,
-  },
-  imag: {
-    type: Number,
-  },
+import { iProperty } from "@/lib/data-helpers";
+
+export interface iMaterial extends Document {
+  _id: string; // Define _id as a string
+  userId: string;
+  name: string;
+  density: number;
+  category: string;
+  compression: iProperty;
+  shear: iProperty;
+  updatedAt: Date;
+}
+
+const MaterialSchema: Schema = new Schema({
+  _id: { type: String, required: true }, // Define _id as a string
+  userId: { type: String, required: true },
+  name: { type: String, required: true },
+  density: { type: Number, required: true },
+  category: { type: String, required: true },
+  compression: { type: Object, required: true },
+  shear: { type: Object, required: true },
+  updatedAt: { type: Date, default: Date.now },
 });
 
-// Define the main schema for the 'Material' document
-const materialSchema = new Schema({
-  category: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  density: {
-    type: Number,
-    required: true,
-  },
-  compression: propertySchema, // Embed the 'compression' schema
-  shear: propertySchema, // Embed the 'shear' schema
-  userId: {
-    type: mongoose.Types.ObjectId,
-    required:true,
-  }
-},
-{
-    timestamps: true,
-  }
-);
-
-const Material = models.Material || model("Material", materialSchema);
-
-export default Material;
+export default mongoose.models.Material ||
+  mongoose.model<iMaterial>("Material", MaterialSchema);

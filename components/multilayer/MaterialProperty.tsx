@@ -1,4 +1,4 @@
-import { iProperty, iType, iLabel } from "@/actions/material-helper";
+import { iProperty, iType, iLabel } from "@/lib/data-helpers";
 
 interface iMaterialProperty {
   label: iLabel;

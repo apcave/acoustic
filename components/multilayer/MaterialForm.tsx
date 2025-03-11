@@ -1,9 +1,5 @@
 "use client";
-import {
-  iMaterial,
-  iniMatActionStatus,
-  iProperty,
-} from "@/actions/material-helper";
+import { iMaterial, iniMatActionStatus, iProperty } from "@/lib/data-helpers";
 import { updateAddMaterial } from "@/actions/materials";
 
 import MaterialProperty from "@/components/multilayer/MaterialProperty";
@@ -11,6 +7,7 @@ import MaterialProperty from "@/components/multilayer/MaterialProperty";
 import { useActionState } from "react";
 import { useSession } from "next-auth/react";
 
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
 import { showEditMaterial } from "@/store/uiSlice";
@@ -36,19 +33,21 @@ export default function MaterialForm() {
     iniMatActionStatus()
   );
 
+  useEffect(() => {
+    if (state.status === "success") {
+      state.status = "idle";
+      dispatch(saveEditToMaterials());
+      dispatch(showEditMaterial(false));
+    }
+  }, [state.status, dispatch]);
+
   if (!material) {
     return null;
   }
 
   let userId = "anonymous";
-  if (status === "authenticated" && data?.user?.id) {
-    userId = data.user.id;
-  }
-
-  if (state.status === "success") {
-    state.status = "idle";
-    dispatch(saveEditToMaterials()); // Optimistic update.
-    dispatch(showEditMaterial(false));
+  if (status === "authenticated" && data?.user?._id) {
+    userId = data.user._id;
   }
 
   type iPropType = "shear" | "compression";
@@ -93,26 +92,26 @@ export default function MaterialForm() {
 
     newMat[propType] = property;
 
-    console.log("New Material - ", newMat);
-
     dispatch(setEditMaterial(newMat));
   }
 
   function handleEdit(
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) {
-    const name = e.target.name as keyof iMaterial;
+    console.log("Edit Material - ", e.target.name, e.target.value);
+    const name = e.target.name;
     const newMat = { ...material } as iMaterial;
     if (name === "name") {
       newMat.name = e.target.value;
     } else if (name === "density") {
       newMat.density = parseFloat(e.target.value);
     }
+    dispatch(setEditMaterial(newMat));
   }
 
   return (
     <form id="material-form" action={formAction}>
-      <input type="hidden" name="_id" value={material?._id} />
+      <input type="hidden" name="id" value={material?._id} />
       <input type="hidden" name="userId" value={userId} />
       <h1 className="text-2xl font-bold mb-4">
         Material Properties - state: {material.category}

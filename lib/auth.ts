@@ -10,7 +10,7 @@ import bcrypt from "bcryptjs";
 declare module "next-auth" {
   interface Session {
     user: {
-      id: string | null | undefined;
+      _id: string | null | undefined;
       name: string | null | undefined;
       email: string | null | undefined;
       image: string | null | undefined;
@@ -93,7 +93,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.name = user.name;
         token.email = user.email;
-        token.id = user._id.toString();
+        token._id = user._id.toString();
 
         // This is used during project setup to seed the database.
         //seedMaterial(user._id.toString());
@@ -111,7 +111,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.name = token.name;
         session.user.email = token.email;
-        session.user.id = token.id as string;
+        session.user._id = token._id as string;
       }
       return session;
     },

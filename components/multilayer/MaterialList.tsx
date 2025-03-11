@@ -1,11 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
 
 import MaterialModal from "@/components/multilayer/MaterialModal";
-import { iLayer } from "@/actions/layers-helper";
-import { iMaterial, iProperty } from "@/actions/material-helper";
+import { iMaterial, iProperty, iniLayer } from "@/lib/data-helpers";
 import LayerList from "@/components/multilayer/LayerList";
 
 import { RootState, AppDispatch } from "@/store/store";
@@ -43,11 +41,7 @@ export default function MaterialList({ materials }: iMaterialListProps) {
   function handleAddMaterialToLayer(material: iMaterial) {
     console.log("Adding material", material);
 
-    const newLayer: iLayer = {
-      _id: uuidv4(),
-      thickness: 0,
-      material,
-    };
+    const newLayer = iniLayer(material);
     dispatch(addLayer(newLayer));
   }
 

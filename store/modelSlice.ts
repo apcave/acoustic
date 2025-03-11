@@ -1,6 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { iniModel, iModel, iSweep, iResult } from "@/actions/model-helper";
-import { iComposite, iLayer } from "@/actions/layers-helper";
+import {
+  iniModel,
+  iModel,
+  iSweep,
+  iResult,
+  iComposite,
+  iLayer,
+} from "@/lib/data-helpers";
+
 /*
     Only the material properties and the models are saved individually.
     The layers, sweep and figures data are saved in the models.

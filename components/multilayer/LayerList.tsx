@@ -9,7 +9,7 @@ import {
   deleteLayer,
   editLayer,
 } from "@/store/modelSlice";
-import { iLayer } from "@/actions/layers-helper";
+import { iLayer } from "@/lib/data-helpers";
 
 export default function LayerList() {
   const layers = useSelector(

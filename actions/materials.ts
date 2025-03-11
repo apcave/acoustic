@@ -7,7 +7,7 @@ import {
   iProperty,
   iMatActionStatus,
   iniMatActionStatus,
-} from "@/actions/material-helper";
+} from "@/lib/data-helpers";
 
 import { revalidatePath } from "next/cache";
 
@@ -41,7 +41,7 @@ export async function updateAddMaterial(
     await connectDB();
 
     const userId = formData.get("userId") as string; // Get the user ID from the form
-    const materialId = formData.get("_id") as string; // Get the material ID from the form
+    const materialId = formData.get("id") as string; // Get the material ID from the form
     const name = formData.get("name") as string;
     const density = parseFloat(formData.get("density") as string);
 
@@ -248,6 +248,7 @@ export async function updateAddMaterial(
       }
 
       const materialOb: iMaterial = {
+        _id: materialId,
         userId,
         name,
         density,
@@ -260,15 +261,9 @@ export async function updateAddMaterial(
       return materialOb;
     }
 
-    if (materialId) {
-      // Update existing material
-      material = await Material.findById(materialId);
-      if (!material) {
-        status.status = "error";
-        status.errorMessages.push("Material not found");
-        return status;
-      }
-
+    // Update existing material
+    material = await Material.findById(materialId);
+    if (material) {
       // Assign the values from the makeMaterial function to the existing material
       const materialOb = makeMaterial();
       material.name = materialOb.name;
@@ -277,7 +272,6 @@ export async function updateAddMaterial(
       material.compression = materialOb.compression;
       material.shear = materialOb.shear;
     } else {
-      // Create new material
       material = new Material(makeMaterial());
     }
 

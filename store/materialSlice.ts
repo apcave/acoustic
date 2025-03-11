@@ -5,7 +5,7 @@ import {
   iniMaterial,
   matSerializable,
   matsSerializable,
-} from "../actions/material-helper";
+} from "@/lib/data-helpers";
 
 interface MaterialState {
   materials: iMaterial[];
