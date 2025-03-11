@@ -1,33 +1,27 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
 
 import MaterialModal from "@/components/multilayer/MaterialModal";
-import { iLayers, initialLayers } from "@/actions/layers-helper";
+import { iLayer } from "@/actions/layers-helper";
 import { iMaterial, iProperty } from "@/actions/material-helper";
 import LayerList from "@/components/multilayer/LayerList";
-
-import { useSelector, useDispatch } from "react-redux";
 
 import { RootState, AppDispatch } from "@/store/store";
 import { fetchMaterialsList } from "@/store/materialActions";
 import { replaceMaterials, setEditMaterial } from "@/store/materialSlice";
 import { showEditMaterial } from "@/store/uiSlice";
+import { addLayer } from "@/store/modelSlice";
 
 interface iMaterialListProps {
   materials: iMaterial[];
-  propsLayers?: iLayers;
 }
 
-export default function MaterialList({
-  materials,
-  propsLayers,
-}: iMaterialListProps) {
+export default function MaterialList({ materials }: iMaterialListProps) {
   const dispatch = useDispatch<AppDispatch>();
   const materialState = useSelector((state: RootState) => state.mat.materials);
   const [filteredMaterials, setMaterialFilter] = useState(materialState);
-
-  const initialLayersState = propsLayers ? propsLayers : initialLayers();
-  const [layersState, setLayersState] = useState<iLayers>(initialLayersState);
 
   // Update the material list every 10 seconds in case another users changes the data.
   useEffect(() => {
@@ -48,16 +42,13 @@ export default function MaterialList({
   // Adds a newly selected material to the layers.
   function handleAddMaterialToLayer(material: iMaterial) {
     console.log("Adding material", material);
-    setLayersState((prev) => {
-      const newLayer = {
-        thickness: 0,
-        material: material,
-      };
-      return {
-        ...prev,
-        layers: [...prev.layers, newLayer],
-      };
-    });
+
+    const newLayer: iLayer = {
+      _id: uuidv4(),
+      thickness: 0,
+      material,
+    };
+    dispatch(addLayer(newLayer));
   }
 
   function launchMaterialModal(material: iMaterial) {
@@ -92,7 +83,7 @@ export default function MaterialList({
           Acoustic Material Properties
         </h1>
 
-        <LayerList layers={layersState} />
+        <LayerList />
 
         <span className="flex justify-center my-3">
           <h1 className="text-xl text-center font-bold">Available Materials</h1>
