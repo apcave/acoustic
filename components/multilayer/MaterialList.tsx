@@ -1,12 +1,17 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 
-import MaterialModal, {
-  iModalHandle,
-} from "@/components/multilayer/MaterialModal";
+import MaterialModal from "@/components/multilayer/MaterialModal";
 import { iLayers, initialLayers } from "@/actions/layers-helper";
 import { iMaterial, iProperty } from "@/actions/material-helper";
 import LayerList from "@/components/multilayer/LayerList";
+
+import { useSelector, useDispatch } from "react-redux";
+
+import { RootState } from "@/store/store";
+import { fetchMaterialsList } from "@/store/materialActions";
+import { replaceMaterials, setEditMaterial } from "@/store/materialSlice";
+import { showEditMaterial } from "@/store/uiSlice";
 
 interface iMaterialListProps {
   materials: iMaterial[];
@@ -17,42 +22,25 @@ export default function MaterialList({
   materials,
   propsLayers,
 }: iMaterialListProps) {
-  console.log("MaterialList - ", materials, propsLayers);
+  const dispatch = useDispatch();
+  const materialState = useSelector((state: RootState) => state.mat.materials);
+  const [filteredMaterials, setMaterialFilter] = useState(materialState);
 
-  const [materialState, setMaterialState] = useState<iMaterial[]>(materials);
   const initialLayersState = propsLayers ? propsLayers : initialLayers();
   const [layersState, setLayersState] = useState<iLayers>(initialLayersState);
 
-  const modalRef = useRef<iModalHandle | null>(null);
-
-  // The materials data can change due to other users editing the database.
-  // This effect fetches the materials every 10 seconds to keep the UI up to date.
+  // Update the material list every 10 seconds in case another users changes the data.
   useEffect(() => {
-    const fetchMaterials = async () => {
-      try {
-        const response = await fetch("/api/materials");
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setMaterialState((prevState) => {
-          // Check if the new data is different from the current state
-          if (JSON.stringify(prevState) !== JSON.stringify(data)) {
-            return data;
-          }
-          return prevState;
-        });
-      } catch (error) {
-        console.error("Error fetching materials:", error);
-      }
-    };
-
-    fetchMaterials(); // Initial fetch
-
-    const interval = setInterval(fetchMaterials, 10000); // Fetch every 10 seconds
-
+    const interval = setInterval(dispatch(fetchMaterialsList() as any), 10000);
     return () => clearInterval(interval);
-  }, []);
+  }, [dispatch]);
+
+  // Sets the materials list from server side code...
+  useEffect(() => {
+    dispatch(replaceMaterials(materials));
+    // TODO: Alphabetical sort of material names.
+    setMaterialFilter(materials);
+  }, [dispatch, materials]);
 
   // Adds a newly selected material to the layers.
   function handleAddMaterialToLayer(material: iMaterial) {
@@ -69,47 +57,21 @@ export default function MaterialList({
     });
   }
 
-  async function handleOptimisticUpdate(material: iMaterial) {
-    /*
-        A modal dialog is used to edit the material properties.
-        Data collection and validation is done in the modal component.
-        This function is called after a successful post to the API.
-        For this to be called the user must have successfully edited the material properties.
-        As such the modal dialog is no longer needed and can be closed.
-
-        The update to the materials list also effects the modal properties.
-        As such the modal needs to be closed before the state takes effect.
-    */
-    // Close the modal dialog
-    modalRef?.current?.close();
-    const materialExists = materialState.some(
-      (mat) => mat._id === material._id
-    );
-    if (materialExists) {
-      // Optimistically update the UI
-      setMaterialState((prev) =>
-        prev.map((mat) => (mat._id === material._id ? material : mat))
-      );
-    } else {
-      // Optimistically update the UI
-      setMaterialState((prev) => [...prev, material]);
-    }
-  }
-
   function launchMaterialModal(material: iMaterial) {
     // Make a copy of the material to avoid changing the original.
-    modalRef?.current?.open({ ...material });
+    dispatch(setEditMaterial(material));
+    dispatch(showEditMaterial(true));
   }
 
   function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
     const search = event.target.value.toLowerCase();
-    const filteredMaterials = materialState.filter((material) => {
+    const data = materialState.filter((material) => {
       return material.name.toLowerCase().includes(search);
     });
-    setMaterialState(filteredMaterials);
+    setMaterialFilter(data);
   }
 
-  const materialList = materialState.map((material) => (
+  const materialList = filteredMaterials.map((material) => (
     <MaterialRow
       key={material._id}
       material={material}
@@ -121,7 +83,7 @@ export default function MaterialList({
   return (
     <>
       <div id="modal-root" />
-      <MaterialModal ref={modalRef} onChange={handleOptimisticUpdate} />
+      <MaterialModal />
       <div className="w-[170mm] bg-white text-black shadow-md font-serif mx-auto p-8 rounded m-[5mm] relative">
         <h1 className="text-2xl text-center mb-1 font-bold">
           Acoustic Material Properties

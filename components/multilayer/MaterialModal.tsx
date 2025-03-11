@@ -1,43 +1,32 @@
 "use client";
-import { iMaterial, initialMaterial } from "@/actions/material-helper";
-import MaterialForm from "@/components/multilayer/MaterialForm";
 
-import { useImperativeHandle, useRef, useState, useEffect } from "react";
+import { RootState } from "@/store/store";
+import MaterialForm from "@/components/multilayer/MaterialForm";
+import { showEditMaterial } from "@/store/uiSlice";
+
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
-interface iMaterialModalProps {
-  ref: React.Ref<iModalHandle>;
-  onChange: (material: iMaterial) => void;
-}
-
-export interface iModalHandle {
-  open: (material: iMaterial) => void;
-  close: () => void;
-}
+import { useSelector, useDispatch } from "react-redux";
 
 /*
-  The modal is either closed with escape, close or save buttons.
-  In the case of escape or close the dialog closes and no changes are made.
+  The component opens a dialog box to edit a material when the context editMaterial is set.
 */
-export default function MaterialModal({ ref, onChange }: iMaterialModalProps) {
-  // This ref is used to open the dialog from the parent component.
-  const dialog = useRef<HTMLDialogElement | null>(null);
+export default function MaterialModal() {
+  const dispatch = useDispatch();
 
-  // This state is used to update the UI (combo boxes determine input fields)
-  const [material, setMaterial] = useState(initialMaterial());
+  // The reference is required to make the box truly modal (background change and tint)
+  const dialogRef = useRef<HTMLDialogElement | null>(null);
 
-  // When the parent component opens the modal it passes the material to be edited.
-  useImperativeHandle(ref, () => {
-    return {
-      open(material: iMaterial) {
-        setMaterial(material);
-        dialog.current?.showModal();
-      },
-      close() {
-        dialog.current?.close();
-      },
-    };
-  });
+  const showModal = useSelector(
+    (state: RootState) => state.ui.showEditMaterial
+  );
+
+  if (showModal) {
+    dialogRef.current?.showModal();
+  } else {
+    dialogRef.current?.close();
+  }
 
   // This logic is used with the portal to ensure the dialog is rendered on the client side only.
   // The id tag for the portal is only valid on the client side.
@@ -53,15 +42,11 @@ export default function MaterialModal({ ref, onChange }: iMaterialModalProps) {
 
   return createPortal(
     <dialog
-      ref={dialog}
+      ref={dialogRef}
+      onClose={() => dispatch(showEditMaterial(false))}
       className="backdrop:bg-stone-900/90 p-4 rounded-md shadow-md"
     >
-      <MaterialForm
-        material={material}
-        setMaterial={setMaterial}
-        onChange={onChange}
-      />
-      <button onClick={() => dialog.current?.close()}>Close</button>
+      <button onClick={() => dispatch(showEditMaterial(false))}>Close</button>
     </dialog>,
     document.getElementById("modal-root") || document.body
   );

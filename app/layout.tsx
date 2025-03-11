@@ -1,8 +1,8 @@
 import Header from "@/components/Header";
+
 import { Geist, Geist_Mono } from "next/font/google";
 
-
-import { Provider } from  "./provider";
+import { Provider as AuthProvider } from "./provider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -15,28 +15,21 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-
-      <Provider>
-
+    <AuthProvider>
       <Header />
       <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        
-        {children}
-        
-      </body>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          {children}
+        </body>
       </html>
-      </Provider>
-
+    </AuthProvider>
   );
 }
