@@ -10,6 +10,7 @@
   table-layout: auto;
   width: 80%;
   margin: auto;
+  margin-bottom: 12px;
 }
 
 #layer-list table span {

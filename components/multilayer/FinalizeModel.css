@@ -1,0 +1,76 @@
+#finalize-model {
+  border: 1px solid;
+  border-radius: 6px;
+  border-color: var(--color-4-secondary);
+  margin-top: 0.25cm;
+  margin-bottom: 0.25cm;
+  font-size: 14px;
+}
+
+#finalize-model div {
+  display: flex;
+  padding-bottom: 6px;
+}
+
+#finalize-model .vertical {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 6px;
+  color: red;
+}
+
+#finalize-model input[type="checkbox"].twolines {
+  margin-top: 0.3cm;
+}
+
+#finalize-model input[type="checkbox"] {
+  height: 14px;
+  margin-top: 0.1cm;
+  border-color: var(--color-4-secondary);
+  width: 1cm;
+  margin-left: 12px;
+}
+
+#finalize-model input {
+  text-align: left;
+  border-color: var(--color-4-secondary);
+}
+
+#finalize-model label {
+  text-align: left;
+  justify-items: left;
+  font-weight: bold;
+}
+
+#finalize-model label.name {
+  padding: 4px;
+  padding-left: 20px;
+  width: 3cm;
+}
+
+#finalize-model input.name {
+  padding: 4px;
+  width: 12.5cm;
+  padding-left: 5px;
+  background-color: var(--color-6-primary);
+}
+
+#finalize-model p.left {
+  text-align: left;
+  padding-left: 20px;
+  font-weight: bold;
+}
+
+#finalize-model textarea {
+  width: 15cm;
+  border: 1px solid;
+  padding-left: 5px;
+  border-radius: 6px;
+  border-color: var(--color-4-secondary);
+  background-color: var(--color-6-primary);
+}
+
+#finalize-model button {
+  margin-bottom: 12px;
+  margin-top: 4px;
+}

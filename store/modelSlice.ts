@@ -76,6 +76,26 @@ const modelSlice = createSlice({
     addLayer: (state, action: PayloadAction<iLayer>) => {
       state.composite.layers.push(action.payload);
     },
+    editName: (state, action: PayloadAction<string>) => {
+      state.name = action.payload;
+    },
+
+    editDescription: (state, action: PayloadAction<string>) => {
+      state.description = action.payload;
+    },
+
+    editSweep: (state, action: PayloadAction<iSweep>) => {
+      state.sweep = action.payload;
+    },
+    setIncidentCompression: (state, action: PayloadAction<boolean>) => {
+      state.incidentCompression = action.payload;
+    },
+
+    editModel: (state, action: PayloadAction<iModel>) => {
+      //TODO: This is not working
+      console.log("editModel", action.payload);
+      state = action.payload;
+    },
   },
 });
 
@@ -89,5 +109,9 @@ export const {
   moveLayerDown,
   editLayer,
   addLayer,
+  editName,
+  editDescription,
+  editSweep,
+  setIncidentCompression,
 } = modelSlice.actions;
 export default modelSlice.reducer;

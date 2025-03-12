@@ -14,7 +14,7 @@ import {
 } from "@/store/modelSlice";
 import { iLayer } from "@/lib/data-helpers";
 
-export default function LayerList() {
+export default function LayerList({ linkToEdit }: { linkToEdit: boolean }) {
   const layers = useSelector(
     (state: RootState) => state.model.composite.layers
   );
@@ -54,16 +54,18 @@ export default function LayerList() {
               ))}
             </tbody>
           </table>
-          <div>
-            <Link
-              onClick={handleSaveModel}
-              className="link-button"
-              style={{ marginTop: "6px" }}
-              href={`/acoustic/models/${modelId}`}
-            >
-              Edit Model
-            </Link>
-          </div>
+          {linkToEdit && (
+            <div>
+              <Link
+                onClick={handleSaveModel}
+                className="link-button"
+                style={{ marginTop: "6px" }}
+                href={`/acoustic/models/${modelId}`}
+              >
+                Edit Model
+              </Link>
+            </div>
+          )}
         </>
       )}
     </div>

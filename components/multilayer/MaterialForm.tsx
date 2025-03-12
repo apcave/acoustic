@@ -41,7 +41,7 @@ export default function MaterialForm() {
       dispatch(saveEditToMaterials());
       dispatch(showEditMaterial(false));
     }
-  }, [state.status, dispatch]);
+  }, [state, dispatch]);
 
   if (!material) {
     return null;

@@ -1,0 +1,46 @@
+#sweep-form {
+  border: 1px solid;
+  border-radius: 6px;
+  border-color: var(--color-4-secondary);
+  margin-top: 0.25cm;
+  margin-bottom: 0.25cm;
+  font-size: 14px;
+}
+
+#sweep-form div {
+  display: flex;
+  padding-bottom: 6px;
+}
+
+#sweep-form .col1 {
+  flex: 0 0 34%;
+}
+
+#sweep-form .col2 {
+  flex: 0 0 20%;
+}
+
+#sweep-form .col3 {
+  flex: 0 0 37%;
+}
+
+#sweep-form .col4 {
+  flex: 0 0 5%;
+}
+
+#sweep-form label {
+  font-weight: bold;
+  text-align: left;
+  margin-left: 10px;
+}
+
+#sweep-form input {
+  padding: 0px;
+  border-color: var(--color-4-secondary);
+  background-color: var(--color-6-primary);
+}
+
+#sweep-form input[type="checkbox"] {
+  height: 14px;
+  margin-top: 3px;
+}

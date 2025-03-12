@@ -20,6 +20,12 @@
   --color-urgent: red;
   --color-approval: green;
 }
+
+.urgent {
+  font-size: 16px;
+  color: var(--color-urgent);
+}
+
 body {
   background-attachment: fixed;
   background-size: 30%;

@@ -86,7 +86,7 @@ export default function MaterialList({ materials }: iMaterialListProps) {
       <div id="materials-list">
         <h1>Acoustic Material Properties</h1>
 
-        <LayerList />
+        <LayerList linkToEdit={true} />
 
         <h1>Available Materials</h1>
         <span className="search-bar">

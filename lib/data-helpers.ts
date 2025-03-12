@@ -8,6 +8,9 @@ export interface iSweep {
   isFrequency: boolean;
   isLogarithmic: boolean;
   values: number[];
+  start: number;
+  end: number;
+  numSteps: number;
 }
 
 export interface iResult {
@@ -25,6 +28,7 @@ export interface iModel {
   _id: string;
   name: string;
   description: string;
+  incidentCompression: boolean;
   composite: iComposite;
   sweep: iSweep;
   result: iResult | null;
@@ -33,19 +37,84 @@ export interface iModel {
   updatedAt: Date | string;
 }
 
+export function validateSweep(newSweep: iSweep, wasEndChanged: boolean) {
+  function validateMinMax() {
+    if (!newSweep.isFrequency && newSweep.start > 90) {
+      newSweep.start = 90;
+    }
+    if (!newSweep.isFrequency && newSweep.end > 90) {
+      newSweep.end = 90;
+    }
+
+    if (newSweep.start > newSweep.end) {
+      if (wasEndChanged) {
+        newSweep.start = newSweep.end;
+      } else {
+        newSweep.end = newSweep.start;
+      }
+    }
+  }
+
+  function logspace() {
+    const startLog = Math.log10(newSweep.start);
+    const endLog = Math.log10(newSweep.end);
+    const step = (endLog - startLog) / (newSweep.numSteps - 1);
+
+    newSweep.values = Array.from({ length: newSweep.numSteps }, (_, i) =>
+      Math.pow(10, startLog + i * step)
+    );
+  }
+
+  function linspace() {
+    const step = (newSweep.end - newSweep.start) / (newSweep.numSteps - 1);
+    newSweep.values = Array.from(
+      { length: newSweep.numSteps },
+      (_, i) => newSweep.start + i * step
+    );
+  }
+
+  if (newSweep.start < 0) {
+    newSweep.start = 0;
+  }
+  if (newSweep.end < 0) {
+    newSweep.end = 0;
+  }
+  if (newSweep.numSteps < 1) {
+    newSweep.numSteps = 1;
+  }
+
+  validateMinMax();
+
+  if (newSweep.start === newSweep.end) {
+    newSweep.values = [newSweep.start];
+    newSweep.numSteps = 1;
+  } else if (newSweep.isLogarithmic) {
+    logspace();
+  } else {
+    linspace();
+  }
+  return newSweep;
+}
+
 export function iniSweep(): iSweep {
-  return {
+  const newSweep = {
     isFrequency: true,
-    isLogarithmic: true,
-    values: [20, 20000],
+    isLogarithmic: false,
+    values: [],
+    start: 0,
+    end: 20,
+    numSteps: 100,
   };
+  validateSweep(newSweep, false);
+  return newSweep;
 }
 
 export function iniModel(): iModel {
   return {
     _id: newID(), // Replace with a valid ID or generate one
-    name: "New Model",
-    description: "A default acoustic model.",
+    name: "New Composite Model",
+    description: "Finalize the model details and run the physics simulation.",
+    incidentCompression: true,
     composite: iniComposite(), // Start with an empty array of layers
     sweep: iniSweep(),
     result: null,
@@ -179,5 +248,21 @@ export function iniComposite(): iComposite {
     userId: "default_user_id", // Replace with a valid user ID
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+  };
+}
+
+type iStatus = "idle" | "loading" | "success" | "error";
+
+export interface iModelActionStatus {
+  status: iStatus;
+  errorMessages: string[];
+  payload: iModel | null;
+}
+
+export function iniModelActionStatus(): iModelActionStatus {
+  return {
+    status: "idle",
+    errorMessages: [],
+    payload: null,
   };
 }
