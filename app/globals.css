@@ -57,7 +57,7 @@ input {
   font-size: 14px;
   padding: 3px;
   text-align: center;
-  border: #57534d;
+  border: var(--color-2-secondary);
   border: 1px solid;
   border-radius: 6px;
   width: 3cm;
@@ -66,27 +66,27 @@ input {
 button {
   padding: 4px;
   padding-inline: 0.3cm;
-  background-color: #57534d;
-  color: #d6d3d1;
+  background-color: var(--color-2-secondary);
+  color: var(--color-4-secondary);
   border-radius: 6px;
   font-size: 14px;
 }
 
 button:hover {
-  background-color: #79716b;
-  color: #d6d3d1;
+  background-color: var(--color-3-secondary);
+  color: var(--color-4-secondary);
 }
 
 .link-button {
   padding: 4px;
   padding-inline: 0.3cm;
-  background-color: #57534d;
-  color: #d6d3d1;
+  background-color: var(--color-2-secondary);
+  color: var(--color-4-secondary);
   border-radius: 6px;
-  font-size: 14px;
+  font-size: var(--color-4-secondary);
 }
 
 .link-button:hover {
-  background-color: #79716b;
-  color: #d6d3d1;
+  background-color: var(--color-3-secondary);
+  color: var(--color-4-secondary);
 }
