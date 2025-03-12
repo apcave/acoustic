@@ -77,34 +77,25 @@ export default function MaterialList({ materials }: iMaterialListProps) {
 
         <LayerList />
 
-        <span className="flex justify-center my-3">
-          <h1 className="text-xl text-center font-bold">Available Materials</h1>
+        <h1>Available Materials</h1>
+        <span className="search-bar">
           <input
+            className="search-input"
             onChange={handleSearch}
             type="text"
             placeholder=" Search Materials"
-            className="ml-8 w-[40mm] border border-gray-300 rounded-md text-sm"
           />
-          <button className="ml-2 p-1 focus:outline-none text-sm rounded-md bg-stone-600 text-stone-300 hover:bg-stone-500 hover:text-stone-100">
-            New Material
-          </button>
+          <button>New Material</button>
         </span>
 
-        <ul className="flex flex-col items-center px-10">
-          <li className="pb-0">
-            <span className="flex w-[155mm]">
-              <h2 className="px-3 w-[40mm] font-bold text-sm text-center">
-                Name
-              </h2>
-              <h2 className="px-3 w-[20mm] font-bold text-sm text-center">
-                Density
-              </h2>
-              <h2 className="px-3 w-[40mm] font-bold text-sm text-center">
-                Compression
-              </h2>
-              <h2 className="px-3 w-[40mm] font-bold text-sm text-center">
-                Shear
-              </h2>
+        <ul>
+          <li>
+            <span>
+              <h3 className="col1">Name</h3>
+              <h3 className="col2">Density</h3>
+              <h3 className="col3">Compression</h3>
+              <h3 className="col4">Shear</h3>
+              <h3 className="col5"></h3>
             </span>
           </li>
           {materialList}
@@ -145,10 +136,10 @@ function ModulusCell({ isShear, value, className }: ModulusCellProps) {
   }
 
   return (
-    <span>
-      <p className={className}>{text_l1}</p>
-      <p className={className}>{text_l2}</p>
-    </span>
+    <div className={className}>
+      <p>{text_l1}</p>
+      <p>{text_l2}</p>
+    </div>
   );
 }
 
@@ -159,38 +150,29 @@ interface MaterialRowProps {
 }
 
 function MaterialRow({ material, onSelect, onEdit }: MaterialRowProps) {
-  const cellClasses = "px-3 py-0.5 leading-tight rounded text-sm";
-
   return (
     <>
-      <li key={material._id} className="pb-1.5 flex">
-        <span
-          onClick={() => onSelect(material)}
-          className="hover:border-blue-300 hover:bg-blue-100 flex border rounded-md shadow bg-stone-100"
-        >
-          <p className={cellClasses + " w-[40mm] border-r rounded-r-none"}>
-            {material.name}
-          </p>
-          <p className={cellClasses + " w-[20mm] border-r rounded-r-none"}>
-            {material.density} kg/m³
-          </p>
-          <ModulusCell
-            className={cellClasses + " w-[40mm] border-r rounded-r-none"}
-            isShear={false}
-            value={material.compression}
-          />
-          <ModulusCell
-            className={cellClasses + " w-[40mm]"}
-            isShear={true}
-            value={material.shear}
-          />
+      <li key={material._id}>
+        <span>
+          <span onClick={() => onSelect(material)} className="highlight">
+            <p className="col1 border-right">{material.name}</p>
+
+            <p className="col2 border-right">{material.density} kg/m³</p>
+            <ModulusCell
+              className="col3 border-right"
+              isShear={false}
+              value={material.compression}
+            />
+            <ModulusCell
+              className="col4"
+              isShear={true}
+              value={material.shear}
+            />
+          </span>
+          <button className="col5" onClick={() => onEdit(material)}>
+            Edit
+          </button>
         </span>
-        <button
-          className="w-[15mm] ml-1 focus:outline-none text-sm md:text-base rounded-md bg-stone-600 text-stone-300 hover:bg-stone-500 hover:text-stone-100"
-          onClick={() => onEdit(material)}
-        >
-          Edit
-        </button>
       </li>
     </>
   );

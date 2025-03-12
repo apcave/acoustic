@@ -2,6 +2,8 @@ import { useSelector, useDispatch } from "react-redux";
 import Link from "next/link";
 import Image from "next/image";
 
+import styles from "@/components/multilayer/LayerList.module.css"; // Import the CSS module
+
 import { RootState, AppDispatch } from "@/store/store";
 import {
   moveLayerUp,
@@ -23,7 +25,7 @@ export default function LayerList() {
 
   return (
     <div id="layer-list">
-      <h1>Composite Material Layers</h1>
+      <h2>Composite Material Layers</h2>
 
       {layers.length === 0 ? (
         <>

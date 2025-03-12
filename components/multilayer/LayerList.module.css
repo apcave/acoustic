@@ -1,0 +1,94 @@
+#layer-list {
+  border-width: 1px;
+  border-radius: 6px;
+  border-color: #d1d5dc;
+  text-align: center;
+  align-items: center;
+}
+
+#layer-list table {
+  table-layout: auto;
+  width: 80%;
+  margin: auto;
+}
+
+#layer-list table span {
+  display: flex;
+}
+
+#layer-list table tr .col1 {
+  width: 20%;
+  border-right: 1px solid;
+  border-color: #d1d5dc;
+}
+
+#layer-list table tr .col2 {
+  width: 30%;
+  border-right: 1px solid;
+  border-color: #d1d5dc;
+}
+
+#layer-list table tr .col3 {
+  width: 50%;
+}
+
+#layer-list table td.line-bottom {
+  border-bottom: 1px solid;
+  border-color: #d1d5dc;
+}
+
+#layer-list table .move-span {
+  display: flex;
+  padding-left: 0.65cm;
+}
+
+#layer-list table .layer-num {
+  padding-left: 0.2cm;
+  padding-right: 0.7cm;
+}
+
+#layer-list table .delete-span {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 0.2cm;
+}
+
+#layer-list table .arrow {
+  cursor: pointer;
+  margin-left: 3px;
+  margin-block: 8px;
+}
+
+#layer-list table .down {
+  rotate: 180deg;
+}
+
+#layer-list table .delete {
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+#layer-list table .urgent {
+  text-decoration: underline;
+  margin-right: 14px;
+  color: red;
+}
+
+#layer-list table input {
+  border: none;
+}
+
+#layer-list table p {
+  padding: 3px;
+}
+
+#layer-list table input {
+  font-size: 14px;
+  width: 100%;
+  padding: 3px;
+  text-align: center;
+}
+
+#layer-list div {
+  margin: 15px;
+}

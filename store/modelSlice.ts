@@ -45,6 +45,9 @@ const modelSlice = createSlice({
       if (idx > 0) {
         // Swap the layers
         const temp = state.composite.layers[idx];
+        if (idx === 1) {
+          temp.thickness = 0;
+        }
         state.composite.layers[idx] = state.composite.layers[idx - 1];
         state.composite.layers[idx - 1] = temp;
       }
@@ -55,6 +58,9 @@ const modelSlice = createSlice({
       );
       if (idx < state.composite.layers.length - 1) {
         const temp = state.composite.layers[idx];
+        if (idx === state.composite.layers.length - 2) {
+          temp.thickness = 0;
+        }
         state.composite.layers[idx] = state.composite.layers[idx + 1];
         state.composite.layers[idx + 1] = temp;
       }
