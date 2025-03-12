@@ -1,0 +1,11 @@
+#model-form {
+  width: 170mm;
+  background-color: var(--color-7-primary);
+  color: var(--color-1-secondary);
+  padding: 1rem;
+  border-radius: 0.25rem;
+  margin-top: 5mm;
+  margin-inline: auto;
+  position: relative;
+  text-align: center;
+}
