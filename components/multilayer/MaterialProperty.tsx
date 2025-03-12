@@ -178,16 +178,11 @@ export default function MaterialProperty({
   }
 
   return (
-    <div className="align-center border rounded-md pt-1 pb-4 px-4 mt-4 w-[200mm] h-[50mm]">
-      <label className="block text-lg mb-2 font-bold">{title}</label>
+    <div className="property">
+      <h3>{title}</h3>
       {!disable && (
-        <div className="flex items-center">
-          <label
-            htmlFor={label}
-            className="block text-lg mb-2 font-bold mr-4 p-2 w-[40mm]"
-          >
-            Data Type
-          </label>
+        <div>
+          <label htmlFor={label}>Data Type</label>
           <select
             id={label}
             name={label}
@@ -206,6 +201,7 @@ export default function MaterialProperty({
           </select>
         </div>
       )}
+
       <WaveProps property={property} onChange={handleEdit} label={label} />
       <ModulusProps property={property} onChange={handleEdit} label={label} />
 
@@ -233,35 +229,23 @@ interface iTypeProps {
 function WaveProps({ property, onChange, label }: iTypeProps) {
   if (property.type === "wave") {
     return (
-      <div className="flex items-center">
-        <label
-          htmlFor={`${label}-wave-speed`}
-          className="block text-lg font-bold mr-4 p-2 w-[40mm]"
-        >
-          Wave Speed (m/s)
-        </label>
+      <div>
+        <label htmlFor={`${label}-wave-speed`}>Wave Speed (m/s)</label>
         <input
           id={`${label}-wave-speed`}
           name={`${label}-wave-speed`}
           type="number"
-          className="border rounded-md p-2 mr-4 w-[40mm]"
           onChange={onChange}
           min="0"
           step="any"
           value={property.waveSpeed}
         />
-        <label
-          htmlFor={`${label}-attenuation`}
-          className="block text-lg font-bold w-[40mm]"
-        >
-          Attenuation (db/m)
-        </label>
+        <label htmlFor={`${label}-attenuation`}>Attenuation (db/m)</label>
         <input
           id={`${label}-attenuation`}
           name={`${label}-attenuation`}
           type="number"
           step="any"
-          className="border rounded-md p-2 w-[40mm]"
           onChange={onChange}
           value={property.attenuation}
         />
@@ -275,34 +259,22 @@ function WaveProps({ property, onChange, label }: iTypeProps) {
 function ModulusProps({ property, onChange, label }: iTypeProps) {
   if (property.type === "modulus") {
     return (
-      <div className="flex items-center">
-        <label
-          htmlFor={`${label}-real`}
-          className="block text-lg font-bold mr-4 p-2 w-[40mm]"
-        >
-          Real (MPa)
-        </label>
+      <div>
+        <label htmlFor={`${label}-real`}>Real (MPa)</label>
         <input
           id={`${label}-real`}
           name={`${label}-real`}
           type="number"
           step="any"
-          className="border rounded-md p-2 mr-4 w-[40mm]"
           onChange={onChange}
           min="0"
           value={property.real}
         />
-        <label
-          htmlFor={`${label}-imag`}
-          className="block text-lg font-bold mr-4 p-2 w-[40mm]"
-        >
-          Imaginary (MPa)
-        </label>
+        <label htmlFor={`${label}-imag`}>Imaginary (MPa)</label>
         <input
           id={`${label}-imag`}
           name={`${label}-imag`}
           type="number"
-          className="border rounded-md p-2 w-[40mm]"
           onChange={onChange}
           step="any"
           min="0"

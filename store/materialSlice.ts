@@ -37,9 +37,16 @@ const materialSlice = createSlice({
         }
       }
     },
+    makeNewMaterial: (state) => {
+      state.editMaterial = iniMaterial();
+    },
   },
 });
 
-export const { replaceMaterials, setEditMaterial, saveEditToMaterials } =
-  materialSlice.actions;
+export const {
+  replaceMaterials,
+  setEditMaterial,
+  saveEditToMaterials,
+  makeNewMaterial,
+} = materialSlice.actions;
 export default materialSlice.reducer;

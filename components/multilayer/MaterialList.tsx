@@ -8,7 +8,11 @@ import LayerList from "@/components/multilayer/LayerList";
 
 import { RootState, AppDispatch } from "@/store/store";
 import { fetchMaterialsList } from "@/store/materialActions";
-import { replaceMaterials, setEditMaterial } from "@/store/materialSlice";
+import {
+  replaceMaterials,
+  setEditMaterial,
+  makeNewMaterial,
+} from "@/store/materialSlice";
 import { showEditMaterial } from "@/store/uiSlice";
 import { addLayer } from "@/store/modelSlice";
 
@@ -61,6 +65,11 @@ export default function MaterialList({ materials }: iMaterialListProps) {
     setMaterialFilter(data);
   }
 
+  function handleNewMaterial() {
+    dispatch(makeNewMaterial());
+    dispatch(showEditMaterial(true));
+  }
+
   const materialList = filteredMaterials.map((material) => (
     <MaterialRow
       key={material._id}
@@ -87,7 +96,7 @@ export default function MaterialList({ materials }: iMaterialListProps) {
             type="text"
             placeholder=" Search Materials"
           />
-          <button>New Material</button>
+          <button onClick={handleNewMaterial}>New Material</button>
         </span>
 
         <ul>

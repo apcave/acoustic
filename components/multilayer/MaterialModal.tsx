@@ -9,6 +9,8 @@ import { createPortal } from "react-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 
+import "@/components/multilayer/MaterialModal.css";
+
 /*
   The component opens a dialog box to edit a material when the context editMaterial is set.
 */
@@ -42,12 +44,11 @@ export default function MaterialModal() {
 
   return createPortal(
     <dialog
+      id="material-dialog"
       ref={dialogRef}
       onClose={() => dispatch(showEditMaterial(false))}
-      className="backdrop:bg-stone-900/90 p-4 rounded-md shadow-md"
     >
       <MaterialForm />
-      <button onClick={() => dispatch(showEditMaterial(false))}>Close</button>
     </dialog>,
     document.getElementById("modal-root") || document.body
   );

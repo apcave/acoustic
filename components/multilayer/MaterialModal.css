@@ -1,0 +1,12 @@
+#material-dialog {
+  width: 18cm;
+  margin: auto;
+  border-width: 1px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 6px;
+  font-size: 14px;
+  &::backdrop {
+    backdrop-filter: blur(2px);
+  }
+}

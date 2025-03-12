@@ -13,6 +13,8 @@ import { RootState } from "@/store/store";
 import { showEditMaterial } from "@/store/uiSlice";
 import { saveEditToMaterials, setEditMaterial } from "@/store/materialSlice";
 
+import "@/components/multilayer/MaterialForm.css";
+
 /*
   Local state is used to update the UI and then a server action updates the materials database.
   The parent can be component is optimistically updated with with the new material properties after a successful POST.
@@ -113,16 +115,14 @@ export default function MaterialForm() {
     <form id="material-form" action={formAction}>
       <input type="hidden" name="id" value={material?._id} />
       <input type="hidden" name="userId" value={userId} />
-      <h1 className="text-2xl font-bold mb-4">
-        Material Properties - state: {material.category}
-      </h1>
-      <div className="flex items-center mb-4">
-        <label className="block font-bold mr-4" htmlFor="name">
+      <h2>Material Properties - Material is a {material.category}</h2>
+      <div>
+        <label className="col" htmlFor="name">
           Name
         </label>
         <input
           type="text"
-          className="border rounded-md p-2 mr-4"
+          className="col"
           id="name"
           name="name"
           onChange={handleEdit}
@@ -131,12 +131,9 @@ export default function MaterialForm() {
           title="Name cannot be empty or just whitespace"
           value={material.name}
         />
-        <label className="block font-bold mr-4" htmlFor="density">
-          Density (kg/m³)
-        </label>
+        <label htmlFor="density">Density (kg/m³)</label>
         <input
           type="number"
-          className="border rounded-md p-2 w-[40mm]"
           id="density"
           name="density"
           required
@@ -157,9 +154,10 @@ export default function MaterialForm() {
         onChange={handleChangeProperty}
         compType={material.compression.type}
       />
-      <div className="mt-4 text-right space-x-4">
+      <div className="status-group">
         {state.status === "error" &&
           state.errorMessages.map((mess, index) => <p key={index}>{mess}</p>)}
+        <button onClick={() => dispatch(showEditMaterial(false))}>Close</button>
         <button disabled={pending}>
           {pending ? "Submitting..." : "Save Properties"}
         </button>

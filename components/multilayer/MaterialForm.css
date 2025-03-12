@@ -1,0 +1,45 @@
+#material-form {
+  width: 100%;
+  font-size: 14px;
+}
+
+#material-form div {
+  display: flex;
+  margin-bottom: 14px;
+}
+
+#material-form .status-group {
+  justify-content: right;
+  gap: 0.4cm;
+}
+
+#material-form .property {
+  border: 1px solid;
+  border-radius: 6px;
+  padding: 4px;
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+#material-form h3 {
+  padding: 4px;
+}
+
+#material-form label {
+  flex: 0 0 25%;
+  padding-top: 5px;
+  padding-left: 10px;
+}
+
+#material-form input {
+  flex: 0 0 25%;
+  text-align: center;
+}
+
+#material-form select {
+  flex: 0 0 25%;
+  padding: 5px;
+  margin-top: 2px;
+  text-align: center;
+}
