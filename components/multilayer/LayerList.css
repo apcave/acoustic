@@ -1,7 +1,7 @@
 #layer-list {
   border-width: 1px;
   border-radius: 6px;
-  border-color: #d1d5dc;
+  border-color: var(--color-4-secondary);
   text-align: center;
   align-items: center;
 }
@@ -19,13 +19,13 @@
 #layer-list table tr .col1 {
   width: 20%;
   border-right: 1px solid;
-  border-color: #d1d5dc;
+  border-color: var(--color-4-secondary);
 }
 
 #layer-list table tr .col2 {
   width: 30%;
   border-right: 1px solid;
-  border-color: #d1d5dc;
+  border-color: var(--color-4-secondary);
 }
 
 #layer-list table tr .col3 {
@@ -34,7 +34,7 @@
 
 #layer-list table td.line-bottom {
   border-bottom: 1px solid;
-  border-color: #d1d5dc;
+  border-color: var(--color-4-secondary);
 }
 
 #layer-list table .move-span {
@@ -71,7 +71,7 @@
 #layer-list table .urgent {
   text-decoration: underline;
   margin-right: 14px;
-  color: red;
+  color: var(--color-urgent);
 }
 
 #layer-list table input {

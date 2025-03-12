@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 
 import NavLink from "@/components/NavLink";
 
+import "@/components/Header.css";
+
 interface TabProps {
   link: string;
   title: string;

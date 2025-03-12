@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Link from "next/link";
 import Image from "next/image";
 
-import styles from "@/components/multilayer/LayerList.module.css"; // Import the CSS module
+import "@/components/multilayer/LayerList.css";
 
 import { RootState, AppDispatch } from "@/store/store";
 import {
@@ -28,10 +28,10 @@ export default function LayerList() {
       <h2>Composite Material Layers</h2>
 
       {layers.length === 0 ? (
-        <>
+        <div>
           <p>Click on materials to add to model.</p>
           <p>Models requires at least two materials for an interface.</p>
-        </>
+        </div>
       ) : (
         <>
           <table>

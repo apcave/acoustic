@@ -12,6 +12,8 @@ import { replaceMaterials, setEditMaterial } from "@/store/materialSlice";
 import { showEditMaterial } from "@/store/uiSlice";
 import { addLayer } from "@/store/modelSlice";
 
+import "@/components/multilayer/MaterialList.css";
+
 interface iMaterialListProps {
   materials: iMaterial[];
 }
@@ -72,7 +74,7 @@ export default function MaterialList({ materials }: iMaterialListProps) {
     <>
       <div id="modal-root" />
       <MaterialModal />
-      <div id="acoustic-app">
+      <div id="materials-list">
         <h1>Acoustic Material Properties</h1>
 
         <LayerList />

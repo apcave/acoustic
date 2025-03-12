@@ -16,7 +16,7 @@ export default function NavLink({ href, children }: NavLinkProps) {
   const isActive = pathname === href; // Use exact match
 
   return (
-    <div id="nav-link">
+    <div className="nav-link">
       <Link href={href} className={isActive ? "active" : undefined}>
         {children}
       </Link>
