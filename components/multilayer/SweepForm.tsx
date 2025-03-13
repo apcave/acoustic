@@ -7,7 +7,7 @@ import { validateSweep } from "@/lib/data-helpers";
 
 export default function SweepForm() {
   const dispatch = useDispatch<AppDispatch>();
-  const sweep = useSelector((state: RootState) => state.model.sweep);
+  const sweep = useSelector((state: RootState) => state.model.model.sweep);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     console.log("Checkbox changed.");

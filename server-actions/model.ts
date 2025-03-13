@@ -5,6 +5,7 @@ import {
   iniModelActionStatus,
   iModelActionStatus,
   iModel,
+  newID,
 } from "@/lib/data-helpers";
 
 export async function getModel(modelId: string): Promise<iModelActionStatus> {
@@ -41,6 +42,10 @@ export async function updateModel(
 
   try {
     await connectDB();
+
+    if (newModel._id === "unsaved") {
+      newModel._id = newID();
+    }
 
     // Update existing material
     let model = await Model.findById(newModel._id);

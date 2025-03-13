@@ -6,9 +6,11 @@ import FinalizeModel from "@/components/multilayer/FinalizeModel";
 
 import { iModel } from "@/lib/data-helpers";
 
-import { RootState } from "@/store/store";
+import { RootState, AppDispatch } from "@/store/store";
+import { editModel } from "@/store/modelSlice";
 
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import "@/components/multilayer/ModelForm.css";
 
@@ -17,24 +19,24 @@ interface iModelFormProps {
 }
 
 export default function ModelForm({ orgModel }: iModelFormProps) {
-  //const dispatch = useDispatch<AppDispatch>();
-  const model = useSelector((state: RootState) => state.model);
+  const dispatch = useDispatch<AppDispatch>();
+  const model = useSelector((state: RootState) => state.model.model);
 
-  console.log("ModelForm", model);
+  const modelName = model.name || "";
+  const modelDescription = model.description || "";
 
-  // useEffect(() => {
-  //   if (orgModel) {
-  //     dispatch(editModel(orgModel));
-  //   }
-  // }, [orgModel, dispatch]);
+  useEffect(() => {
+    if (orgModel) {
+      console.log("<<<<<<<<<<<<<<<<<<<---------------------------------");
+      console.log("Client updating model from server pre-render");
+      dispatch(editModel(orgModel));
+    }
+  }, [orgModel, dispatch]);
 
   return (
     <div id="model-form">
-      <h1>
-        {model.name}
-        {orgModel?.name}
-      </h1>
-      <p>{model.description}</p>
+      <h1>{modelName}</h1>
+      <p>{modelDescription}</p>
       <SweepForm />
       <LayerList linkToEdit={false} />
       <FinalizeModel />

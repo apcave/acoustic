@@ -111,7 +111,7 @@ export function iniSweep(): iSweep {
 
 export function iniModel(): iModel {
   return {
-    _id: newID(), // Replace with a valid ID or generate one
+    _id: "unsaved", // Replace with a valid ID or generate one
     name: "New Composite Model",
     description: "Finalize the model details and run the physics simulation.",
     incidentCompression: true,

@@ -9,6 +9,15 @@ import { Suspense } from "react";
     The list of material properties is important and will attract users to the site.
     This list needs to be searchable for the users to interact with the site.
     So a mix of server and client code is used to generate the page.
+
+    The material data can be accessed by this page using React Server Components (RSC) or public materials API.
+    The material data is stored using RSC and a React hook (useActionState) attached to a form.
+
+    The public API provides a list of the materials in json format, it is polled to update the material list if anther user edit this list.
+    Also, I may advertise this API for researchers and engineers.
+
+    TODO:
+    - check that the page is being invalided when the material list is updated in mongodb.
 */
 
 // This function avoids fetching the data twice... next magic.

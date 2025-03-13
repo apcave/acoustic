@@ -19,9 +19,9 @@ import Delete from "@/public/delete.svg";
 
 export default function LayerList({ linkToEdit }: { linkToEdit: boolean }) {
   const layers = useSelector(
-    (state: RootState) => state.model.composite.layers
+    (state: RootState) => state.model.model.composite.layers
   );
-  const modelId = useSelector((state: RootState) => state.model._id);
+  const modelId = useSelector((state: RootState) => state.model.model._id);
 
   function handleSaveModel() {
     console.log("Save the context model to mongodb.....");

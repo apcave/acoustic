@@ -12,89 +12,96 @@ import {
     Only the material properties and the models are saved individually.
     The layers, sweep and figures data are saved in the models.
 */
+interface ModelState {
+  model: iModel;
+}
 
-const initialState: iModel = iniModel();
+const initialState: ModelState = {
+  model: iniModel(),
+};
 
 const modelSlice = createSlice({
   name: "model",
   initialState,
   reducers: {
     setModel: (state, action: PayloadAction<iModel>) => {
-      state = action.payload;
+      state.model = action.payload;
     },
 
     setLayers: (state, action: PayloadAction<iComposite>) => {
-      state.composite = action.payload;
+      state.model.composite = action.payload;
     },
 
     setSweep: (state, action: PayloadAction<iSweep>) => {
-      state.sweep = action.payload;
+      state.model.sweep = action.payload;
     },
     setResults: (state, action: PayloadAction<iResult>) => {
-      state.result = action.payload;
+      state.model.result = action.payload;
     },
     deleteLayer: (state, action: PayloadAction<iLayer>) => {
-      state.composite.layers = state.composite.layers.filter(
+      state.model.composite.layers = state.model.composite.layers.filter(
         (lay) => lay._id !== action.payload._id
       );
     },
     moveLayerUp: (state, action: PayloadAction<iLayer>) => {
-      const idx = state.composite.layers.findIndex(
+      const idx = state.model.composite.layers.findIndex(
         (lay) => lay._id === action.payload._id
       );
       if (idx > 0) {
         // Swap the layers
-        const temp = state.composite.layers[idx];
+        const temp = state.model.composite.layers[idx];
         if (idx === 1) {
           temp.thickness = 0;
         }
-        state.composite.layers[idx] = state.composite.layers[idx - 1];
-        state.composite.layers[idx - 1] = temp;
+        state.model.composite.layers[idx] =
+          state.model.composite.layers[idx - 1];
+        state.model.composite.layers[idx - 1] = temp;
       }
     },
     moveLayerDown: (state, action: PayloadAction<iLayer>) => {
-      const idx = state.composite.layers.findIndex(
+      const idx = state.model.composite.layers.findIndex(
         (lay) => lay._id === action.payload._id
       );
-      if (idx < state.composite.layers.length - 1) {
-        const temp = state.composite.layers[idx];
-        if (idx === state.composite.layers.length - 2) {
+      if (idx < state.model.composite.layers.length - 1) {
+        const temp = state.model.composite.layers[idx];
+        if (idx === state.model.composite.layers.length - 2) {
           temp.thickness = 0;
         }
-        state.composite.layers[idx] = state.composite.layers[idx + 1];
-        state.composite.layers[idx + 1] = temp;
+        state.model.composite.layers[idx] =
+          state.model.composite.layers[idx + 1];
+        state.model.composite.layers[idx + 1] = temp;
       }
     },
     editLayer: (state, action: PayloadAction<iLayer>) => {
-      const idx = state.composite.layers.findIndex(
+      const idx = state.model.composite.layers.findIndex(
         (lay) => lay._id === action.payload._id
       );
       if (idx >= 0) {
-        state.composite.layers[idx] = action.payload;
+        state.model.composite.layers[idx] = action.payload;
       }
     },
     addLayer: (state, action: PayloadAction<iLayer>) => {
-      state.composite.layers.push(action.payload);
+      state.model.composite.layers.push(action.payload);
     },
     editName: (state, action: PayloadAction<string>) => {
-      state.name = action.payload;
+      state.model.name = action.payload;
     },
 
     editDescription: (state, action: PayloadAction<string>) => {
-      state.description = action.payload;
+      state.model.description = action.payload;
     },
 
     editSweep: (state, action: PayloadAction<iSweep>) => {
-      state.sweep = action.payload;
+      state.model.sweep = action.payload;
     },
     setIncidentCompression: (state, action: PayloadAction<boolean>) => {
-      state.incidentCompression = action.payload;
+      state.model.incidentCompression = action.payload;
     },
 
     editModel: (state, action: PayloadAction<iModel>) => {
       //TODO: This is not working
       console.log("editModel", action.payload);
-      state = action.payload;
+      state.model = action.payload;
     },
   },
 });
@@ -112,6 +119,7 @@ export const {
   editName,
   editDescription,
   editSweep,
+  editModel,
   setIncidentCompression,
 } = modelSlice.actions;
 export default modelSlice.reducer;
