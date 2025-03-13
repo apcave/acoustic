@@ -1,0 +1,78 @@
+#page {
+  display: flex;
+  justify-content: center;
+  font-size: 12px;
+}
+
+#page .paper {
+  height: 25.7cm;
+  background-color: white;
+  width: 17cm;
+  margin-inline: auto;
+  padding: 32px;
+  position: relative;
+  border-radius: 6px;
+  margin: 5mm;
+}
+
+#page p {
+  font-size: 12px;
+}
+
+#page h1 {
+  text-align: center;
+}
+
+#page h3 {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+#page hr {
+  border-top-width: 1px;
+  border-top-style: solid;
+  padding-bottom: 4px;
+}
+
+#page h3.centre-text {
+  text-align: center;
+}
+
+#page div.paper-nav {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 16px;
+  left: 0;
+  gap: 16px;
+  width: 100%;
+}
+
+#page button {
+  color: black;
+  background-color: transparent;
+  border: none;
+  &:hover {
+    color: var(--color-2-primary);
+  }
+}
+
+#page button.current {
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+#page ul.dots {
+  list-style-type: disc;
+  margin-left: 24px;
+  margin-bottom: 4px;
+}
+
+#page div.entry {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  align-items: center;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
