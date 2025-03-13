@@ -1,3 +1,12 @@
-
-
-
+#model-item {
+  justify-content: center;
+  align-items: center;
+  width: 5cm;
+  height: 5cm;
+  padding: 10px;
+  border: 1px solid;
+  border-color: var(--color-4-secondary);
+  border-radius: 6px;
+  background-color: var(--color-7-primary);
+  overflow: hidden;
+}

@@ -1,0 +1,7 @@
+#model-list {
+  margin-top: 5mm;
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
