@@ -10,6 +10,8 @@ import {
   newID,
 } from "@/lib/data-helpers";
 
+import { revalidatePath } from "next/cache";
+
 export async function getAllModels(): Promise<iModelAllStatus> {
   const status = iniModelAllStatus();
 
@@ -49,6 +51,7 @@ export async function getModel(modelId: string): Promise<iModelStatus> {
 
     status.status = "success";
     status.payload = JSON.parse(JSON.stringify(model));
+    revalidatePath("/acoustic/models");
     return status;
   } catch (error) {
     status.status = "error";
