@@ -2,7 +2,7 @@
 import SweepForm from "@/components/multilayer/SweepForm";
 import LayerList from "@/components/multilayer/LayerList";
 import AcousticChart from "@/components/multilayer/AcousticChart";
-import FinalizeModel from "@/components/multilayer/FinalizeModel";
+import FinalizeModel from "@/components/multilayer/ModelFinalize";
 
 import { iModel } from "@/lib/data-helpers";
 

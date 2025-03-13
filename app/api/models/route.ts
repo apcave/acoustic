@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
 
     const result = await updateModel(model);
     if (result.status === "error") {
-      result.errorMessages.map((mes) => {
+      result.errorMessages.map((mes: string) => {
         console.log(mes);
       });
 

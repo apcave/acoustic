@@ -253,13 +253,27 @@ export function iniComposite(): iComposite {
 
 type iStatus = "idle" | "loading" | "success" | "error";
 
-export interface iModelActionStatus {
+export interface iModelStatus {
   status: iStatus;
   errorMessages: string[];
   payload: iModel | null;
 }
 
-export function iniModelActionStatus(): iModelActionStatus {
+export interface iModelAllStatus {
+  status: iStatus;
+  errorMessages: string[];
+  payload: iModel[] | null;
+}
+
+export function iniModelAllStatus(): iModelAllStatus {
+  return {
+    status: "idle",
+    errorMessages: [],
+    payload: null,
+  };
+}
+
+export function iniModelStatus(): iModelStatus {
   return {
     status: "idle",
     errorMessages: [],

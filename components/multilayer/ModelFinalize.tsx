@@ -12,7 +12,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 
-import "@/components/multilayer/FinalizeModel.css";
+import "@/components/multilayer/ModelFinalize.css";
 
 export default function FinalizeModel() {
   const router = useRouter();
