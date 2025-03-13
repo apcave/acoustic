@@ -33,7 +33,7 @@ export default function Header() {
         <menu>
           <Tab link="/" title="Home" />
           <Tab link="/acoustic/materials" title="Materials" />
-          <Tab link="/acoustic/results" title="Results" />
+          <Tab link="/acoustic/models" title="Models" />
           <Tab link="/resume" title="Alex's Resume" />
           <li>
             <Link
