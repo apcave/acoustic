@@ -5,6 +5,8 @@ import Link from "next/link";
 import { register } from "@/server-actions/register";
 import { signIn } from "next-auth/react";
 
+import "@/app/register/page.css";
+
 export default function Register() {
   const [error, setError] = useState<string>();
   const router = useRouter();
@@ -26,60 +28,28 @@ export default function Register() {
   };
 
   return (
-    <section className="w-full h-screen flex items-center justify-center">
-      <form
-        ref={ref}
-        action={handleSubmit}
-        className="p-6 w-full max-w-[400px] flex flex-col justify-between items-center gap-2 
-        border border-solid border-black bg-white rounded"
-      >
+    <section id="register">
+      <form ref={ref} action={handleSubmit}>
         {error && <div className="">{error}</div>}
-        <h1 className="mb-5 w-full text-2xl font-bold">Register</h1>
+        <h1>Register</h1>
 
-        <label className="w-full text-sm">Full Name</label>
-        <input
-          type="text"
-          placeholder="Full Name"
-          className="w-full h-8 border border-solid border-black py-1 px-2.5 rounded text-[13px]"
-          name="name"
-        />
+        <label>Full Name</label>
+        <input type="text" placeholder="Full Name" name="name" />
 
-        <label className="w-full text-sm">Email</label>
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full h-8 border border-solid border-black py-1 px-2.5 rounded"
-          name="email"
-        />
+        <label>Email</label>
+        <input type="email" placeholder="Email" name="email" />
 
-        <label className="w-full text-sm">Password</label>
-        <div className="flex w-full">
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full h-8 border border-solid border-black py-1 px-2.5 rounded"
-            name="password"
-          />
-        </div>
+        <label>Password</label>
 
-        <button
-          className="w-full border border-solid border-black py-1.5 mt-2.5 rounded
-        transition duration-150 ease hover:bg-black"
-        >
-          Sign up
-        </button>
+        <input type="password" placeholder="Password" name="password" />
 
-        <button
-          className="w-full border border-solid border-blue-500 text-blue-500 rounded"
-          onClick={() => signIn("google", { callbackUrl: "/" })}
-        >
+        <button>Sign up</button>
+
+        <button onClick={() => signIn("google", { callbackUrl: "/" })}>
           Sign Up with Google
         </button>
 
-        <Link
-          href="/login"
-          className="text-sm text-[#888] transition duration-150 ease hover:text-black"
-        >
+        <Link className="link-button" href="/login">
           Already have an account?
         </Link>
       </form>
