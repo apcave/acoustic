@@ -54,6 +54,7 @@ export async function updateModel(
       model.result = newModel.result;
       model.updatedAt = new Date().toISOString();
     } else {
+      console.log("Creating new model <<<<<<<<<<<-------------------");
       model = new Model(newModel);
     }
 

@@ -1,6 +1,6 @@
 "use server";
 import ModelForm from "@/components/multilayer/ModelForm";
-import { getModel } from "@/actions/model";
+import { getModel } from "@/server-actions/model";
 
 interface Params {
   modelid: string;
@@ -9,9 +9,14 @@ interface Params {
 export default async function ModelDetail({ params }: { params: Params }) {
   let debug = null;
   let model = null;
-  if (params.modelid) {
-    const result = await getModel(params.modelid);
+  const paramsOb = await params;
+  const id = paramsOb.modelid;
+
+  if (id) {
+    const result = await getModel(id);
     if (result.status === "success") {
+      console.log("<<<<<-------------------->>>>>>>>>>>>>>>>>");
+      console.log("Got model from mongodb.... Yay!");
       console.log(result.payload);
       model = result.payload;
     } else if (result.status === "error") {

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getMaterials } from "@/actions/materials";
+import { getMaterials } from "@/server-actions/materials";
 
 export async function GET() {
   // This is a public API, authentication is not required.

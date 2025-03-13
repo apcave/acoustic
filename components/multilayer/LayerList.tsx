@@ -14,6 +14,9 @@ import {
 } from "@/store/modelSlice";
 import { iLayer } from "@/lib/data-helpers";
 
+import GreenArrow from "@/public/greenUpArrow.svg";
+import Delete from "@/public/delete.svg";
+
 export default function LayerList({ linkToEdit }: { linkToEdit: boolean }) {
   const layers = useSelector(
     (state: RootState) => state.model.composite.layers
@@ -123,17 +126,13 @@ function CompositeLayerItem({
       <td className={index === numLayers - 1 ? "col1" : "col1 line-bottom"}>
         <span className="move-span">
           <Image
-            src="/greenUpArrow.svg"
-            width="10"
-            height="4"
+            src={GreenArrow}
             alt="up arrow"
             className="arrow"
             onClick={() => dispatch(moveLayerUp(layer))}
           />
           <Image
-            src="/greenUpArrow.svg"
-            width="10"
-            height="4"
+            src={GreenArrow}
             className="arrow down"
             alt="down arrow"
             onClick={() => dispatch(moveLayerDown(layer))}
@@ -162,9 +161,7 @@ function CompositeLayerItem({
         <span className="delete-span">
           <p>{layer.material.name}</p>
           <Image
-            src="/delete.svg"
-            width="15"
-            height="15"
+            src={Delete}
             className="delete"
             alt="delete"
             onClick={() => dispatch(deleteLayer(layer))}

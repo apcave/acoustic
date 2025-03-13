@@ -24,5 +24,5 @@ const ModelSchema: Schema = new Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-export default mongoose.models.Material ||
+export default mongoose.models.Model ||
   mongoose.model<iModel>("Model", ModelSchema);

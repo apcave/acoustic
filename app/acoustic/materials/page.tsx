@@ -1,7 +1,7 @@
 "use server";
 import { cache } from "react";
 import MaterialList from "@/components/multilayer/MaterialList";
-import { getMaterials } from "@/actions/materials";
+import { getMaterials } from "@/server-actions/materials";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 

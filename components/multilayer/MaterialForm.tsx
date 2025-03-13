@@ -1,6 +1,6 @@
 "use client";
 import { iMaterial, iniMatActionStatus, iProperty } from "@/lib/data-helpers";
-import { updateAddMaterial } from "@/actions/materials";
+import { updateAddMaterial } from "@/server-actions/materials";
 
 import MaterialProperty from "@/components/multilayer/MaterialProperty";
 

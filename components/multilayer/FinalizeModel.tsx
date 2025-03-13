@@ -6,6 +6,7 @@ import {
   editDescription,
   setIncidentCompression,
 } from "@/store/modelSlice";
+import { saveModelToServer } from "@/store/modelActions";
 
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +19,14 @@ export default function FinalizeModel() {
   const model = useSelector((state: RootState) => state.model);
 
   console.log("FinalizeModel", model);
+
+  function handleSaveAndRun() {
+    console.log("Save the model and run the simulation");
+    console.log(model);
+    console.log("TODO: Add validation for the composite section.");
+
+    dispatch(saveModelToServer(model));
+  }
 
   return (
     <div id="finalize-model">
@@ -76,7 +85,7 @@ export default function FinalizeModel() {
           <p>Clear for Incident Shear Wave</p>
         </label>
       </div>
-      <button>Run Simulation</button>
+      <button onClick={handleSaveAndRun}>Run Simulation</button>
     </div>
   );
 }
