@@ -10,3 +10,8 @@
   background-color: var(--color-7-primary);
   overflow: hidden;
 }
+
+#model-item p {
+  font-size: 10px;
+  text-align: center;
+}

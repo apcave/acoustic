@@ -4,8 +4,7 @@
   font-size: 12px;
 }
 
-#page .paper {
-  height: 25.7cm;
+#page div.web {
   background-color: white;
   width: 17cm;
   margin-inline: auto;
@@ -15,12 +14,21 @@
   margin: 5mm;
 }
 
+#page .paper {
+  height: 25.7cm;
+}
+
 #page p {
   font-size: 12px;
 }
 
 #page h1 {
   text-align: center;
+}
+
+#page h2 {
+  font-size: 16px;
+  font-weight: bold;
 }
 
 #page h3 {

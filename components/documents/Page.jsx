@@ -4,16 +4,18 @@ import "@/components/documents/Page.css";
 
 export function WebContent({ name, text, children, ...props }) {
   return (
-    <div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 1 }}
-      className="w-[170mm] bg-white text-black shadow-md font-serif mx-auto p-8 rounded m-[5mm] relative"
-    >
-      <h1 className="text-4xl text-center">{name}</h1>
-      <p className="text-sm text-center mt-2 mb-2">{text}</p>
-      {children}
+    <div id="page">
+      <div
+        className="web"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 1 }}
+      >
+        <h1>{name}</h1>
+        <h3 className="centre-text">{text}</h3>
+        {children}
+      </div>
     </div>
   );
 }
@@ -47,7 +49,7 @@ export function Page({
   return (
     <div id="page" className="frame">
       <motion.div
-        className="paper"
+        className="web paper"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}

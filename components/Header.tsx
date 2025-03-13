@@ -49,7 +49,6 @@ export default function Header() {
       {isAuth && <p>Hello {data.user.name}</p>}
       {isAuth && (
         <button
-          className="pr-4"
           onClick={() => {
             signOut({ redirect: false }).then(() => {
               router.push("/");
@@ -61,7 +60,6 @@ export default function Header() {
       )}
       {!isAuth && (
         <button
-          className="pr-4"
           onClick={() => {
             router.push("/login");
           }}
