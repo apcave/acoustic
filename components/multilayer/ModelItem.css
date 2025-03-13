@@ -8,6 +8,7 @@
   border-color: var(--color-4-secondary);
   border-radius: 6px;
   background-color: var(--color-7-primary);
+  color: var(--color-1-secondary);
   overflow: hidden;
 }
 

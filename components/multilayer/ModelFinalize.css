@@ -1,7 +1,8 @@
 #finalize-model {
   border: 1px solid;
   border-radius: 6px;
-  border-color: var(--color-4-secondary);
+  background-color: var(--color-7-primary);
+  color: var(--color-1-secondary);
   margin-top: 0.25cm;
   margin-bottom: 0.25cm;
   font-size: 14px;

@@ -65,7 +65,19 @@ input {
   font-size: 14px;
   padding: 3px;
   text-align: center;
-  border: var(--color-2-secondary);
+  border-color: var(--color-4-secondary);
+  background-color: var(--color-6-primary);
+  border: 1px solid;
+  border-radius: 6px;
+  width: 3cm;
+}
+
+select {
+  font-size: 14px;
+  padding: 3px;
+  text-align: center;
+  border-color: var(--color-4-secondary);
+  background-color: var(--color-6-primary);
   border: 1px solid;
   border-radius: 6px;
   width: 3cm;

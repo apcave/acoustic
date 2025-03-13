@@ -36,8 +36,6 @@
 
 #sweep-form input {
   padding: 0px;
-  border-color: var(--color-4-secondary);
-  background-color: var(--color-6-primary);
 }
 
 #sweep-form input[type="checkbox"] {
