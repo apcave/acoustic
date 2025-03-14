@@ -40,17 +40,17 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Learn More
+## To Do
 
-To learn more about Next.js, take a look at the following resources:
+- Models page pre-rendering takes time, do an optimistic update.
+- Clicking on the models in the list results in a delayed response the first time. Ensure all model pages are pre-renders when the server starts.
+- When you click on run-model there no feed-back, provide a message and a spinner.
+- Provide for editing of material properties after adding them to the a model. Click in the Layers section on the name to edit.
+- Add edit materials button next to run simulation to add more materials to an existing model.
+- More edit name and description to where it is displayed on the edit model page.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Add more animations work on UX.
+- Animate loading model also add spinner.
+- Work on calculations code.
+- Once data is available work on graphs and results section.
+- Once data is available add feature to down-load it through the browser.
