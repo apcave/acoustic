@@ -39,7 +39,7 @@ The pages.tsx files in the /app and child directories are all pre-rendered by th
 
 ## Project Directory Structure
 
-# Next.js specific project file structure.
+### Next.js specific project file structure.
 
 | **URL**                    | **FILE**                                | Description                                             |
 | -------------------------- | --------------------------------------- | ------------------------------------------------------- |
@@ -56,7 +56,7 @@ The pages.tsx files in the /app and child directories are all pre-rendered by th
 | /api/materials             | /app/api/materials/route.ts             | API to output a list of all material properties in JSON |
 | /sitemap.xml               | /app/sitemap.xml/route.ts               | API to output a site map in XML                         |
 
-# Project Directory Structure
+### Project Directory Structure
 
 | **Directory**          | **Description**                                            |
 | ---------------------- | ---------------------------------------------------------- |
@@ -74,9 +74,36 @@ To duplicate the [Composite Acoustic](https://sound-wave.dev) front-end you will
 
 - Access to a [MongoDB](https://mongodb.com) database.
 - A [Google Developer](https://developers.google.com) account for the [NextAuth.js](https://next-auth.js.org) authentication.
-- If you want hosting I recommend [Vercel](http://vercel.com) as it simplifies the process for a [Next.js](https://nextjs.org) application.
+- If you want hosting I recommend [Vercel](http://vercel.com) as it simplifies the process for a [Next.js](https://nextjs.org) application. Hosting is free with the trial account.
 
 ### Environment Variables
+
+Environment variables can be set using at .env file at the project root for development or configured using server secrets.
+
+#### Authentication Hash
+
+```bash
+AUTH_SECRET=
+```
+
+To generate a secure authentication secret, you can use the following.
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+Copy the result into the environment variable or .env file.
+
+#### Google Authentication Provider
+
+```bash
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+```
+
+Follow the instruction from NextAuth.js [here](https://next-auth.js.org/providers/google). You will need a google developer account
+
+#### MongoDB variable
 
 ```bash
 MONGODB_URI="mongodb+srv://<username>:<password>@<collection>.<url>/acoustic?retryWrites=true&w=majority"
@@ -84,9 +111,9 @@ MONGODB_URI="mongodb+srv://<username>:<password>@<collection>.<url>/acoustic?ret
 
 The web application uses a [MongoDB](https://mongodb.com) database for persistent storage. You will need a [connection string](https://www.mongodb.com/resources/products/fundamentals/mongodb-connection-string) to a database with administrator access. You can get a database and connection with the free account.
 
-First, run the development server:
+## Running on a Development Server
 
-https://next-auth.js.org/providers/google
+Once the environmental variables are correct set simply run.
 
 ```bash
 npm install
@@ -94,6 +121,14 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Running on a Production Server
+
+1. Make your own GitHub repository of this code.
+
+2. Get an account with [Vercel](http://vercel.com) follow the instructions to setup with a GitHub account. The Vercel project will attach to a GitHub repository and the project has options for setting server secrets.
+
+3. Push to CI/CD deploy.
 
 ## To Do
 
