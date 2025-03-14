@@ -1,6 +1,6 @@
-# Composite Acoustic full-stack application.
+# Composite Acoustic web app
 
-This repository contains the code for the front-end and part of the back-end for the [Composite Acoustic](https://sound-wave.dev) web application.
+This repository contains the code for the [Composite Acoustic](https://sound-wave.dev) web application hosted in the link.
 
 It is a full-stack [React](https://react.dev) application using following packages;
 
@@ -12,6 +12,32 @@ It is a full-stack [React](https://react.dev) application using following packag
 - [Recharts](https://recharts.org/en-US/) provides the components used to plot the acoustic data.
 
 The acoustic physics calculations are performed by a separate state-less server component in this [respository](https://github.com/apcave/acoustic-calcs). It implements a [RESTful](https://aws.amazon.com/what-is/restful-api/) API written in Fortran and python.
+
+## Cloud Configuration
+
+This repository is hosted on [Vercel](http://vercel.com) it provides dynamic hosting and pre-rendering of pages. The client accesses the calculations API and the NoSQL database via the [Vercel](http://vercel.com) server. Server functions are restricted using passwords and session management in the [Next.js](https://nextjs.org) code.
+
+[MongoDB](https://mongodb.com) hosts the NoSQL database and the calculations API is hosted on AWS as a EC2 although there are plans to implement this API as a AWS Lamdba. The [Next.js](https://nextjs.org) application access these services through static passwords and connection strings that are stored in environment variables.
+
+CI/CD deployment including TTD checks are setup with [Vercel](http://vercel.com) where my project builds and deploys on main branch pushes at [https://sound-wave.dev](https://sound-wave.dev). Server secrets are managed by [Vercel](http://vercel.com).
+
+For further details on the calculations API see it's repository [here](https://github.com/apcave/acoustic-calcs).
+
+## State Management
+
+The server has state that is defined as pre-rendered pages and persistent storage in a NoSQL database. This state needs to be synchronized with the client state as the users make edits.
+
+The client code makes use of polling the server for updated data, optimistic updating and the server actions trigger re-rendering of pre-rendered pages when the user finalizes edits.
+
+[Redux](https://redux.js.org) manages state through the use of context property drilling is avoided. This makes for flexible and easy to maintain code. Reducers are used to provide functions to change state that self document. The use of Reducers and Selectors give confidence that components will be updated when effected by Reducers no matter where in the code they are invoked. Thunks simplify the job of syncronizing server and client state by extending the functionality of the Reducers. The client state management code is in the [/store](https://github.com/apcave/acoustic/tree/main/store) directory.
+
+## Search Engine Optimization
+
+The site is not a single page web application and is not hosted statically. This means that the web page contents and urls can be editing programmatically by the server. The most important example of this is the [https://sound-wave.dev/sitemap.xml](https://sound-wave.dev/sitemap.xml) which is used by search engines to crawl the site. It is not a file but a REST API defined in this code [here](https://github.com/apcave/acoustic/tree/main/app/sitemap.xml).
+
+The pages.tsx files in the /app and child directories are all pre-rendered by the server. Each of these pages include meta-data and have an entry in the site map. The [materials](https://github.com/apcave/acoustic/blob/main/app/acoustic/materials/page.tsx) page has a meta-data description that includes the names of all the materials that is updated whenever a user add or edits a material. The [models](https://github.com/apcave/acoustic/blob/main/app/acoustic/models/page.tsx) page is similar and updates when a user edits or updates a model. Each [model](app/acoustic/models/[modelid]/page.tsx) gets a url and entry in the site map when saved this page has the name and description in the meta-data. The other pages are not as complex and have static content and meta-data.
+
+## Project Directory Structure
 
 ## Getting Started
 
