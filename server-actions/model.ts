@@ -51,7 +51,7 @@ export async function getModel(modelId: string): Promise<iModelStatus> {
 
     status.status = "success";
     status.payload = JSON.parse(JSON.stringify(model));
-    revalidatePath("/acoustic/models");
+
     return status;
   } catch (error) {
     status.status = "error";
@@ -95,6 +95,7 @@ export async function updateModel(newModel: iModel): Promise<iModelStatus> {
     }
 
     await model.save();
+    revalidatePath("/acoustic/models");
 
     status.status = "success";
     status.payload = JSON.parse(JSON.stringify(model));

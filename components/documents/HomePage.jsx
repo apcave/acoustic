@@ -9,23 +9,26 @@ import {
 export default function HomePage() {
   return (
     <WebContent
-      name="Multi-Layer Acoustic Model"
+      name="Composite Material Acoustic Model"
       text="Demonstration Web Application by Dr Alexander Cave"
       numPages={1}
       pageNum={1}
     >
       <Heading text="Objective">
         <p>
-          The multi-layer web application is a demonstration of{" "}
+          This web application is a demonstration of{" "}
           <Link
-            className="text-blue-700 hover:underline"
+            className="link"
             href="/Levesque_Piche_1992.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            D. Levesque and L. Piche acoustic physics model
+            D. Levesque and L. Piche (1992)
           </Link>
-          . It models plane wave at some angle of incidence being reflected
-          (Rp,Rs) off and traveling through (Tp, Ts) multiple layers of possibly
-          resonant material. The coefficients are generated as complex numbers
+          , acoustic physics model. It models shear (s) and compression (p)
+          planes wave at some angle of incidence being reflected (Rp,Rs) off and
+          traveling through (Tp, Ts) multiple layers of possibly resonant
+          material. The coefficients are generated as complex numbers
           representing the amplitude and phase of reflected compression (Rp) and
           reflected shear (Rs) waves as well as transmitted compression (Tp) and
           transmitted shear (Ts) waves.
@@ -50,6 +53,158 @@ export default function HomePage() {
           layers. Where the intermediate layers further defined through layer
           thickness.
         </p>
+      </Heading>
+      <Heading text="About the Project">
+        <p>
+          This project is also demonstrates the computer programming skills of{" "}
+          <Link className="link" href="/resume">
+            Dr Alexander Cave
+          </Link>{" "}
+          who has developed this web application using code that is available
+          for review.
+        </p>
+        <NamedList name="Project GitHub Repositories:">
+          <li>
+            The UI and server Typescript / JavaScript full-stack{" "}
+            <Link
+              className="link"
+              href="https://github.com/apcave/acoustic"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              code
+            </Link>{" "}
+            and{" "}
+            <Link
+              className="link"
+              href="https://github.com/apcave/acoustic/blob/main/README.md"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              description
+            </Link>{" "}
+            .
+          </li>
+          <li>
+            The Fortran calculation code and python (Django) wrapper{" "}
+            <Link
+              className="link"
+              href="https://github.com/apcave/acoustic-calcs"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              code
+            </Link>{" "}
+            and{" "}
+            <Link
+              className="link"
+              href="https://github.com/apcave/acoustic-calcs/blob/main/README.md"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              description
+            </Link>{" "}
+            .
+          </li>
+        </NamedList>
+        Alex is looking for work and new projects and can be contacted through{" "}
+        <Link
+          className="link"
+          href="https://au.linkedin.com/in/alexander-cave-9b50b427"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          LinkedIn
+        </Link>{" "}
+        or{" "}
+        <a className="link" href="mailto:alex.cave@outlook.com.au">
+          email
+        </a>
+        .
+      </Heading>
+      <Heading text="Help">
+        <p>
+          This project is under construction, the client side UI/UX code is
+          advanced as is the persistent storage and Next.js server code.
+        </p>
+        <h3>The part that does the physics calculation does not work.</h3>
+
+        <h3 className="numbers">Walk Through</h3>
+        <ol>
+          <li>
+            <Link
+              className="link"
+              href="/acoustic/materials"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Click here
+            </Link>{" "}
+            to open a new tab on the materials property page or navigate by
+            using the menu bar.
+          </li>
+          <li>Click on four materials in the Available Materials list.</li>
+          <li>
+            Notice that these materials are added to the model in the Composite
+            Material Layers section.
+          </li>
+          <li>
+            Click on the Edit button for one of the materials, a modal dialog
+            box appears and you can edit the material properties.
+          </li>
+          <li>
+            Notice there is a working search bar and button to add a new
+            material.
+          </li>
+          <li>
+            To form a composite material the layer thickness must be defined.
+            Click the red Edit link on a Composite Material Layer to enter the
+            thickness in milimeters.
+          </li>
+          <li>
+            Materials can be removed from the model by clicking the red delete
+            icon.
+          </li>
+          <li>
+            The incident wave travels through a medium defined by the first
+            layer. It for this layer that reflection co-efficient (Rp, Rs) are
+            applicable.
+          </li>
+          <li>
+            The final layer defines the medium through which the transmitted
+            wave travels. It is for this layer that transmission co-efficient
+            (Tp, Ts) are applicable.
+          </li>
+          <li>
+            The intermediate layers are defined by the materials and thickness.
+          </li>
+          <li>
+            The order of the layers is important and can be altered by clicking
+            the up or down arrow for the layer.
+          </li>
+          <li>
+            Once your finished editing the layers of the composite material
+            click "Edit Model".
+          </li>
+          <li>
+            The axis of the results plots are defined by sweeping either the
+            angle of incidence or the frequency of the incident wave. An area is
+            provided to edit the properties of the sweep for the model.
+          </li>
+          <li>
+            In the "Finalize Model" section you can edit the model name and
+            description and define if the incident wave is a shear or
+            compression wave.
+          </li>
+          <li>
+            Click "Run Simulation" to save the model and run the calculation.
+          </li>
+          <li>
+            As the API is incomplete the results do not display and cannot be
+            downloaded. However the model will appear in the "Models" page using
+            the link in the menu bar.
+          </li>
+        </ol>
       </Heading>
     </WebContent>
   );
