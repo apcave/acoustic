@@ -39,13 +39,20 @@ The pages.tsx files in the /app and child directories are all pre-rendered by th
 
 ## Project Directory Structure
 
-- /app, the project root from which TSX pages are served.
-- /app/layout.tsx defines a wrapper for all page.tsx files.
-- url: / file: /app/page.tsx
-- url: /acoustic/materials, /app/acoustic/materials/page.tsx the list of all materials page.
-
-- url: /acoustic/models, /app/acoustic/models/page.tsx the models list page.
-- url: /acoustic/models/[modelid], /app/acoustic/models/[modelid]/page.tsx the model detail page specific to the <modelid>.
+| **URL**                    | **FILE**                                | Description                                             |
+| -------------------------- | --------------------------------------- | ------------------------------------------------------- |
+| /public                    | /public                                 | Directory of all static publicly served files           |
+| /                          | /app                                    | The project root from which TSX is served               |
+|                            | /app/layout.tsx                         | A wrapper from a page.tsx files                         |
+| /                          | /app/page.tsx                           | The application home page                               |
+| /acoustic/materials        | /app/acoustic/materials/page.tsx        | A list of all materials                                 |
+| /acoustic/models           | /app/acoustic/models/page.tsx           | A list of all models                                    |
+| /acoustic/models/[modelid] | /app/acoustic/models/[modelid]/page.tsx | The model details specific to "modelid"                 |
+| /login                     | /login/page.tsx                         | Provides for user login                                 |
+| /register                  | /register/page.txt                      | Provides for user registration                          |
+| /api/auth/[...nextauth]    | /app/api/auth/[...nextauth]/route.ts    | API for user management from client side                |
+| /api/materials             | /app/api/materials/route.ts             | API to output a list of all material properties in JSON |
+| /sitemap.xml               | /app/sitemap.xml/route.ts               | API to output a site map in XML                         |
 
 ## Getting Started
 
