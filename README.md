@@ -39,6 +39,14 @@ The pages.tsx files in the /app and child directories are all pre-rendered by th
 
 ## Project Directory Structure
 
+- /app, the project root from which TSX pages are served.
+- /app/layout.tsx defines a wrapper for all page.tsx files.
+- url: sound-wave.dev, file: /app/page.tsx
+- url: sound-wave.dev/acoustic/materials, /app/acoustic/materials/page.tsx the list of all materials page.
+
+- url: sound-wave.dev/acoustic/models, /app/acoustic/models/page.tsx the models list page.
+- url: sound-wave.dev/acoustic/models/<modelid>, /app/acoustic/models/[modelid]/page.tsx the model detail page specific to the <modelid>.
+
 ## Getting Started
 
 To duplicate the [Composite Acoustic](https://sound-wave.dev) front-end you will need:
