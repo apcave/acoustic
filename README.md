@@ -39,6 +39,8 @@ The pages.tsx files in the /app and child directories are all pre-rendered by th
 
 ## Project Directory Structure
 
+# Next.js specific project file structure.
+
 | **URL**                    | **FILE**                                | Description                                             |
 | -------------------------- | --------------------------------------- | ------------------------------------------------------- |
 | /public                    | /public                                 | Directory of all static publicly served files           |
@@ -53,6 +55,18 @@ The pages.tsx files in the /app and child directories are all pre-rendered by th
 | /api/auth/[...nextauth]    | /app/api/auth/[...nextauth]/route.ts    | API for user management from client side                |
 | /api/materials             | /app/api/materials/route.ts             | API to output a list of all material properties in JSON |
 | /sitemap.xml               | /app/sitemap.xml/route.ts               | API to output a site map in XML                         |
+
+# Project Directory Structure
+
+| **Directory**          | **Description**                                            |
+| ---------------------- | ---------------------------------------------------------- |
+| /components            | Holds the code for the React components                    |
+| /components/documents  | React components for text pages                            |
+| /components/multilayer | React components specific to the acoustic modelling        |
+| /lib                   | Miscellaneous code                                         |
+| /models                | NoSQL model definitions                                    |
+| /server-action         | Code to be executed on the server                          |
+| /store                 | Client state specific code, Redux Slices, Reducers, Thunks |
 
 ## Getting Started
 
