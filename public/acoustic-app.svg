@@ -1,0 +1,21 @@
+<svg
+    width="200"
+    height="200"
+    viewBox="0 0 200 200"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    stroke="black"
+    stroke-width="5"
+>
+    <!-- Concentric sound waves -->
+    <circle cx="100" cy="100" r="95" stroke="black" stroke-width="2" fill="black"/>
+    
+    <!-- Composite material layers -->
+    <polygon points="50,120 100,40 150,120" stroke="white" stroke-width="3" fill="white"/>
+
+ 
+    
+    <!-- Physics wave element and background fill -->
+    <path d="M 0 150 Q 50 110, 100 150 T 200 150 L 200 200 L 0 200 Z" fill="#00b7ff" stroke="none"/>
+    <path d="M 0 150 Q 50 110, 100 150 T 200 150" stroke="#00b7ff" stroke-width="3" fill="none"/>
+</svg>

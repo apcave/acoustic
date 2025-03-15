@@ -30,13 +30,25 @@ const getData = cache(async () => {
 export async function generateMetadata(): Promise<Metadata> {
   const materials = await getData();
   const materialNames = materials
-    .slice(0, 5)
     .map((m: { name: string }) => m.name)
     .join(", ");
+
+  const keywords: string[] = [
+    "acoustic",
+    "materials",
+    "models",
+    "resume",
+    "sound",
+    "wave",
+    "react",
+    "nextjs",
+  ];
+  materials.map((m: { name: string }) => keywords.push(m.name));
 
   return {
     title: "Acoustic Materials",
     description: `List of acoustic materials and their shear compression,speed of sound, modules properties. Includes: ${materialNames}`,
+    keywords,
   };
 }
 
