@@ -1,4 +1,8 @@
 "use server";
+import fs from "fs";
+import path from "path";
+const { MONGODB_URI } = process.env;
+
 import { connectDB } from "@/lib/mongodb";
 import Model from "@/models/Model";
 import {
@@ -99,6 +103,16 @@ export async function updateModel(newModel: iModel): Promise<iModelStatus> {
 
     status.status = "success";
     status.payload = JSON.parse(JSON.stringify(model));
+
+    // TODO: Remove Lines!
+    console.log("Model written to file for TESTING");
+    const filePath = path.join(__dirname, "modelPayload.txt");
+    fs.writeFileSync(
+      filePath,
+      JSON.stringify(status.payload, null, 2),
+      "utf-8"
+    );
+
     return status;
   } catch (error: any) {
     status.status = "error";

@@ -6,6 +6,7 @@ export interface iModel extends Document {
   _id: string;
   name: string;
   description: string;
+  incidentCompression: boolean;
   composite: iComposite;
   sweep: iSweep;
   result: iResult | null;
@@ -18,6 +19,7 @@ const ModelSchema: Schema = new Schema({
   _id: { type: String, required: true },
   name: { type: String, required: true },
   description: { type: String, required: true },
+  incidentCompression: { type: Boolean, required: true },
   composite: { type: Object, required: true },
   sweep: { type: Object, required: true },
   userId: { type: String, required: true },

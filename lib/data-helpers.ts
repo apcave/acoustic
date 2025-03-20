@@ -8,6 +8,8 @@ export interface iSweep {
   isFrequency: boolean;
   isLogarithmic: boolean;
   values: number[];
+  angle: number | null;
+  frequency: number | null;
   start: number;
   end: number;
   numSteps: number;
@@ -93,12 +95,36 @@ export function validateSweep(newSweep: iSweep, wasEndChanged: boolean) {
   } else {
     linspace();
   }
+
+  if (newSweep.isFrequency) {
+    if (newSweep.angle === null) {
+      newSweep.angle = 45;
+    }
+    if (newSweep.angle < 0) {
+      newSweep.angle = 0;
+    }
+    if (newSweep.angle > 90) {
+      newSweep.angle = 90;
+    }
+    newSweep.frequency = null;
+  } else {
+    if (newSweep.frequency === null) {
+      newSweep.frequency = 1000;
+    }
+    if (newSweep.frequency < 0) {
+      newSweep.frequency = 1000;
+    }
+    newSweep.angle = null;
+  }
+
   return newSweep;
 }
 
 export function iniSweep(): iSweep {
   const newSweep = {
     isFrequency: true,
+    angle: 45,
+    frequency: null,
     isLogarithmic: false,
     values: [],
     start: 0,

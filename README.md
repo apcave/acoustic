@@ -138,7 +138,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - Provide for editing of material properties after adding them to the a model. Click in the Layers section on the name to edit.
 - Add edit materials button next to run simulation to add more materials to an existing model.
 - More edit name and description to where it is displayed on the edit model page.
-
+- When the shear goes from not a fluid to a fluid the UI errors.
+- When frequency is swept there needs to be a way of setting the angle.
+- When the angle is swept there needs to be a way to setting the frequency.
 - Add more animations work on UX.
 - Animate loading model also add spinner.
 - Work on calculations code.
