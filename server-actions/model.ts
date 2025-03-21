@@ -111,13 +111,13 @@ export async function updateModel(newModel: iModel): Promise<iModelStatus> {
     console.log("Model:", status.payload);
 
     // TODO: Remove Lines!
-    console.log("Model written to file for TESTING");
-    const filePath = path.join(__dirname, "modelPayload.txt");
-    fs.writeFileSync(
-      filePath,
-      JSON.stringify(status.payload, null, 2),
-      "utf-8"
-    );
+    // console.log("Model written to file for TESTING");
+    // const filePath = path.join(__dirname, "modelPayload.txt");
+    // fs.writeFileSync(
+    //   filePath,
+    //   JSON.stringify(status.payload, null, 2),
+    //   "utf-8"
+    // );
 
     return status;
   } catch (error: any) {
