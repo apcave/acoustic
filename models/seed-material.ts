@@ -1,6 +1,7 @@
 "use server";
 import { connectDB } from "@/lib/mongodb";
 import Material from "@/models/Material";
+import Model from "@/models/Model";
 import mongoose from "mongoose";
 
 import { newID } from "@/lib/data-helpers";
@@ -514,6 +515,7 @@ export async function seedDatabase(userIdStr: string) {
 
     // Optional: Clear existing data
     await Material.deleteMany({});
+    await Model.deleteMany({});
     console.log("Cleared existing data");
 
     // Insert the new data

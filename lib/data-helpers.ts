@@ -15,15 +15,22 @@ export interface iSweep {
   numSteps: number;
 }
 
+interface iComplexArray {
+  real: number[];
+  imag: number[];
+}
+
 export interface iResult {
-  Rp_real: number[];
-  Rp_imag: number[];
-  Rs_real: number[];
-  Rs_imag: number[];
-  Tp_real: number[];
-  Tp_imag: number[];
-  Ts_real: number[];
-  Ts_imag: number[];
+  return_code: number;
+  return_message: string;
+  Rp: iComplexArray;
+  Rs: iComplexArray;
+  Tp: iComplexArray;
+  Ts: iComplexArray;
+  TpE: number[];
+  TsE: number[];
+  RpE: number[];
+  RsE: number[];
 }
 
 export interface iModel {
@@ -33,7 +40,7 @@ export interface iModel {
   incidentCompression: boolean;
   composite: iComposite;
   sweep: iSweep;
-  result: iResult | null;
+  results: iResult | null;
   userId: string;
   createdAt: Date | string;
   updatedAt: Date | string;
@@ -143,7 +150,7 @@ export function iniModel(): iModel {
     incidentCompression: true,
     composite: iniComposite(), // Start with an empty array of layers
     sweep: iniSweep(),
-    result: null,
+    results: null,
     userId: "default_user_id", // Replace with a valid user ID
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),

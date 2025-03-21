@@ -1,7 +1,8 @@
 "use server";
 import fs from "fs";
 import path from "path";
-const { MONGODB_URI } = process.env;
+
+import { runAcousticCalcs } from "@/server-actions/acoustic-calcs";
 
 import { connectDB } from "@/lib/mongodb";
 import Model from "@/models/Model";
@@ -15,6 +16,7 @@ import {
 } from "@/lib/data-helpers";
 
 import { revalidatePath } from "next/cache";
+import { a } from "framer-motion/client";
 
 export async function getAllModels(): Promise<iModelAllStatus> {
   const status = iniModelAllStatus();
@@ -76,6 +78,8 @@ export async function updateModel(newModel: iModel): Promise<iModelStatus> {
   const status = iniModelStatus();
 
   try {
+    newModel = await runAcousticCalcs(newModel);
+    console.log("Results from acoustic calculations:", newModel);
     await connectDB();
 
     if (newModel._id === "unsaved") {
@@ -91,7 +95,7 @@ export async function updateModel(newModel: iModel): Promise<iModelStatus> {
       model.incidentCompression = newModel.incidentCompression;
       model.composite = newModel.composite;
       model.sweep = newModel.sweep;
-      model.result = newModel.result;
+      model.results = newModel.results;
       model.updatedAt = new Date().toISOString();
     } else {
       console.log("Creating new model <<<<<<<<<<<-------------------");
@@ -103,6 +107,8 @@ export async function updateModel(newModel: iModel): Promise<iModelStatus> {
 
     status.status = "success";
     status.payload = JSON.parse(JSON.stringify(model));
+    console.log("Model updated successfully");
+    console.log("Model:", status.payload);
 
     // TODO: Remove Lines!
     console.log("Model written to file for TESTING");

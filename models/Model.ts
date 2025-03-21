@@ -9,7 +9,7 @@ export interface iModel extends Document {
   incidentCompression: boolean;
   composite: iComposite;
   sweep: iSweep;
-  result: iResult | null;
+  results: iResult | null;
   userId: string;
   createdAt: Date | string;
   updatedAt: Date | string;
@@ -21,6 +21,7 @@ const ModelSchema: Schema = new Schema({
   description: { type: String, required: true },
   incidentCompression: { type: Boolean, required: true },
   composite: { type: Object, required: true },
+  results: { type: Object, required: true },
   sweep: { type: Object, required: true },
   userId: { type: String, required: true },
   updatedAt: { type: Date, default: Date.now },

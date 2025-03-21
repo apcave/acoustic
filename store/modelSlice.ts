@@ -36,7 +36,7 @@ const modelSlice = createSlice({
       state.model.sweep = action.payload;
     },
     setResults: (state, action: PayloadAction<iResult>) => {
-      state.model.result = action.payload;
+      state.model.results = action.payload;
     },
     deleteLayer: (state, action: PayloadAction<iLayer>) => {
       state.model.composite.layers = state.model.composite.layers.filter(
