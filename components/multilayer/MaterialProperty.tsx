@@ -135,6 +135,9 @@ export default function MaterialProperty({
       );
     } else if (name === `${label}-real`) {
       const real = parseFloat(value);
+      if (real < 0) {
+        return;
+      }
 
       if (real === 0) {
         let type: iType;
@@ -165,12 +168,16 @@ export default function MaterialProperty({
         );
       }
     } else if (name === `${label}-imag`) {
+      const imag = parseFloat(value);
+      if (imag < 0) {
+        return;
+      }
       onChange(
         {
           ...property,
           waveSpeed: undefined,
           attenuation: undefined,
-          imag: parseFloat(value),
+          imag: imag,
         },
         label
       );
@@ -260,24 +267,18 @@ function ModulusProps({ property, onChange, label }: iTypeProps) {
   if (property.type === "modulus") {
     return (
       <div>
-        <label htmlFor={`${label}-real`}>Real (MPa)</label>
+        <label htmlFor={`${label}-real`}>Real (Pa)</label>
         <input
           id={`${label}-real`}
           name={`${label}-real`}
-          type="number"
-          step="any"
           onChange={onChange}
-          min="0"
           value={property.real}
         />
-        <label htmlFor={`${label}-imag`}>Imaginary (MPa)</label>
+        <label htmlFor={`${label}-imag`}>Imaginary (Pa)</label>
         <input
           id={`${label}-imag`}
           name={`${label}-imag`}
-          type="number"
           onChange={onChange}
-          step="any"
-          min="0"
           value={property.imag}
         />
       </div>

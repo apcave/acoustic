@@ -41,7 +41,16 @@ export default function Header() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              GitHub
+              Fullstack GitHub
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="https://github.com/apcave/acoustic-calcs"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Backend GitHub
             </Link>
           </li>
         </menu>

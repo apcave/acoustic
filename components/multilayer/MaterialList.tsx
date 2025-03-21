@@ -135,12 +135,17 @@ function ModulusCell({ isShear, value, className }: ModulusCellProps) {
       text_l1 = "K: ";
     }
 
-    if (!value.real || !value.imag) {
+    if (!value.real) {
       throw new Error("Invalid modulus value");
     }
 
+    let imag = 0;
+    if (value.imag) {
+      imag = value.imag;
+    }
+
     text_l1 += value.real / 1e6 + " Re MPa + ";
-    text_l2 += value.imag / 1e6 + " Im MPa";
+    text_l2 += imag / 1e6 + " Im MPa";
   } else {
     text_l1 = "Fluid Material";
     text_l2 = "";

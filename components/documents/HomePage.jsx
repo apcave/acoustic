@@ -82,7 +82,7 @@ export default function HomePage() {
               rel="noopener noreferrer"
             >
               description
-            </Link>{" "}
+            </Link>
             .
           </li>
           <li>
@@ -103,7 +103,7 @@ export default function HomePage() {
               rel="noopener noreferrer"
             >
               description
-            </Link>{" "}
+            </Link>
             .
           </li>
         </NamedList>
@@ -127,8 +127,6 @@ export default function HomePage() {
           This project is under construction, the client side UI/UX code is
           advanced as is the persistent storage and Next.js server code.
         </p>
-        <h3>The part that does the physics calculation does not work.</h3>
-
         <h3 className="numbers">Walk Through</h3>
         <ol>
           <li>
