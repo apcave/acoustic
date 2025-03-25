@@ -29,6 +29,11 @@ interface Params {
   params: Promise<args>;
 }
 
+const getCachedModel = async (id: string) => {
+  const model = await getModel(id);
+  return model;
+};
+
 export default async function ModelDetail({ params }: Params) {
   let debug = null;
   let model = null;
@@ -37,7 +42,7 @@ export default async function ModelDetail({ params }: Params) {
 
   if (id) {
     if (id !== "unsaved") {
-      const result = await getModel(id);
+      const result = await getCachedModel(id);
       if (result.status === "success") {
         // Model is defined and saved.
         model = result.payload;
