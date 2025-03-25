@@ -7,7 +7,7 @@ import FinalizeModel from "@/components/multilayer/ModelFinalize";
 import { iModel } from "@/lib/data-helpers";
 
 import { RootState, AppDispatch } from "@/store/store";
-import { editModel } from "@/store/modelSlice";
+import { setModel } from "@/store/modelSlice";
 
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,7 +29,7 @@ export default function ModelForm({ orgModel }: iModelFormProps) {
     if (orgModel) {
       console.log("<<<<<<<<<<<<<<<<<<<---------------------------------");
       console.log("Client updating model from server pre-render");
-      dispatch(editModel(orgModel));
+      dispatch(setModel(orgModel));
     }
   }, [orgModel, dispatch]);
 

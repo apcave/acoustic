@@ -72,6 +72,11 @@ input {
   width: 3cm;
 }
 
+input.error {
+  border-color: var(--color-urgent);
+  background-color: var(--color-urgent);
+}
+
 select {
   font-size: 14px;
   padding: 3px;

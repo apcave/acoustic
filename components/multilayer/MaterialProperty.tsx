@@ -1,4 +1,5 @@
 import { iProperty, iType, iLabel } from "@/lib/data-helpers";
+import InputFloat from "@/components/InputFloat";
 
 interface iMaterialProperty {
   label: iLabel;
@@ -238,21 +239,17 @@ function WaveProps({ property, onChange, label }: iTypeProps) {
     return (
       <div>
         <label htmlFor={`${label}-wave-speed`}>Wave Speed (m/s)</label>
-        <input
+        <InputFloat
           id={`${label}-wave-speed`}
           name={`${label}-wave-speed`}
-          type="number"
           onChange={onChange}
-          min="0"
-          step="any"
+          min={0}
           value={property.waveSpeed}
         />
         <label htmlFor={`${label}-attenuation`}>Attenuation (db/m)</label>
-        <input
+        <InputFloat
           id={`${label}-attenuation`}
           name={`${label}-attenuation`}
-          type="number"
-          step="any"
           onChange={onChange}
           value={property.attenuation}
         />
@@ -268,17 +265,19 @@ function ModulusProps({ property, onChange, label }: iTypeProps) {
     return (
       <div>
         <label htmlFor={`${label}-real`}>Real (Pa)</label>
-        <input
+        <InputFloat
           id={`${label}-real`}
           name={`${label}-real`}
           onChange={onChange}
+          min={0}
           value={property.real}
         />
         <label htmlFor={`${label}-imag`}>Imaginary (Pa)</label>
-        <input
+        <InputFloat
           id={`${label}-imag`}
           name={`${label}-imag`}
           onChange={onChange}
+          min={0}
           value={property.imag}
         />
       </div>

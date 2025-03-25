@@ -5,6 +5,8 @@ import "@/components/multilayer/SweepForm.css";
 import { useSelector, useDispatch } from "react-redux";
 import { validateSweep } from "@/lib/data-helpers";
 
+import InputFloat from "@/components/InputFloat";
+
 export default function SweepForm() {
   const dispatch = useDispatch<AppDispatch>();
   const sweep = useSelector((state: RootState) => state.model.model.sweep);
@@ -37,7 +39,7 @@ export default function SweepForm() {
       newSweep.isFrequency = !newSweep.isFrequency;
     }
     validateSweep(newSweep, wasEndChanged);
-    dispatch(editSweep(newSweep));
+    dispatch(editSweep(newSweep)); // If the sweeps doesn't change the state stays the same.
   }
 
   return (
@@ -50,13 +52,12 @@ export default function SweepForm() {
         <label htmlFor="start" className="col1">
           Starting {sweep.isFrequency ? "Frequency kHz" : "Angle °"}
         </label>
-        <input
+        <InputFloat
           className="col2"
           id="start"
           name="start"
-          type="number"
-          step="any"
-          min="0"
+          min={0}
+          max={undefined}
           value={sweep.start}
           onChange={handleChange}
         />
@@ -78,13 +79,12 @@ export default function SweepForm() {
         <label htmlFor="end" className="col1">
           Ending {sweep.isFrequency ? "Frequency kHz" : "Angle °"}
         </label>
-        <input
+        <InputFloat
           className="col2"
           id="end"
           name="end"
-          type="number"
-          step="any"
-          min="0"
+          min={0}
+          max={undefined}
           value={sweep.end}
           onChange={handleChange}
         />

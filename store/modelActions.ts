@@ -1,6 +1,6 @@
 import { iModel } from "@/lib/data-helpers";
 import { Dispatch } from "redux";
-import { editModel } from "./modelSlice";
+import { setModel } from "./modelSlice";
 
 /*
   This thunk sends a model to the server to be saved.
@@ -35,7 +35,7 @@ export function saveModelToServer(model: iModel) {
 
       console.log("<<<<<<<<<<<<<<<<<----------------------");
       console.log("client updating Model state");
-      dispatch(editModel(newModel));
+      dispatch(setModel(newModel));
     } catch (error) {
       console.log("Error saving model:", error);
     }

@@ -3,6 +3,7 @@ import { iMaterial, iniMatActionStatus, iProperty } from "@/lib/data-helpers";
 import { updateAddMaterial } from "@/server-actions/materials";
 
 import MaterialProperty from "@/components/multilayer/MaterialProperty";
+import InputFloat from "@/components/InputFloat";
 
 import { useActionState } from "react";
 import { useSession } from "next-auth/react";
@@ -132,14 +133,12 @@ export default function MaterialForm() {
           value={material.name}
         />
         <label htmlFor="density">Density (kg/m³)</label>
-        <input
-          type="number"
+        <InputFloat
           id="density"
           name="density"
           required
           onChange={handleEdit}
-          step="any"
-          min="0"
+          min={0}
           value={material.density}
         />
       </div>

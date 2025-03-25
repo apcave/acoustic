@@ -13,6 +13,7 @@ import {
   editLayer,
 } from "@/store/modelSlice";
 import { iLayer } from "@/lib/data-helpers";
+import InputFloat from "@/components/InputFloat";
 
 import GreenArrow from "@/public/greenUpArrow.svg";
 import Delete from "@/public/delete.svg";
@@ -142,13 +143,12 @@ function CompositeLayerItem({
       </td>
       <td className={index === numLayers - 1 ? "col2" : "col2 line-bottom"}>
         {!buttonLabel && (
-          <input
+          <InputFloat
             disabled={!isCompositeLayer}
             onChange={(e) => handleEditThickness(e, layer)}
             value={layer.thickness}
-            type="number"
-            step="any"
-            min="0"
+            min={0}
+            max={undefined}
           />
         )}
         {buttonLabel && (
