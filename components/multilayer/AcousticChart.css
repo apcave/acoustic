@@ -1,0 +1,21 @@
+#main-chart div.chart-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+#main-chart p.title {
+  font-weight: bold;
+  color: var(--color-3-secondary);
+}
+
+#main-chart p.yaxis {
+  writing-mode: vertical-lr; /* Make the text vertical */
+  text-orientation: mixed; /* Ensure proper orientation of characters */
+
+  font-weight: bold;
+  color: var(--color-3-secondary);
+}

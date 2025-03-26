@@ -11,7 +11,7 @@ import { PropsWithChildren, useState } from "react";
 interface InputFloatProps {
   id?: string;
   name?: string;
-  value: number | undefined;
+  value: number | undefined | null;
   disabled?: boolean;
   required?: boolean;
   min?: number;

@@ -17,6 +17,7 @@ import {
 
 import { revalidatePath } from "next/cache";
 import { a } from "framer-motion/client";
+import { log } from "console";
 
 export async function getAllModels(): Promise<iModelAllStatus> {
   const status = iniModelAllStatus();
@@ -78,8 +79,10 @@ export async function updateModel(newModel: iModel): Promise<iModelStatus> {
   const status = iniModelStatus();
 
   try {
+    console.log(">>>>>>>>>>>>>>>>>>>>>> About to start acoustic-cals request");
+    // Fetches the results from the server.
     newModel = await runAcousticCalcs(newModel);
-    console.log("Results from acoustic calculations:", newModel);
+    console.log(">>>>>>>>>>>>>>> Results from acoustic calculations");
     await connectDB();
 
     if (newModel._id === "unsaved") {
@@ -104,11 +107,11 @@ export async function updateModel(newModel: iModel): Promise<iModelStatus> {
 
     await model.save();
     revalidatePath("/acoustic/models");
+    revalidatePath(`/acoustic/models/${model._id}`);
+    console.log(">>>>>>>>>>>>>>>>>>>>>>> MongoDb Model Updated");
 
     status.status = "success";
     status.payload = JSON.parse(JSON.stringify(model));
-    console.log("Model updated successfully");
-    console.log("Model:", status.payload);
 
     // TODO: Remove Lines!
     // console.log("Model written to file for TESTING");
@@ -118,11 +121,19 @@ export async function updateModel(newModel: iModel): Promise<iModelStatus> {
     //   JSON.stringify(status.payload, null, 2),
     //   "utf-8"
     // );
-
+    console.log(">>>>>>>>>>>>>>>>>>>>>> Sent Model to Client");
     return status;
-  } catch (error: any) {
+  } catch (error: unknown) {
+    console.log(
+      ">>>>>>>>>>>>>>>>>>>>>> Acoustic cals-request errrored in Next.js"
+    );
     status.status = "error";
-    status.errorMessages.push("Failed to update model", error.message);
+    if (error instanceof Error) {
+      console.log("Failed to update model", error.message);
+      status.errorMessages.push("Failed to update model", error.message);
+    } else {
+      status.errorMessages.push("Failed to update model");
+    }
     return status;
   }
 }

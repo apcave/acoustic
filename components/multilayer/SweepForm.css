@@ -13,7 +13,7 @@
 }
 
 #sweep-form .col1 {
-  flex: 0 0 34%;
+  flex: 0 0 33%;
 }
 
 #sweep-form .col2 {
@@ -26,6 +26,14 @@
 
 #sweep-form .col4 {
   flex: 0 0 5%;
+}
+
+#sweep-form .col3-1 {
+  flex: 0 0 21%;
+}
+
+#sweep-form .col4-1 {
+  flex: 0 0 20%;
 }
 
 #sweep-form label {

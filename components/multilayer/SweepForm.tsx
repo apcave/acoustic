@@ -38,6 +38,15 @@ export default function SweepForm() {
     if (e.target.name === "isFrequency") {
       newSweep.isFrequency = !newSweep.isFrequency;
     }
+
+    if (e.target.name === "angle") {
+      newSweep.angle = parseFloat(e.target.value);
+    }
+
+    if (e.target.name === "frequency") {
+      newSweep.frequency = parseFloat(e.target.value);
+    }
+
     validateSweep(newSweep, wasEndChanged);
     dispatch(editSweep(newSweep)); // If the sweeps doesn't change the state stays the same.
   }
@@ -50,7 +59,7 @@ export default function SweepForm() {
       </h2>
       <div>
         <label htmlFor="start" className="col1">
-          Starting {sweep.isFrequency ? "Frequency kHz" : "Angle °"}
+          Starting {sweep.isFrequency ? "Frequency (Hz)" : "Angle °"}
         </label>
         <InputFloat
           className="col2"
@@ -77,7 +86,7 @@ export default function SweepForm() {
 
       <div>
         <label htmlFor="end" className="col1">
-          Ending {sweep.isFrequency ? "Frequency kHz" : "Angle °"}
+          Ending {sweep.isFrequency ? "Frequency (Hz)" : "Angle °"}
         </label>
         <InputFloat
           className="col2"
@@ -114,6 +123,37 @@ export default function SweepForm() {
           value={sweep.numSteps}
           onChange={handleChange}
         />
+        {sweep.isFrequency ? (
+          <>
+            <label htmlFor="angle" className="col3-1">
+              Fixed Angle
+            </label>
+            <InputFloat
+              className="col4-1"
+              id="angle"
+              name="angle"
+              min={0}
+              max={90}
+              value={sweep.angle}
+              onChange={handleChange}
+            />
+          </>
+        ) : (
+          <>
+            <label htmlFor="frequency" className="col3-1">
+              Fixed Frequency
+            </label>
+            <InputFloat
+              className="col4-1"
+              id="frequency"
+              name="frequency"
+              min={0}
+              max={undefined}
+              value={sweep.frequency}
+              onChange={handleChange}
+            />
+          </>
+        )}
       </div>
     </div>
   );

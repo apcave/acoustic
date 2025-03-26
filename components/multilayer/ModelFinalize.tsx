@@ -20,6 +20,9 @@ export default function FinalizeModel() {
   const dispatch = useDispatch<AppDispatch>();
   const model = useSelector((state: RootState) => state.model.model);
   const [redirect, setRedirect] = useState(model._id);
+  const composite = useSelector(
+    (state: RootState) => state.model.model.composite
+  );
 
   // Ensure model properties are always defined
   const modelName = model.name || "";
@@ -38,6 +41,11 @@ export default function FinalizeModel() {
       router.push(`/acoustic/models/${model._id}`);
     }
   }, [model._id, redirect, router]);
+
+  if (!composite.layers[0]) {
+    return <></>;
+  }
+  const isRSolid = composite.layers[0].material.category === "solid";
 
   function handleSaveAndRun() {
     console.log("<<<<<<<<<<<<<<<<---------------------------------");
@@ -91,22 +99,22 @@ export default function FinalizeModel() {
           />
         </>
       )}
-
-      <div>
-        <input
-          id="incidentCompression"
-          name="incidentCompression"
-          className="twolines"
-          type="checkbox"
-          checked={incidentCompression}
-          onChange={(e) => dispatch(setIncidentCompression(e.target.checked))}
-        />
-
-        <label htmlFor="incidentCompression">
-          <p>Check for Incident Compression Wave</p>
-          <p>Clear for Incident Shear Wave</p>
-        </label>
-      </div>
+      {isRSolid && (
+        <div>
+          <input
+            id="incidentCompression"
+            name="incidentCompression"
+            className="twolines"
+            type="checkbox"
+            checked={incidentCompression}
+            onChange={(e) => dispatch(setIncidentCompression(e.target.checked))}
+          />
+          <label htmlFor="incidentCompression">
+            <p>Check for Incident Compression Wave</p>
+            <p>Clear for Incident Shear Wave</p>
+          </label>
+        </div>
+      )}
       <button onClick={handleSaveAndRun}>Run Simulation</button>
     </div>
   );

@@ -15,6 +15,10 @@ import { setModel } from "./modelSlice";
 export function saveModelToServer(model: iModel) {
   async function sendData(dispatch: Dispatch) {
     try {
+      console.log("<<<<<<<<<<<<<<<<<----------------------");
+      console.log("client Model sent to server");
+      console.log(model);
+
       const response = await fetch("/api/models", {
         method: "POST",
         headers: {
@@ -29,8 +33,6 @@ export function saveModelToServer(model: iModel) {
 
       const data = await response.json();
 
-      console.log("<<<<<<<<<<<<<<<<<----------------------");
-      console.log("client Model sent to server");
       const newModel: iModel = data.model;
 
       console.log("<<<<<<<<<<<<<<<<<----------------------");

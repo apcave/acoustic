@@ -121,7 +121,14 @@ export function validateSweep(newSweep: iSweep, wasEndChanged: boolean) {
     if (newSweep.frequency < 0) {
       newSweep.frequency = 1000;
     }
-    newSweep.angle = null;
+  }
+
+  if (newSweep.angle === null) {
+    newSweep.angle = 0;
+  }
+
+  if (newSweep.frequency === null) {
+    newSweep.frequency = 20000;
   }
 
   return newSweep;
@@ -130,8 +137,8 @@ export function validateSweep(newSweep: iSweep, wasEndChanged: boolean) {
 export function iniSweep(): iSweep {
   const newSweep = {
     isFrequency: true,
-    angle: 45,
-    frequency: null,
+    angle: 0,
+    frequency: 16e6,
     isLogarithmic: false,
     values: [],
     start: 0,

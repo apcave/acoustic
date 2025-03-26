@@ -12,6 +12,7 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { iResult, iSweep } from "@/lib/data-helpers";
+import "@/components/multilayer/AcousticChart.css";
 
 function unwrap(angles: number[]): number[] {
   let unwrapped = [...angles];
@@ -38,6 +39,18 @@ const AcousticChart: React.FC = () => {
   const sweep = useSelector(
     (state: RootState) => state.model.model.sweep
   ) as iSweep;
+  const composite = useSelector(
+    (state: RootState) => state.model.model.composite
+  );
+
+  if (!composite.layers[0]) {
+    return <></>;
+  }
+
+  const isRSolid = composite.layers[0].material.category === "solid";
+  const isTSolid =
+    composite.layers[composite.layers.length - 1].material.category === "solid";
+  const showShear = isRSolid || isRSolid;
 
   if (!results) {
     return null;
@@ -51,7 +64,6 @@ const AcousticChart: React.FC = () => {
       Math.atan2(results.Rp.imag[index], results.Rp.real[index])
     )
   );
-  console.log("unwrappedRpTheta", unwrappedRpTheta);
   const unwrappedTpTheta = unwrap(
     results.Tp.imag.map((_, index) =>
       Math.atan2(results.Tp.imag[index], results.Tp.real[index])
@@ -81,6 +93,7 @@ const AcousticChart: React.FC = () => {
     const Ts_abs = Math.sqrt(
       results.Ts.real[index] ** 2 + results.Ts.imag[index] ** 2
     );
+
     return {
       values: sweep.values[index],
       Rp_r: results.Rp.real[index],
@@ -108,7 +121,6 @@ const AcousticChart: React.FC = () => {
       RsE: results.RsE[index],
     };
   });
-  console.log("data", data);
 
   // Calculate the range of x values
   const xRange = Math.max(...sweep.values) - Math.min(...sweep.values);
@@ -130,220 +142,240 @@ const AcousticChart: React.FC = () => {
   const tooltipFormatter = (value: number) => value.toFixed(3);
   const tooltipLabelFormatter = (label: number) =>
     `Frequency: ${label.toFixed(decimalPlaces)} Hz`;
+  const xAxisLabel = sweep.isFrequency
+    ? "Frequency (Hz)"
+    : "Incident Angle (°)";
 
   return (
-    <div>
+    <div id="main-chart">
+      <h1>Simulation Results</h1>
       <h2>Compression Transmission and Reflection</h2>
-      <p>Absolute ratios to incedents pressure.</p>
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart
-          width={500}
-          height={300}
-          data={data}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
-            dataKey="values"
-            tickFormatter={formatXAxis}
-            label={{
-              value: "Frequency (Hz)",
-              position: "insideBottomRight",
-              offset: -10,
+
+      <p className="title">Absolute ratios to incedents pressure.</p>
+      <div className="chart-div">
+        <p className="yaxis">Amplitude (ratio)</p>
+        <ResponsiveContainer className="chart" width="100%" height={300}>
+          <LineChart
+            data={data}
+            margin={{
+              top: 5,
+              right: 30,
+              bottom: 5,
             }}
-          />
-          <YAxis
-            label={{
-              value: "Amplitude (abs)",
-              angle: -90,
-              position: "insideLeft",
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="values"
+              tickFormatter={formatXAxis}
+              label={{
+                value: xAxisLabel,
+                position: "insideBottomRight",
+                offset: -10,
+              }}
+            />
+            <YAxis />
+            <Tooltip
+              formatter={tooltipFormatter}
+              labelFormatter={tooltipLabelFormatter}
+            />
+            <Legend />
+            <Line type="monotone" dataKey="abs(Rp)" stroke="red" dot={false} />
+            <Line type="monotone" dataKey="abs(Tp)" stroke="blue" dot={false} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+
+      <p className="title">Phase changes relative to incident.</p>
+      <div className="chart-div">
+        <p className="yaxis">Relative phase change (degrees)</p>
+        <ResponsiveContainer className="chart" width="100%" height={300}>
+          <LineChart
+            data={data}
+            margin={{
+              top: 5,
+              right: 30,
+              bottom: 5,
             }}
-          />
-          <Tooltip
-            formatter={tooltipFormatter}
-            labelFormatter={tooltipLabelFormatter}
-          />
-          <Legend />
-          <Line type="monotone" dataKey="abs(Rp)" stroke="red" dot={false} />
-          <Line type="monotone" dataKey="abs(Tp)" stroke="blue" dot={false} />
-        </LineChart>
-      </ResponsiveContainer>
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart
-          width={500}
-          height={300}
-          data={data}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
-            dataKey="values"
-            tickFormatter={formatXAxis}
-            label={{
-              value: "Frequency (Hz)",
-              position: "insideBottomRight",
-              offset: -10,
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="values"
+              tickFormatter={formatXAxis}
+              label={{
+                value: xAxisLabel,
+                position: "insideBottomRight",
+                offset: -10,
+              }}
+            />
+            <YAxis />
+            <Tooltip
+              formatter={tooltipFormatter}
+              labelFormatter={tooltipLabelFormatter}
+            />
+            <Legend />
+            <Line
+              type="monotone"
+              dataKey="theta(Rp)"
+              stroke="red"
+              dot={false}
+            />
+            <Line
+              type="monotone"
+              dataKey="theta(Tp)"
+              stroke="blue"
+              dot={false}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+      {showShear && (
+        <>
+          <h2>Shear Wave Transmission (Ts) and Reflection (Rs)</h2>
+          <p>Absolute ratios to incedents pressure.</p>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart
+              data={data}
+              margin={{
+                top: 5,
+                right: 30,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                dataKey="values"
+                tickFormatter={formatXAxis}
+                label={{
+                  value: xAxisLabel,
+                  position: "insideBottomRight",
+                  offset: -10,
+                }}
+              />
+              <YAxis
+                label={{
+                  value: "Amplitude (abs)",
+                  angle: -90,
+                  position: "insideLeft",
+                }}
+              />
+              <Tooltip
+                formatter={tooltipFormatter}
+                labelFormatter={tooltipLabelFormatter}
+              />
+              <Legend />
+              {isRSolid && (
+                <Line
+                  type="monotone"
+                  dataKey="abs(Rs)"
+                  stroke="green"
+                  dot={false}
+                />
+              )}
+              {isTSolid && (
+                <Line
+                  type="monotone"
+                  dataKey="abs(Ts)"
+                  stroke="magenta"
+                  dot={false}
+                />
+              )}
+            </LineChart>
+          </ResponsiveContainer>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart
+              data={data}
+              margin={{
+                top: 5,
+                right: 30,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                dataKey="values"
+                tickFormatter={formatXAxis}
+                label={{
+                  value: xAxisLabel,
+                  position: "insideBottomRight",
+                  offset: -10,
+                }}
+              />
+              <YAxis
+                label={{
+                  value: "Phase Angle (degrees)",
+                  angle: -90,
+                  position: "insideLeft",
+                }}
+              />
+              <Tooltip
+                formatter={tooltipFormatter}
+                labelFormatter={tooltipLabelFormatter}
+              />
+              <Legend />
+              {isRSolid && (
+                <Line
+                  type="monotone"
+                  dataKey="theta(Rs)"
+                  stroke="green"
+                  dot={false}
+                />
+              )}
+              {isTSolid && (
+                <Line
+                  type="monotone"
+                  dataKey="theta(Ts)"
+                  stroke="magenta"
+                  dot={false}
+                />
+              )}
+            </LineChart>
+          </ResponsiveContainer>
+        </>
+      )}
+      <h2>Energy Transmission and Reflection</h2>
+      <div className="chart-div">
+        <p className="yaxis">Power (ratio)</p>
+        <ResponsiveContainer height={300} width="100%">
+          <LineChart
+            data={data}
+            margin={{
+              top: 5,
+              right: 30,
+              bottom: 5,
             }}
-          />
-          <YAxis
-            label={{
-              value: "Phase Angle (degrees)",
-              angle: -90,
-              position: "insideLeft",
-            }}
-          />
-          <Tooltip
-            formatter={tooltipFormatter}
-            labelFormatter={tooltipLabelFormatter}
-          />
-          <Legend />
-          <Line type="monotone" dataKey="theta(Rp)" stroke="red" dot={false} />
-          <Line type="monotone" dataKey="theta(Tp)" stroke="blue" dot={false} />
-        </LineChart>
-      </ResponsiveContainer>
-      <h2>Shear Wave Transmission (Ts) and Reflection (Rs)</h2>
-      <p>Absolute ratios to incedents pressure.</p>
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart
-          width={500}
-          height={300}
-          data={data}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
-            dataKey="values"
-            tickFormatter={formatXAxis}
-            label={{
-              value: "Frequency (Hz)",
-              position: "insideBottomRight",
-              offset: -10,
-            }}
-          />
-          <YAxis
-            label={{
-              value: "Amplitude (abs)",
-              angle: -90,
-              position: "insideLeft",
-            }}
-          />
-          <Tooltip
-            formatter={tooltipFormatter}
-            labelFormatter={tooltipLabelFormatter}
-          />
-          <Legend />
-          <Line type="monotone" dataKey="abs(Rs)" stroke="green" dot={false} />
-          <Line
-            type="monotone"
-            dataKey="abs(Ts)"
-            stroke="magenta"
-            dot={false}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart
-          width={500}
-          height={300}
-          data={data}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
-            dataKey="values"
-            tickFormatter={formatXAxis}
-            label={{
-              value: "Frequency (Hz)",
-              position: "insideBottomRight",
-              offset: -10,
-            }}
-          />
-          <YAxis
-            label={{
-              value: "Phase Angle (degrees)",
-              angle: -90,
-              position: "insideLeft",
-            }}
-          />
-          <Tooltip
-            formatter={tooltipFormatter}
-            labelFormatter={tooltipLabelFormatter}
-          />
-          <Legend />
-          <Line
-            type="monotone"
-            dataKey="theta(Rs)"
-            stroke="green"
-            dot={false}
-          />
-          <Line
-            type="monotone"
-            dataKey="theta(Ts)"
-            stroke="magenta"
-            dot={false}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart
-          width={500}
-          height={300}
-          data={data}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
-            dataKey="values"
-            tickFormatter={formatXAxis}
-            label={{
-              value: "Frequency (Hz)",
-              position: "insideBottomRight",
-              offset: -10,
-            }}
-          />
-          <YAxis
-            label={{
-              value: "Phase Angle (degrees)",
-              angle: -90,
-              position: "insideLeft",
-            }}
-          />
-          <Tooltip
-            formatter={tooltipFormatter}
-            labelFormatter={tooltipLabelFormatter}
-          />
-          <Legend />
-          <Line type="monotone" dataKey="RpE" stroke="red" dot={false} />
-          <Line type="monotone" dataKey="TpE" stroke="blue" dot={false} />
-          <Line type="monotone" dataKey="RsE" stroke="green" dot={false} />
-          <Line type="monotone" dataKey="TsE" stroke="magenta" dot={false} />
-        </LineChart>
-      </ResponsiveContainer>
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="values"
+              tickFormatter={formatXAxis}
+              label={{
+                value: xAxisLabel,
+                position: "insideBottomRight",
+                offset: -10,
+              }}
+            />
+            <YAxis />
+            <Tooltip
+              formatter={tooltipFormatter}
+              labelFormatter={tooltipLabelFormatter}
+            />
+            <Legend />
+            <Line type="monotone" dataKey="RpE" stroke="red" dot={false} />
+            <Line type="monotone" dataKey="TpE" stroke="blue" dot={false} />
+            {isRSolid && (
+              <Line type="monotone" dataKey="RsE" stroke="green" dot={false} />
+            )}
+            {isTSolid && (
+              <Line
+                type="monotone"
+                dataKey="TsE"
+                stroke="magenta"
+                dot={false}
+              />
+            )}
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };

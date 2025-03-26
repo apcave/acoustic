@@ -2,29 +2,22 @@ import { NextRequest, NextResponse } from "next/server";
 import { iModel } from "@/lib/data-helpers";
 import { updateModel } from "@/server-actions/model";
 
-// function consoleLogModel(model: iModel) {
-//   console.log("<<<<<<<<<<<<<<<------------------>>>>>>>>>>>>>>>");
-//   console.log("Model:", model);
-//   console.log("<<<<<<<<<<<<<<<------------------>>>>>>>>>>>>>>>");
-//   console.log("Composite Layers:");
-//   model.composite.layers.map((layer) => {
-//     console.log("Layer:", layer);
-//   });
-// }
-
-/*
-  This API point takes a model in json as the payload in a POST request.
-  The json is parsed and inserted into the database by server actions.
-*/
+/**
+ * Server side code the clients post models to be run to this end point.
+ */
 
 export async function POST(req: NextRequest) {
   try {
+    console.log(
+      ">>>>>>>>>>>>>>>>---------------------- POST Received By Next.js"
+    );
     const body = await req.json();
     const model: iModel = body;
 
-    //consoleLogModel(model);
-    console.log("<<<<<<<<<<<<<<<<<----------------------");
-    console.log("Model received");
+    console.log(
+      "<<<<<<<<<<<<<<<<<---------------------- Model Received By Next.js"
+    );
+    console.log(model);
 
     const result = await updateModel(model);
     if (result.status === "error") {

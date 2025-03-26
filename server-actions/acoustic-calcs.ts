@@ -10,13 +10,13 @@ interface iTokens {
 let tokens: iTokens | null = null;
 
 async function login(): Promise<iTokens> {
-  console.log("Logging in to the calculations server...");
+  // console.log("Logging in to the calculations server...");
   const response = await axios.post(`http://${CALC_HOST}/api/user/token/`, {
     email: CALC_EMAIL,
     password: CALC_PASS,
   });
   const tokens = response.data;
-  console.log("Login successful. JWTs:", tokens);
+  // console.log("Login successful. JWTs:", tokens);
   return tokens;
 }
 
@@ -25,9 +25,9 @@ async function refreshToken(refresh: string) {
     `http://${CALC_HOST}/api/user/token/refresh/`,
     { refresh }
   );
-  console.log("response:", response.data);
+  // console.log("response:", response.data);
   const access = response.data.access;
-  console.log("Token renewed. New JWT:", access);
+  //console.log("Token renewed. New JWT:", access);
   return access;
 }
 
@@ -37,6 +37,7 @@ export async function keepAliveCalcs() {
   }
 }
 
+// Next.js server posting to acoustic-calcs server.
 export async function runAcousticCalcs(model: iModel): Promise<iModel> {
   if (!tokens) {
     tokens = await login();
@@ -86,6 +87,7 @@ export async function runAcousticCalcs(model: iModel): Promise<iModel> {
         return response.data as iModel;
       }
     } else {
+      console.log("Error running acoustic calculations:", error);
       throw error;
     }
   }
