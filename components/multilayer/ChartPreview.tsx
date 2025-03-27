@@ -1,11 +1,4 @@
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  ResponsiveContainer,
-} from "recharts";
+import { LineChart, Line, CartesianGrid, ResponsiveContainer } from "recharts";
 import "@/components/multilayer/AcousticChart.css";
 import { iResult } from "@/lib/data-helpers";
 

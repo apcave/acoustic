@@ -136,6 +136,52 @@ export default function ChartTR({
           </LineChart>
         </ResponsiveContainer>
       </div>
+      <div className="chart-div">
+        <p className="yaxis">Relative phase change (degrees)</p>
+        <ResponsiveContainer className="chart" width="100%" height={300}>
+          <LineChart
+            data={data}
+            margin={{
+              top: 5,
+              right: 30,
+              bottom: 5,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="values"
+              tickFormatter={formatXAxis}
+              label={{
+                value: xAxisLabel,
+                position: "insideBottomRight",
+                offset: -10,
+              }}
+            />
+            <YAxis />
+            <Tooltip
+              formatter={tooltipFormatter}
+              labelFormatter={tooltipLabelFormatter}
+            />
+            <Legend />
+            {showR && (
+              <Line
+                type="monotone"
+                dataKey={isShear ? "theta(Rs)" : "theta(Rp)"}
+                stroke={isShear ? "orange" : "red"}
+                dot={false}
+              />
+            )}
+            {showT && (
+              <Line
+                type="monotone"
+                dataKey={isShear ? "theta(Ts)" : "theta(Tp)"}
+                stroke={isShear ? "green" : "blue"}
+                dot={false}
+              />
+            )}
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </>
   );
 }
