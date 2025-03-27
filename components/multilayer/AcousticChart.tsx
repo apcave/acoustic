@@ -26,7 +26,7 @@ const AcousticChart: React.FC = () => {
     (state: RootState) => state.model.model.composite
   );
 
-  if (!composite.layers[0]) {
+  if (!composite.layers[0] || !results) {
     return <></>;
   }
 

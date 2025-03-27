@@ -58,7 +58,7 @@ export default function LayerList({ linkToEdit }: { linkToEdit: boolean }) {
               ))}
             </tbody>
           </table>
-          {linkToEdit && (
+          {linkToEdit ? (
             <div>
               <Link
                 onClick={handleSaveModel}
@@ -67,6 +67,16 @@ export default function LayerList({ linkToEdit }: { linkToEdit: boolean }) {
                 href={`/acoustic/models/${modelId}`}
               >
                 Edit Model
+              </Link>
+            </div>
+          ) : (
+            <div>
+              <Link
+                className="link-button"
+                style={{ marginTop: "6px" }}
+                href={`/acoustic/materials`}
+              >
+                Add Materials
               </Link>
             </div>
           )}

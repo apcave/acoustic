@@ -37,12 +37,7 @@ export async function keepAliveCalcs() {
   }
 }
 
-// Next.js server posting to acoustic-calcs server.
-export async function runAcousticCalcs(model: iModel): Promise<iModel> {
-  if (!tokens) {
-    tokens = await login();
-  }
-
+async function getResults(model: iModel, tokens: iTokens): Promise<iModel> {
   try {
     const response = await axios.post(
       `http://${CALC_HOST}/api/composite/`,
@@ -55,40 +50,60 @@ export async function runAcousticCalcs(model: iModel): Promise<iModel> {
     );
     return response.data as iModel;
   } catch (error: any) {
-    if (error.response && error.response.status === 401) {
-      try {
-        // Token expired, refresh it
-        tokens.access = await refreshToken(tokens.refresh);
-        // Retry the request with the new token
-        const response = await axios.post(
-          `http://${CALC_HOST}/api/composite/`,
-          { data: model },
-          {
-            headers: {
-              Authorization: `Bearer ${tokens.access}`,
-            },
-          }
-        );
-        return response.data as iModel;
-      } catch (refreshError) {
-        console.error("Token renewal failed, logging in again:", refreshError);
-        // If token renewal fails, log in again
-        tokens = await login();
-        // Retry the request with the new token
-        const response = await axios.post(
-          `http://${CALC_HOST}/api/composite/`,
-          { data: model },
-          {
-            headers: {
-              Authorization: `Bearer ${tokens.access}`,
-            },
-          }
-        );
-        return response.data as iModel;
-      }
+    if (error.response) {
+      //console.error("Error response status:", error.response.status);
+      //console.error("Error response data:", error.response.data);
+
+      // Extract return_code and return_message
+      const failedModel = error.response.data["payload"] as iModel;
+
+      const returnCode = failedModel.results?.return_code || "Unknown Code";
+      let returnMessage =
+        failedModel.results?.return_message || "Unknown Message";
+      returnMessage = returnMessage.replace(/^b'|\'$/g, ""); // Remove b' prefix and trailing '
+
+      // Throw a new error with the extracted message
+      throw new Error(`Code: ${returnCode}, Message: ${returnMessage}`);
+    } else if (error.request) {
+      // The request was made but no response was received
+      console.error("No response received:", error.request);
+      throw new Error("No response received from the calculations server.");
     } else {
-      console.log("Error running acoustic calculations:", error);
-      throw error;
+      // Something else happened while setting up the request
+      console.error("Error message:", error.message);
+      throw new Error(`Unexpected error: ${error.message}`);
+    }
+  }
+}
+
+// Next.js server posting to acoustic-calcs server.
+export async function runAcousticCalcs(model: iModel): Promise<iModel> {
+  if (!tokens) {
+    tokens = await login();
+  }
+
+  try {
+    return getResults(model, tokens);
+  } catch (error: any) {
+    if (error.response && error.response.status === 401) {
+      // Token expired, refresh it
+      try {
+        tokens.access = await refreshToken(tokens.refresh);
+        return getResults(model, tokens);
+      } catch (error: any) {
+        if (error.response && error.response.status === 401) {
+          try {
+            console.error("Token renewal failed, logging in again:", error);
+            // If token renewal fails, log in again
+            tokens = await login();
+            // Retry the request with the new token
+            return getResults(model, tokens);
+          } catch (error) {
+            console.error("Login failed:", error);
+            throw new Error("Failed to log in to the calculations server.");
+          }
+        }
+      }
     }
   }
 }

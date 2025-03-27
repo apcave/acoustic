@@ -22,7 +22,6 @@
 }
 
 .urgent {
-  font-size: 16px;
   color: var(--color-urgent);
 }
 

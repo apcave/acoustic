@@ -21,6 +21,7 @@ interface iModelFormProps {
 export default function ModelForm({ orgModel }: iModelFormProps) {
   const dispatch = useDispatch<AppDispatch>();
   const model = useSelector((state: RootState) => state.model.model);
+  const error = useSelector((state: RootState) => state.ui.serverFeedback);
 
   const modelName = model.name || "";
   const modelDescription = model.description || "";
@@ -40,7 +41,14 @@ export default function ModelForm({ orgModel }: iModelFormProps) {
       <SweepForm />
       <LayerList linkToEdit={false} />
       <FinalizeModel />
-      <AcousticChart />
+      {error ? (
+        <>
+          <h2>Server Error</h2>
+          <p className="urgent">{error}</p>
+        </>
+      ) : (
+        <AcousticChart />
+      )}
     </div>
   );
 }

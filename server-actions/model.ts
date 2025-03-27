@@ -129,8 +129,11 @@ export async function updateModel(newModel: iModel): Promise<iModelStatus> {
     );
     status.status = "error";
     if (error instanceof Error) {
-      console.log("Failed to update model", error.message);
-      status.errorMessages.push("Failed to update model", error.message);
+      console.log(
+        "Catch updateModel --> Failed to update model: ",
+        error.message
+      );
+      status.errorMessages.push(error.message);
     } else {
       status.errorMessages.push("Failed to update model");
     }

@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface uiState {
+  serverFeedback: string | null;
   showEditMaterial: boolean;
 }
 
 const initialState: uiState = {
   showEditMaterial: false,
+  serverFeedback: null,
 };
 
 const uiSlice = createSlice({
@@ -15,8 +17,11 @@ const uiSlice = createSlice({
     showEditMaterial: (state, action: PayloadAction<boolean>) => {
       state.showEditMaterial = action.payload;
     },
+    setServerFeedback: (state, action: PayloadAction<string>) => {
+      state.serverFeedback = action.payload;
+    },
   },
 });
 
-export const { showEditMaterial } = uiSlice.actions;
+export const { showEditMaterial, setServerFeedback } = uiSlice.actions;
 export default uiSlice.reducer;

@@ -1,6 +1,7 @@
 import { iModel } from "@/lib/data-helpers";
 import { Dispatch } from "redux";
 import { setModel } from "./modelSlice";
+import { setServerFeedback } from "@/store/uiSlice";
 
 /*
   This thunk sends a model to the server to be saved.
@@ -28,7 +29,14 @@ export function saveModelToServer(model: iModel) {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorData = await response.json();
+        const errorMessage = errorData.error || "Unknown error occurred";
+
+        dispatch(setServerFeedback(errorMessage));
+
+        console.log("Error saving model:", response);
+        return;
+        //throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();

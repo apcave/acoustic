@@ -17,18 +17,15 @@ export async function POST(req: NextRequest) {
     console.log(
       "<<<<<<<<<<<<<<<<<---------------------- Model Received By Next.js"
     );
-    console.log(model);
+    //console.log(model);
 
     const result = await updateModel(model);
     if (result.status === "error") {
-      result.errorMessages.map((mes: string) => {
-        console.log(mes);
-      });
+      const err_str = result.errorMessages.join(" ");
 
-      return NextResponse.json(
-        { error: "Failed to update model" },
-        { status: 500 }
-      );
+      console.log("acoustic-calcs, result : ", err_str);
+
+      return NextResponse.json({ error: err_str }, { status: 500 });
     }
 
     console.log("<<<<<<<<<<<<<<<<<----------------------");
@@ -47,7 +44,7 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
   } catch (error: unknown) {
-    console.log("Error saving model:", error);
+    console.log("Catch ---> Error saving model:", error);
 
     return NextResponse.json(
       { error: (error as Error)?.message },
