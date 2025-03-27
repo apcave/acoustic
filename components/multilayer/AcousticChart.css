@@ -18,4 +18,5 @@
 
   font-weight: bold;
   color: var(--color-3-secondary);
+  transform: translate(5px, -20px);
 }

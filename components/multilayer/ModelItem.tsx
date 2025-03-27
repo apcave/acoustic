@@ -17,7 +17,7 @@ export default function ModelItem({ model }: { model: iModel }) {
   return (
     <div id="model-item" onClick={handleClick}>
       <h3>{model.name}</h3>
-      <ChartPreview />
+      <ChartPreview results={model.results} />
       <p>{model.description}</p>
     </div>
   );
