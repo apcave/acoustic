@@ -10,7 +10,7 @@ import { RootState, AppDispatch } from "@/store/store";
 import { fetchMaterialsList } from "@/store/materialActions";
 import {
   replaceMaterials,
-  setEditMaterial,
+  setEditGlobalMaterial,
   makeNewMaterial,
 } from "@/store/materialSlice";
 import { showEditMaterial } from "@/store/uiSlice";
@@ -25,27 +25,43 @@ interface iMaterialListProps {
 export default function MaterialList({ materials }: iMaterialListProps) {
   const dispatch = useDispatch<AppDispatch>();
   const materialState = useSelector((state: RootState) => state.mat.materials);
-  const [filteredMaterials, setMaterialFilter] = useState(materialState);
+  const [filter, setFilter] = useState("");
 
   // Update the material list every 10 seconds in case another users changes the data.
   useEffect(() => {
     const interval = setInterval(() => {
-      dispatch(fetchMaterialsList());
+      console.log("Updating materials list from server.");
+      dispatch(fetchMaterialsList()); // Get the list from the server and move it to the state.
     }, 10000);
 
     return () => clearInterval(interval);
   }, [dispatch]);
 
   // Sets the materials list from server side code...
+  // Only called once when the component mounts.
   useEffect(() => {
     dispatch(replaceMaterials(materials));
-    // TODO: Alphabetical sort of material names.
-    setMaterialFilter(materials);
   }, [dispatch, materials]);
+
+  let filterMats = [...materialState];
+  if (filter.length > 0) {
+    filterMats = filterMats.filter((material) => {
+      return material.name.toLowerCase().includes(filter);
+    });
+  }
+  filterMats.sort((a, b) => {
+    if (a.name < b.name) {
+      return -1;
+    }
+    if (a.name > b.name) {
+      return 1;
+    }
+    return 0;
+  });
 
   // Adds a newly selected material to the layers.
   function handleAddMaterialToLayer(material: iMaterial) {
-    console.log("Adding material", material);
+    //console.log("Adding material", material);
 
     const newLayer = iniLayer(material);
     dispatch(addLayer(newLayer));
@@ -53,16 +69,13 @@ export default function MaterialList({ materials }: iMaterialListProps) {
 
   function launchMaterialModal(material: iMaterial) {
     // Make a copy of the material to avoid changing the original.
-    dispatch(setEditMaterial(material));
+    dispatch(setEditGlobalMaterial(material));
     dispatch(showEditMaterial(true));
   }
 
   function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
     const search = event.target.value.toLowerCase();
-    const data = materialState.filter((material) => {
-      return material.name.toLowerCase().includes(search);
-    });
-    setMaterialFilter(data);
+    setFilter(search);
   }
 
   function handleNewMaterial() {
@@ -70,7 +83,7 @@ export default function MaterialList({ materials }: iMaterialListProps) {
     dispatch(showEditMaterial(true));
   }
 
-  const materialList = filteredMaterials.map((material) => (
+  const materialList = filterMats.map((material) => (
     <MaterialRow
       key={material._id}
       material={material}

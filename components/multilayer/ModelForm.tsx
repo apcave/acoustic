@@ -3,6 +3,7 @@ import SweepForm from "@/components/multilayer/SweepForm";
 import LayerList from "@/components/multilayer/LayerList";
 import AcousticChart from "@/components/multilayer/AcousticChart";
 import FinalizeModel from "@/components/multilayer/ModelFinalize";
+import MaterialModal from "@/components/multilayer/MaterialModal";
 
 import { iModel } from "@/lib/data-helpers";
 
@@ -35,20 +36,24 @@ export default function ModelForm({ orgModel }: iModelFormProps) {
   }, [orgModel, dispatch]);
 
   return (
-    <div id="model-form">
-      <h1>{modelName}</h1>
-      <p>{modelDescription}</p>
-      <SweepForm />
-      <LayerList linkToEdit={false} />
-      <FinalizeModel />
-      {error ? (
-        <>
-          <h2>Server Error</h2>
-          <p className="urgent">{error}</p>
-        </>
-      ) : (
-        <AcousticChart />
-      )}
-    </div>
+    <>
+      <div id="modal-root" />
+      <MaterialModal />
+      <div id="model-form">
+        <h1>{modelName}</h1>
+        <p>{modelDescription}</p>
+        <SweepForm />
+        <LayerList linkToEdit={false} />
+        <FinalizeModel />
+        {error ? (
+          <>
+            <h2>Server Error</h2>
+            <p className="urgent">{error}</p>
+          </>
+        ) : (
+          <AcousticChart />
+        )}
+      </div>
+    </>
   );
 }

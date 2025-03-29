@@ -48,7 +48,9 @@ export default function MaterialModal() {
       ref={dialogRef}
       onClose={() => dispatch(showEditMaterial(false))}
     >
-      <MaterialForm />
+      <div className="margin">
+        <MaterialForm />
+      </div>
     </dialog>,
     document.getElementById("modal-root") || document.body
   );

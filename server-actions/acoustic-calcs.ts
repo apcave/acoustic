@@ -106,4 +106,5 @@ export async function runAcousticCalcs(model: iModel): Promise<iModel> {
       }
     }
   }
+  return model;
 }

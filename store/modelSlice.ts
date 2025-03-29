@@ -6,6 +6,8 @@ import {
   iResult,
   iComposite,
   iLayer,
+  cloneMaterial,
+  iMaterial,
 } from "@/lib/data-helpers";
 
 /*
@@ -77,6 +79,7 @@ const modelSlice = createSlice({
       }
       state.model.results = null;
     },
+
     editLayer: (state, action: PayloadAction<iLayer>) => {
       const idx = state.model.composite.layers.findIndex(
         (lay) => lay._id === action.payload._id
@@ -86,8 +89,20 @@ const modelSlice = createSlice({
       }
       state.model.results = null;
     },
+    updateLayerMaterial: (state, action: PayloadAction<iMaterial>) => {
+      const idx = state.model.composite.layers.findIndex(
+        (lay) => lay.material._id === action.payload._id
+      );
+      if (idx >= 0) {
+        state.model.composite.layers[idx].material = action.payload;
+      }
+      state.model.results = null;
+    },
     addLayer: (state, action: PayloadAction<iLayer>) => {
-      state.model.composite.layers.push(action.payload);
+      const material = cloneMaterial(action.payload.material, true); // Deep clone the layer
+      const clonedLayer = { ...action.payload }; // Deep clone the layer
+      clonedLayer.material = material;
+      state.model.composite.layers.push(clonedLayer);
       state.model.results = null;
     },
 
@@ -137,5 +152,6 @@ export const {
   editSweep,
   editModel,
   setIncidentCompression,
+  updateLayerMaterial,
 } = modelSlice.actions;
 export default modelSlice.reducer;

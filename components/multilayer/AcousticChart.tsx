@@ -30,8 +30,8 @@ const AcousticChart: React.FC = () => {
     return <></>;
   }
 
-  const solidT = composite.layers[0].material.category === "solid";
-  const solidR =
+  const solidR = composite.layers[0].material.category === "solid";
+  const solidT =
     composite.layers[composite.layers.length - 1].material.category === "solid";
 
   const data = sweep.values.map((val, index) => {

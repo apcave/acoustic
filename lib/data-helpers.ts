@@ -202,6 +202,22 @@ export interface iProperty {
   imag?: number;
 }
 
+export function cloneMaterial(
+  mat: iMaterial,
+  newId: boolean = false
+): iMaterial {
+  const newMat = { ...mat };
+  newMat.compression = { ...mat.compression };
+  newMat.shear = { ...mat.shear };
+  if (newId) {
+    newMat._id = newID(); // Or generate a default ID if needed
+    newMat.userId = ""; // Or a default user ID
+    newMat.createdAt = new Date().toISOString();
+    newMat.updatedAt = new Date().toISOString();
+  }
+  return newMat;
+}
+
 export interface iMaterial {
   _id: string;
   createdAt?: Date | string;

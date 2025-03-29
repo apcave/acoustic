@@ -16,9 +16,9 @@ import { setServerFeedback } from "@/store/uiSlice";
 export function saveModelToServer(model: iModel) {
   async function sendData(dispatch: Dispatch) {
     try {
-      console.log("<<<<<<<<<<<<<<<<<----------------------");
-      console.log("client Model sent to server");
-      console.log(model);
+      // console.log("<<<<<<<<<<<<<<<<<----------------------");
+      // console.log("client Model sent to server");
+      // console.log(model);
 
       const response = await fetch("/api/models", {
         method: "POST",
@@ -34,7 +34,8 @@ export function saveModelToServer(model: iModel) {
 
         dispatch(setServerFeedback(errorMessage));
 
-        console.log("Error saving model:", response);
+        console.log("Error saving model:", errorData);
+        console.log("Model Sent:", model);
         return;
         //throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -42,6 +43,9 @@ export function saveModelToServer(model: iModel) {
       const data = await response.json();
 
       const newModel: iModel = data.model;
+      if (!newModel.results) {
+        console.log("Model results not found, not sent to client!!");
+      }
 
       console.log("<<<<<<<<<<<<<<<<<----------------------");
       console.log("client updating Model state");

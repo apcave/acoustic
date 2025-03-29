@@ -12,6 +12,9 @@ import {
   deleteLayer,
   editLayer,
 } from "@/store/modelSlice";
+import { materialEditLocalCopy } from "@/store/materialSlice";
+import { showEditMaterial } from "@/store/uiSlice";
+
 import { iLayer } from "@/lib/data-helpers";
 import InputFloat from "@/components/InputFloat";
 
@@ -132,6 +135,12 @@ function CompositeLayerItem({
     dispatch(editLayer(newLayer));
   }
 
+  function handleMaterialSelect() {
+    // console.log("Material selected: ", layer.material);
+    dispatch(materialEditLocalCopy(layer.material));
+    dispatch(showEditMaterial(true));
+  }
+
   return (
     <tr>
       <td className={index === numLayers - 1 ? "col1" : "col1 line-bottom"}>
@@ -169,7 +178,7 @@ function CompositeLayerItem({
       </td>
       <td className={index === numLayers - 1 ? "col3" : "col3 line-bottom"}>
         <span className="delete-span">
-          <p>{layer.material.name}</p>
+          <p onClick={handleMaterialSelect}>{layer.material.name}</p>
           <Image
             src={Delete}
             className="delete"

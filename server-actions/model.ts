@@ -16,8 +16,9 @@ import {
 } from "@/lib/data-helpers";
 
 import { revalidatePath } from "next/cache";
-import { a } from "framer-motion/client";
+import { a, s } from "framer-motion/client";
 import { log } from "console";
+import { m } from "framer-motion";
 
 export async function getAllModels(): Promise<iModelAllStatus> {
   const status = iniModelAllStatus();
@@ -75,36 +76,36 @@ export async function getModel(modelId: string): Promise<iModelStatus> {
   There is extensive validation performed on the client side.
   TODO: Add server-side validation.
 */
-export async function updateModel(newModel: iModel): Promise<iModelStatus> {
+export async function updateModel(clientModel: iModel): Promise<iModelStatus> {
   const status = iniModelStatus();
 
   try {
     console.log(">>>>>>>>>>>>>>>>>>>>>> About to start acoustic-cals request");
     // Fetches the results from the server.
-    newModel = await runAcousticCalcs(newModel);
+    const calcsModel = await runAcousticCalcs(clientModel);
     console.log(">>>>>>>>>>>>>>> Results from acoustic calculations");
     await connectDB();
 
-    if (newModel._id === "unsaved") {
-      newModel._id = newID();
+    if (calcsModel._id === "unsaved") {
+      calcsModel._id = newID();
     }
 
     // Update existing material
-    let model = await Model.findById(newModel._id);
+    let model = await Model.findById(calcsModel._id);
     if (model) {
       // Assign the values from the makeMaterial function to the existing material
-      model.name = newModel.name;
-      model.description = newModel.description;
-      model.incidentCompression = newModel.incidentCompression;
-      model.composite = newModel.composite;
-      model.sweep = newModel.sweep;
-      model.results = newModel.results;
+      model.name = calcsModel.name;
+      model.description = calcsModel.description;
+      model.incidentCompression = calcsModel.incidentCompression;
+      model.composite = calcsModel.composite;
+      model.sweep = calcsModel.sweep;
+      model.results = calcsModel.results;
       model.updatedAt = new Date().toISOString();
     } else {
       console.log("Creating new model <<<<<<<<<<<-------------------");
-      model = new Model(newModel);
+      model = new Model(calcsModel);
     }
-
+    console.log(">>>>>>>>>>>>>>>>>>>>>> Model to be saved");
     await model.save();
     revalidatePath("/acoustic/models");
     revalidatePath(`/acoustic/models/${model._id}`);
@@ -112,6 +113,12 @@ export async function updateModel(newModel: iModel): Promise<iModelStatus> {
 
     status.status = "success";
     status.payload = JSON.parse(JSON.stringify(model));
+
+    // if (calcsModel.results) {
+    //   console.log("Message from server:", calcsModel.results.return_message);
+    //   console.log("Results from server:", calcsModel.results);
+    // }
+    console.log(status.payload);
 
     // TODO: Remove Lines!
     // console.log("Model written to file for TESTING");

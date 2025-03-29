@@ -1,4 +1,4 @@
-import { PropsWithChildren, useState } from "react";
+import { PropsWithChildren, useState, useEffect } from "react";
 
 /*
     Component for inputting a floating point number, with any format that will be parsed.
@@ -36,8 +36,24 @@ export default function InputFloat(props: PropsWithChildren<InputFloatProps>) {
   const modelValue = value || 0;
   const [floatStr, setFloatStr] = useState(modelValue.toString());
   const [error, setError] = useState(false);
+  const [didEdit, setDidEdit] = useState(false);
+
+  useEffect(() => {
+    if (didEdit) {
+      setDidEdit(false);
+    } else {
+      setFloatStr(modelValue.toString());
+    }
+  }, [modelValue, didEdit]);
+
+  // useEffect(() => {
+  //   if (!didEdit) {
+  //     setFloatStr(modelValue.toString());
+  //   }
+  // }, [modelValue, didEdit]);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setDidEdit(true);
     setFloatStr(e.target.value);
     setError(false);
 
