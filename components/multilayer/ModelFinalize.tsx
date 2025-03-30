@@ -24,6 +24,13 @@ export default function FinalizeModel() {
     (state: RootState) => state.model.model.composite
   );
 
+  if (!model.sweep) {
+    console.log("Model does not have a sweep.");
+  }
+  if (model.sweep) {
+    console.log("Number of values in the sweep:", model.sweep.values.length);
+  }
+
   // Ensure model properties are always defined
   const modelName = model.name || "";
   const modelDescription = model.description || "";

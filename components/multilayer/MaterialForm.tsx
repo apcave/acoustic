@@ -216,11 +216,7 @@ export default function MaterialForm() {
           compType={material.compression.type}
         />
       </form>
-      <div className="status-group">
-        {!isMaterialValid && errorMessage && (
-          <p className="urgent">{errorMessage}</p>
-        )}
-        {serverState === "error" && <p className="urgent">{serverFeedback}</p>}
+      <div id="status-group">
         <button onClick={() => dispatch(showEditMaterial(false))}>Close</button>
         <button
           disabled={!isMaterialValid || serverState === "pending"}
@@ -228,6 +224,10 @@ export default function MaterialForm() {
         >
           {serverState === "pending" ? "Submitting..." : "Save Properties"}
         </button>
+        {!isMaterialValid && errorMessage && (
+          <p className="urgent">{errorMessage}</p>
+        )}
+        {serverState === "error" && <p className="urgent">{serverFeedback}</p>}
       </div>
     </>
   );

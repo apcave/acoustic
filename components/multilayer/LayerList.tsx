@@ -177,8 +177,10 @@ function CompositeLayerItem({
         )}
       </td>
       <td className={index === numLayers - 1 ? "col3" : "col3 line-bottom"}>
-        <span className="delete-span">
-          <p onClick={handleMaterialSelect}>{layer.material.name}</p>
+        <span className="material-span">
+          <button className="material-name" onClick={handleMaterialSelect}>
+            {layer.material.name}
+          </button>
           <Image
             src={Delete}
             className="delete"

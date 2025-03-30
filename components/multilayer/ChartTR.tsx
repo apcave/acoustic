@@ -12,6 +12,7 @@ import "@/components/multilayer/AcousticChart.css";
 
 interface iChartTRProps {
   isShear: boolean;
+  isAbs: boolean;
   solidT: boolean;
   T: {
     real: number[];
@@ -28,6 +29,7 @@ interface iChartTRProps {
 
 export default function ChartTR({
   isShear,
+  isAbs,
   solidT,
   T,
   solidR,
@@ -50,26 +52,78 @@ export default function ChartTR({
     T.imag.map((_, index) => Math.atan2(T.imag[index], T.real[index]))
   );
 
+  let T_label;
+  if (isShear) {
+    if (isAbs) {
+      T_label = "abs(Ts)";
+    } else {
+      T_label = "db(Ts)";
+    }
+  } else {
+    if (isAbs) {
+      T_label = "abs(Tp)";
+    } else {
+      T_label = "db(Tp)";
+    }
+  }
+
+  let R_label;
+  if (isShear) {
+    if (isAbs) {
+      R_label = "abs(Rs)";
+    } else {
+      R_label = "db(Rs)";
+    }
+  } else {
+    if (isAbs) {
+      R_label = "abs(Rp)";
+    } else {
+      R_label = "db(Rp)";
+    }
+  }
+
   const data = T.real.map((_: number, index: number) => {
     const R_abs = Math.sqrt(R.real[index] ** 2 + R.imag[index] ** 2);
     const T_abs = Math.sqrt(T.real[index] ** 2 + T.imag[index] ** 2);
 
-    if (isShear) {
-      return {
-        values: values[index],
-        "abs(Rs)": R_abs,
-        "abs(Ts)": T_abs,
-        "theta(Rs)": R_theta[index],
-        "theta(Ts)": T_theta[index],
-      };
+    const safeValue = Math.max(values[index], 1e-6); // Ensure values are positive
+
+    if (isAbs) {
+      if (isShear) {
+        return {
+          values: safeValue,
+          "abs(Rs)": R_abs,
+          "abs(Ts)": T_abs,
+          "theta(Rs)": R_theta[index],
+          "theta(Ts)": T_theta[index],
+        };
+      } else {
+        return {
+          values: safeValue,
+          "abs(Rp)": R_abs,
+          "abs(Tp)": T_abs,
+          "theta(Rp)": R_theta[index],
+          "theta(Tp)": T_theta[index],
+        };
+      }
     } else {
-      return {
-        values: values[index],
-        "abs(Rp)": R_abs,
-        "abs(Tp)": T_abs,
-        "theta(Rp)": R_theta[index],
-        "theta(Tp)": T_theta[index],
-      };
+      if (isShear) {
+        return {
+          values: safeValue,
+          "db(Rs)": 20 * Math.log10(R_abs),
+          "db(Ts)": 20 * Math.log10(T_abs),
+          "theta(Rs)": R_theta[index],
+          "theta(Ts)": T_theta[index],
+        };
+      } else {
+        return {
+          values: safeValue,
+          "db(Rp)": 20 * Math.log10(R_abs),
+          "db(Tp)": 20 * Math.log10(T_abs),
+          "theta(Rp)": R_theta[index],
+          "theta(Tp)": T_theta[index],
+        };
+      }
     }
   });
   const xRange = Math.max(...values) - Math.min(...values);
@@ -120,7 +174,7 @@ export default function ChartTR({
             {showR && (
               <Line
                 type="monotone"
-                dataKey={isShear ? "abs(Rs)" : "abs(Rp)"}
+                dataKey={R_label}
                 stroke={isShear ? "orange" : "red"}
                 dot={false}
               />
@@ -128,7 +182,7 @@ export default function ChartTR({
             {showT && (
               <Line
                 type="monotone"
-                dataKey={isShear ? "abs(Ts)" : "abs(Tp)"}
+                dataKey={T_label}
                 stroke={isShear ? "green" : "blue"}
                 dot={false}
               />

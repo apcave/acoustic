@@ -76,6 +76,7 @@ const AcousticChart: React.FC = () => {
       <ChartTR
         isShear={false}
         solidT={solidT}
+        isAbs={true}
         T={results.Tp}
         solidR={solidR}
         R={results.Rp}
@@ -85,6 +86,7 @@ const AcousticChart: React.FC = () => {
       <ChartTR
         isShear={true}
         solidT={solidT}
+        isAbs={true}
         T={results.Ts}
         solidR={solidR}
         R={results.Rs}

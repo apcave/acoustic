@@ -65,6 +65,9 @@ export function validateSweep(newSweep: iSweep, wasEndChanged: boolean) {
   }
 
   function logspace() {
+    if (newSweep.start <= 0) {
+      newSweep.start = 1e-10; // Avoid log(0)
+    }
     const startLog = Math.log10(newSweep.start);
     const endLog = Math.log10(newSweep.end);
     const step = (endLog - startLog) / (newSweep.numSteps - 1);
@@ -113,7 +116,7 @@ export function validateSweep(newSweep: iSweep, wasEndChanged: boolean) {
     if (newSweep.angle > 90) {
       newSweep.angle = 90;
     }
-    newSweep.frequency = null;
+    newSweep.frequency = newSweep.end;
   } else {
     if (newSweep.frequency === null) {
       newSweep.frequency = 1000;

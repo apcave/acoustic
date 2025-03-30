@@ -8,11 +8,6 @@
   margin-bottom: 14px;
 }
 
-#material-form .status-group {
-  justify-content: right;
-  gap: 0.4cm;
-}
-
 #material-form .property {
   border: 1px solid;
   border-radius: 6px;
@@ -42,4 +37,12 @@
   padding: 5px;
   margin-top: 2px;
   text-align: center;
+}
+
+#status-group {
+  display: flex;
+  flex-direction: row;
+  align-items: left;
+  justify-content: left;
+  gap: 0.4cm;
 }
