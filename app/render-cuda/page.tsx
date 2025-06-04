@@ -1,14 +1,42 @@
 import type { Metadata } from "next";
 
-import AlexCV from '@/components/documents/AlexCV';
+import PageCuda from "@/components/documents/AcousticRenderer";
 
 export const metadata: Metadata = {
-  title: "Alex's Resume",
-  description: "Dr Alexander Paul Cave's resume for computer programming, C# C++,C, python, JavaScript, React, Node.",
+  title: "Acoustic",
+  description:
+    "Home page for the Sonar Render in C++/CUDA by Dr Alexander Paul Cave",
+  icons: { icon: "/acoustic-app.svg" },
+  keywords: [
+    "acoustic",
+    "render",
+    "sonar",
+    "sound",
+    "wave",
+    "Kirchhoff",
+    "wave equation",
+    "CUDA",
+    "C++",
+    "NVIDIA",
+    "parallel computing",
+    "high performance computing",
+    "GPU rendering",
+    "acoustic simulation",
+    "acoustic modeling",
+    "acoustic rendering",
+    "acoustic wave propagation",
+    "acoustic imaging",
+    "acoustic visualization",
+    "acoustic research",
+    "acoustic engineering",
+    "acoustic applications",
+    "acoustic technology",
+    "acoustic software",
+    "acoustic algorithms",
+    "acoustic physics",
+  ],
 };
 
-export default function Resume() {
-    return (
-        <AlexCV />
-    )
+export default function Home() {
+  return <PageCuda />;
 }

@@ -102,3 +102,29 @@
   list-style-type: decimal;
   margin-left: 24px;
 }
+
+.image-overlay-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.background-image {
+  z-index: 1;
+}
+
+.overlay-box {
+  position: absolute;
+  top: 10cm;
+  z-index: 2;
+  background-color: var(--color-7-primary);
+  color: var(--color-1-secondary);
+  width: 17cm;
+  margin-inline: auto;
+  padding: 32px;
+  position: relative;
+  border-radius: 6px;
+  margin: 5mm;
+}
