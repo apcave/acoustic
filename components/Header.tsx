@@ -53,6 +53,16 @@ export default function Header() {
               Backend GitHub
             </Link>
           </li>
+          <Tab link="/render-cuda" title="C++/CUDA Renderer" />
+          <li>
+            <Link
+              href="https://github.com/apcave/sonar-render"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              C++/CUDA Renderer GitHub
+            </Link>
+          </li>
         </menu>
       </div>
       {isAuth && <p>Hello {data.user.name}</p>}

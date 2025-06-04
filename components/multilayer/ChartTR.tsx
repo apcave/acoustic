@@ -9,6 +9,9 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import "@/components/multilayer/AcousticChart.css";
+import "@/components/multilayer/ChartTR.css";
+
+import { useState } from "react";
 
 interface iChartTRProps {
   isShear: boolean;
@@ -29,7 +32,6 @@ interface iChartTRProps {
 
 export default function ChartTR({
   isShear,
-  isAbs,
   solidT,
   T,
   solidR,
@@ -37,6 +39,7 @@ export default function ChartTR({
   isFreq,
   values,
 }: iChartTRProps) {
+  const [isAbs, setShowAbs] = useState(true);
   const showT = !isShear || (isShear && solidT);
   const showR = !isShear || (isShear && solidR);
   const showChart = (showT && T) || (showR && R);
@@ -126,6 +129,11 @@ export default function ChartTR({
       }
     }
   });
+  function handleToggleAbs(event: React.ChangeEvent<HTMLInputElement>) {
+    const checked = event.target.checked;
+    setShowAbs(checked);
+  }
+
   const xRange = Math.max(...values) - Math.min(...values);
   const decimalPlaces = getDecimalPlaces(xRange);
   const formatXAxis = (tick: number) => tick.toFixed(decimalPlaces);
@@ -143,8 +151,12 @@ export default function ChartTR({
   return (
     <>
       <h2>{chartTitle}</h2>
+      <div className="toggle-container">
+        <input type="checkbox" checked={isAbs} onChange={handleToggleAbs} />
+        <label>Show Absolute Values (abs)</label>
+      </div>
       <div className="chart-div">
-        <p className="yaxis">Amplitude (ratio)</p>
+        <p className="yaxis">Amplitude ({isAbs ? "absolute" : "db"})</p>
         <ResponsiveContainer className="chart" width="100%" height={300}>
           <LineChart
             data={data}
