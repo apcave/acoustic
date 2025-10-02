@@ -69,7 +69,7 @@ export default function LayerList({ linkToEdit }: { linkToEdit: boolean }) {
                 style={{ marginTop: "6px" }}
                 href={`/acoustic/models/${modelId}`}
               >
-                Edit Model
+                Edit / Run Model
               </Link>
             </div>
           ) : (
