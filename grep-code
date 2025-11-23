@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ $# -lt 1 ]; then
+  echo "Usage: $0 <search_term> [file_extension]"
+  echo "Example: $0 useState tsx"
+  exit 1
+fi
+
+SEARCH_TERM="$1"
+EXT="${2:-tsx}"
+
+grep --color=auto -n -r --include="*.$EXT" --exclude-dir="node_modules" "$SEARCH_TERM" .

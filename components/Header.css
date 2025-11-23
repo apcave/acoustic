@@ -6,6 +6,7 @@
   margin: 0;
   padding: 0.5rem;
   font-size: 14px;
+  z-index: 10;
 }
 
 #menu-bar menu {
@@ -34,4 +35,73 @@
 
 #menu-bar .active {
   color: var(--color-1-primary);
+}
+
+#slide-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0vw;
+  height: 100%;
+  background-color: var(--color-6-primary);
+  box-shadow: none;
+  padding: 0;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s,
+    padding 0.3s;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.hamburger-menu {
+  cursor: pointer;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  border: 0;
+  margin-right: 16px;
+}
+
+#slide-modal.open {
+  width: 33vw;
+  box-shadow: 2px 0 5px var(--color-1-secondary);
+  padding: 1rem 0;
+  border-top-right-radius: 24px;
+  border-bottom-right-radius: 24px;
+}
+
+#slide-modal .close-button {
+  align-self: flex-end;
+  margin-right: 0 1rem 0.5rem 0;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+#slide-modal a {
+  text-decoration: none;
+  color: var(--color-1-secondary);
+  padding: 0.1rem 1.5rem;
+  font-size: 12px;
+}
+
+#slide-modal a:hover {
+  color: var(--color-1-primary);
+}
+
+#slide-modal .heading {
+  font-size: 16px;
+  color: var(--color-1-secondary);
+  line-height: 1.4;
+  font-weight: 700;
+  padding: 0.1rem 0.75rem;
+}
+
+#slide-modal hr {
+  width: 85%;
+  margin: 8px auto;
+  border: none;
+  border-top: 2px solid var(--color-4-secondary);
 }

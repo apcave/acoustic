@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
 
 import NavLink from "@/components/NavLink";
 
@@ -24,45 +25,115 @@ function Tab({ link, title }: TabProps) {
 export default function Header() {
   const { status, data } = useSession();
   const router = useRouter();
+  const [open, setOpen] = useState(false);
 
   const isAuth = status === "authenticated";
 
+  useEffect(() => {
+    if (!open) return;
+    function handleClick(e: MouseEvent) {
+      const modal = document.getElementById("slide-modal");
+      if (modal && !modal.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [open]);
+
   return (
     <header id="menu-bar">
+      <button
+        className="hamburger-menu"
+        aria-label="Open menu"
+        onClick={() => setOpen(!open)}
+      >
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <rect
+            x="6"
+            y="8"
+            width="20"
+            height="2"
+            rx="1"
+            fill="var(--color-4-primary)"
+          />
+          <rect
+            x="6"
+            y="15"
+            width="20"
+            height="2"
+            rx="1"
+            fill="var(--color-4-secondary)"
+          />
+          <rect
+            x="6"
+            y="22"
+            width="20"
+            height="2"
+            rx="1"
+            fill="var(--color-4-secondary)"
+          />
+        </svg>
+      </button>
+
+      <div id="slide-modal" className={open ? "open" : ""}>
+        <button
+          className="close-button"
+          aria-label="Close menu"
+          onClick={() => setOpen(false)}
+        >
+          ✕
+        </button>
+        <a href="/" className="heading">
+          Home
+        </a>
+        <hr />
+        <h1 className="heading">Projects</h1>
+        <a href="/render-cuda/">Acoustic Renderer (C++/CUDA)</a>
+        <a href="/">Broadband Sonar (STM32, C Bare Metal)</a>
+        <a href="/bike-lights/">Bike Lights (Nordic, C Zephyr)</a>
+        <a href="/">BlueTooth Microphone (Nordic, C Zephyr)</a>
+        <a href="/">Wifi Camera for AI (Espressif, C Zephyr)</a>
+        <a href="/">Storage Rack (3D Printing / CAD)</a>
+        <hr />
+        <h1 className="heading">Acoustic Web Application</h1>
+        <a href="/acoustic/">Instructions</a>
+        <a href="/acoustic/materials">Materials</a>
+        <a href="/acoustic/models">Models</a>
+
+        <hr />
+        <h1 className="heading">Code Repositories</h1>
+
+        <a href="https://github.com/apcave/acoustic" target="_blank">
+          Acoustic Web Application - JavaScript
+        </a>
+        <a href="https://github.com/apcave/acoustic-calcs" target="_blank">
+          Acoustic Backend - Python / Fortran
+        </a>
+        <a href="https://github.com/apcave/sonar-render" target="_blank">
+          Acoustic Renderer - C++ / CUDA
+        </a>
+        <a href="/">Broadband Sonar - C</a>
+        <a href="https://github.com/apcave/bike-lights" target="_blank">
+          Bike Lights - C
+        </a>
+        <a href="/">BlueTooth Microphone - C</a>
+        <a href="/">Wifi Camera for AI - C</a>
+        <hr />
+        <a href="/resume" className="heading">
+          Alex's Resume
+        </a>
+        <a
+          href="https://www.linkedin.com/in/alexander-cave-9b50b427/"
+          target="_blank"
+        >
+          Linked In
+        </a>
+      </div>
+
       <div>
         <menu>
           <Tab link="/" title="Home" />
-          <Tab link="/acoustic/materials" title="Materials" />
-          <Tab link="/acoustic/models" title="Models" />
-          <Tab link="/resume" title="Alex's Resume" />
-          <li>
-            <Link
-              href="https://github.com/apcave/acoustic"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Fullstack GitHub
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="https://github.com/apcave/acoustic-calcs"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Backend GitHub
-            </Link>
-          </li>
-          <Tab link="/render-cuda" title="C++/CUDA Renderer" />
-          <li>
-            <Link
-              href="https://github.com/apcave/sonar-render"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              C++/CUDA Renderer GitHub
-            </Link>
-          </li>
         </menu>
       </div>
       {isAuth && <p>Hello {data.user.name}</p>}
