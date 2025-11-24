@@ -128,3 +128,23 @@
   border-radius: 6px;
   margin: 5mm;
 }
+
+#two-column {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 6px;
+}
+
+#two-column .column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+}
+
+#two-column .column p.title-caption {
+  margin-top: 8px;
+  font-weight: bold;
+  text-align: center;
+}

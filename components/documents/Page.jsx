@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 import "@/components/documents/Page.css";
 
@@ -94,5 +95,39 @@ export function Entry({ title, leftText, rightText, children, ...props }) {
       </div>
       {children}
     </>
+  );
+}
+
+export function TwoColumnContainer({ children, ...props }) {
+  return <div id="two-column">{children}</div>;
+}
+
+export function ColumnText({ children, ...props }) {
+  return (
+    <div className="column">
+      <p>{children}</p>
+    </div>
+  );
+}
+
+export function ColumnImage({ src, alt, caption, ...props }) {
+  return (
+    <div className="column">
+      <Image src={src} alt={alt} style={{ width: "270px", height: "auto" }} />
+
+      <p className="title-caption">{caption}</p>
+    </div>
+  );
+}
+
+export function ColumnVideo({ src, caption, ...props }) {
+  return (
+    <div className="column">
+      <video width="270" height="auto" controls autoPlay loop>
+        <source src={src} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <p className="title-caption">{caption}</p>
+    </div>
   );
 }
