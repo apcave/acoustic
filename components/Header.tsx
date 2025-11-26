@@ -84,9 +84,9 @@ export default function Header() {
         >
           ✕
         </button>
-        <a href="/" className="heading">
+        <Link href="/" className="heading">
           Home
-        </a>
+        </Link>
         <hr />
         <h1 className="heading">Projects</h1>
         <Link href="/render-cuda/">Acoustic Renderer (C++/CUDA)</Link>

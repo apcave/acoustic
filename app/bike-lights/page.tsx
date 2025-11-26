@@ -10,7 +10,6 @@ import {
 } from "@/components/documents/Page";
 
 import "@/components/documents/Page.css";
-import Image from "next/image";
 
 import schematic from "@/public/bike-lights-SCH.png";
 import board from "@/public/bike-lights-PCB.png";
@@ -247,7 +246,9 @@ export default function Home() {
           responsiveness.
         </p>
         <div style={{ height: "24px" }} />
-        <Heading text="MCU Firmware Overview" />
+        <Heading text="MCU Firmware Overview">
+          <div style={{ height: "8px" }} />
+        </Heading>
         The firmware powering the system includes a range of features designed
         for flexibility, reliability, and easy field updates.
         <div style={{ height: "12px" }} />
