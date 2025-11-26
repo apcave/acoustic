@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 
-import Link from "next/link";
 import {
   WebContent,
   Heading,
-  NamedList,
-  Entry,
   TwoColumnContainer,
   ColumnText,
   ColumnImage,
@@ -23,7 +20,7 @@ import circuit from "@/public/bike-lights-CIR.jpeg";
 export const metadata: Metadata = {
   title: "Acoustic",
   description:
-    "Homepage for Dr Alexander Paul Cave's LED Animated Bike Lights project in C using the Zephyr RTOS on Nordic Semiconductor microcontrollers.",
+    "Homepage for Dr Alexander Paul Cave&apos;s LED Animated Bike Lights project in C using the Zephyr RTOS on Nordic Semiconductor microcontrollers.",
   icons: { icon: "/acoustic-app.svg" },
   keywords: [
     "Zephyr",
@@ -273,7 +270,7 @@ export default function Home() {
           </li>
           <li>
             <b>Real-Time Timing & Hardware Interfaces</b> - Precise control of
-            timing signals and integration with the system's electronic
+            timing signals and integration with the system&apos;s electronic
             interfaces.
           </li>
         </ul>

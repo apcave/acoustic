@@ -89,17 +89,17 @@ export default function Header() {
         </a>
         <hr />
         <h1 className="heading">Projects</h1>
-        <a href="/render-cuda/">Acoustic Renderer (C++/CUDA)</a>
-        <a href="/">Broadband Sonar (STM32, C Bare Metal)</a>
-        <a href="/bike-lights/">Bike Lights (Nordic, C Zephyr)</a>
-        <a href="/">BlueTooth Microphone (Nordic, C Zephyr)</a>
-        <a href="/">Wifi Camera for AI (Espressif, C Zephyr)</a>
-        <a href="/">Storage Rack (3D Printing / CAD)</a>
+        <Link href="/render-cuda/">Acoustic Renderer (C++/CUDA)</Link>
+        <Link href="/">Broadband Sonar (STM32, C Bare Metal)</Link>
+        <Link href="/bike-lights/">Bike Lights (Nordic, C Zephyr)</Link>
+        <Link href="/">BlueTooth Microphone (Nordic, C Zephyr)</Link>
+        <Link href="/">Wifi Camera for AI (Espressif, C Zephyr)</Link>
+        <Link href="/">Storage Rack (3D Printing / CAD)</Link>
         <hr />
         <h1 className="heading">Acoustic Web Application</h1>
-        <a href="/acoustic/">Instructions</a>
-        <a href="/acoustic/materials">Materials</a>
-        <a href="/acoustic/models">Models</a>
+        <Link href="/acoustic/">Instructions</Link>
+        <Link href="/acoustic/materials">Materials</Link>
+        <Link href="/acoustic/models">Models</Link>
 
         <hr />
         <h1 className="heading">Code Repositories</h1>
@@ -113,16 +113,16 @@ export default function Header() {
         <a href="https://github.com/apcave/sonar-render" target="_blank">
           Acoustic Renderer - C++ / CUDA
         </a>
-        <a href="/">Broadband Sonar - C</a>
+        <a href="https://github.com/apcave">Broadband Sonar - C</a>
         <a href="https://github.com/apcave/bike-lights" target="_blank">
           Bike Lights - C
         </a>
-        <a href="/">BlueTooth Microphone - C</a>
-        <a href="/">Wifi Camera for AI - C</a>
+        <a href="https://github.com/apcave">BlueTooth Microphone - C</a>
+        <a href="https://github.com/apcave">Wifi Camera for AI - C</a>
         <hr />
-        <a href="/resume" className="heading">
-          Alex's Resume
-        </a>
+        <Link href="/resume" className="heading">
+          Alex&apos;s Resume
+        </Link>
         <a
           href="https://www.linkedin.com/in/alexander-cave-9b50b427/"
           target="_blank"
