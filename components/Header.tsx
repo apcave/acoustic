@@ -94,7 +94,7 @@ export default function Header() {
         <Link href="/bike-lights/">Bike Lights (Nordic, C Zephyr)</Link>
         <Link href="/">BlueTooth Microphone (Nordic, C Zephyr)</Link>
         <Link href="/">Wifi Camera for AI (Espressif, C Zephyr)</Link>
-        <Link href="/">Storage Rack (3D Printing / CAD)</Link>
+        <Link href="/storage-rack/">Storage Rack (3D Printing / CAD)</Link>
         <hr />
         <h1 className="heading">Acoustic Web Application</h1>
         <Link href="/acoustic/">Instructions</Link>
